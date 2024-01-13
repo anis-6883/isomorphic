@@ -1,8 +1,10 @@
+import { env } from '@/env.mjs';
+import getAccessToken from '@/utils/axios/getAccessToken';
+import { asiaSportBackendUrl } from '@/utils/axios/getAxios';
+import getRandomString from '@/utils/get-random-string';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
-import { env } from '@/env.mjs';
-import isEqual from 'lodash/isEqual';
 import { pagesOptions } from './pages-options';
 
 export const authOptions: NextAuthOptions = {
@@ -12,35 +14,67 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 60 * 60 * 12, // Expire in 12 Hours
   },
   callbacks: {
+    async jwt({ token, user, account }) {
+      if (account?.provider === 'credentials') {
+        if (user) {
+          return {
+            ...token,
+            ...user,
+          };
+        }
+      }
+
+      // Handle Social Auth
+      if (account?.provider === 'google' || account?.provider === 'apple') {
+        const values = {
+          name: user?.name,
+          email: user?.email,
+          password: getRandomString(10),
+          image: user?.image,
+          provider: account?.provider,
+        };
+        const { data } = await asiaSportBackendUrl.post(
+          '/api/user/register',
+          values
+        );
+        const userData = data?.data;
+
+        if (userData) {
+          return {
+            ...token,
+            ...userData,
+          };
+        }
+      }
+
+      // Get Access Token
+      if (new Date().getTime() < token?.expiresIn) return token;
+
+      const role = token?.role === 'user' ? 'user' : 'admin';
+      return await getAccessToken(token, role);
+    },
     async session({ session, token }) {
       return {
         ...session,
         user: {
           ...session.user,
-          id: token.idToken as string,
+          ...token,
         },
       };
     },
-    async jwt({ token, user }) {
-      if (user) {
-        // return user as JWT
-        token.user = user;
-      }
-      return token;
-    },
-    async redirect({ url, baseUrl }) {
-      const parsedUrl = new URL(url, baseUrl);
-      if (parsedUrl.searchParams.has('callbackUrl')) {
-        return `${baseUrl}${parsedUrl.searchParams.get('callbackUrl')}`;
-      }
-      if (parsedUrl.origin === baseUrl) {
-        return url;
-      }
-      return baseUrl;
-    },
+    // async redirect({ url, baseUrl }) {
+    //   const parsedUrl = new URL(url, baseUrl);
+    //   if (parsedUrl.searchParams.has('callbackUrl')) {
+    //     return `${baseUrl}${parsedUrl.searchParams.get('callbackUrl')}`;
+    //   }
+    //   if (parsedUrl.origin === baseUrl) {
+    //     return url;
+    //   }
+    //   return baseUrl;
+    // },
   },
   providers: [
     CredentialsProvider({
@@ -48,23 +82,96 @@ export const authOptions: NextAuthOptions = {
       name: 'Credentials',
       credentials: {},
       async authorize(credentials: any) {
-        // You need to provide your own logic here that takes the credentials
-        // submitted and returns either a object representing a user or value
-        // that is false/null if the credentials are invalid
-        const user = {
-          email: 'admin@admin.com',
-          password: 'admin',
-        };
+        // const cookies = cookie.parse(req.headers.cookie);
+        // Admin Login
+        if (credentials?.adminLogin === 'true') {
+          try {
+            const { data } = await asiaSportBackendUrl.post(
+              '/api/admin/login',
+              {
+                email: credentials?.email,
+                password: credentials?.password,
+              }
+            );
 
-        if (
-          isEqual(user, {
-            email: credentials?.email,
-            password: credentials?.password,
-          })
-        ) {
-          return user as any;
+            if (data?.status === false) {
+              throw new Error(data?.message);
+            } else {
+              const user = data?.data;
+              return user; // return the user's data
+            }
+          } catch (err) {
+            console.log(err.message);
+            throw new Error(err.message);
+          }
+        } else {
+          // User Otp Verify & Sign In
+
+          // if (credentials?.signUp === 'true') {
+          //   try {
+          //     const { data } = await asiaSportBackendUrl.post(
+          //       '/api/user/verify-email',
+          //       { otp: credentials?.otp },
+          //       {
+          //         headers: {
+          //           token: cookies?._temp,
+          //         },
+          //       }
+          //     );
+
+          //     if (data.status === false) {
+          //       throw new Error(data?.message);
+          //     }
+
+          //     const user = data?.data;
+
+          //     return user; // return the user's data
+          //   } catch (err) {
+          //     throw new Error(err.message);
+          //   }
+          // } else {
+          //   try {
+          //     // User Sign In
+
+          //     const { data } = await asiaSportBackendUrl.post(
+          //       '/api/user/login',
+          //       {
+          //         email: credentials?.email,
+          //         password: credentials?.password,
+          //         provider: 'email',
+          //       }
+          //     );
+
+          //     if (data?.status === false) {
+          //       throw new Error(data?.message);
+          //     } else {
+          //       const user = data?.data;
+          //       return user; // return the user's data
+          //     }
+          //   } catch (err) {
+          //     throw new Error(err.message);
+          //   }
+          // }
+
+          // After verified otp by firebase
+          try {
+            const { data } = await asiaSportBackendUrl.post(
+              '/api/user/login-with-phone',
+              { phone: credentials?.phone, country: credentials?.country }
+            );
+
+            if (data.status === false) {
+              throw new Error(data?.message);
+            }
+
+            const user = data?.data;
+
+            return user; // return the user's data
+          } catch (err) {
+            console.log(err);
+            throw new Error(err.message);
+          }
         }
-        return null;
       },
     }),
     GoogleProvider({
