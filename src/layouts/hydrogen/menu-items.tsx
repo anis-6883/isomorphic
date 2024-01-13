@@ -1,12 +1,13 @@
-import { DUMMY_ID } from '@/config/constants';
 import { routes } from '@/config/routes';
 import {
-  PiBriefcaseDuotone,
-  PiCurrencyDollarDuotone,
-  PiFolderNotchDuotone,
-  PiHeadsetDuotone,
-  PiPackageDuotone,
-  PiShoppingCartDuotone,
+  PiCalendarCheckDuotone,
+  PiGearDuotone,
+  PiLayoutDuotone,
+  PiPresentationDuotone,
+  PiShootingStarDuotone,
+  PiUsersDuotone,
+  PiUsersThreeDuotone,
+  PiVideoCameraDuotone,
 } from 'react-icons/pi';
 
 // Note: do not add href in the label object, it is rendering as label
@@ -18,58 +19,58 @@ export const menuItems = [
   // label end
   {
     name: 'Dashboard',
-    href: '/',
-    icon: <PiFolderNotchDuotone />,
+    href: routes.dashboard,
+    icon: <PiLayoutDuotone />,
   },
   {
     name: 'Manage Live',
-    href: routes.executive.dashboard,
-    icon: <PiBriefcaseDuotone />,
+    href: routes.manageLive.home,
+    icon: <PiVideoCameraDuotone />,
     // badge: 'New',
   },
   {
     name: 'Fixtures',
-    href: routes.logistics.dashboard,
-    icon: <PiPackageDuotone />,
+    href: routes.fixture,
+    icon: <PiCalendarCheckDuotone />,
   },
   {
     name: 'Highlights',
-    href: routes.eCommerce.dashboard,
-    icon: <PiShoppingCartDuotone />,
+    href: routes.highlights.home,
+    icon: <PiPresentationDuotone />,
   },
   {
     name: 'Popular',
     href: '#',
-    icon: <PiCurrencyDollarDuotone />,
+    icon: <PiShootingStarDuotone />,
     dropdownItems: [
       {
         name: 'Leagues',
-        href: routes.invoice.home,
+        href: routes.popular.league,
       },
       {
         name: 'Teams',
-        href: routes.invoice.details(DUMMY_ID),
+        href: routes.popular.team,
       },
       {
         name: 'Players',
-        href: routes.invoice.create,
+        href: routes.popular.player,
       },
     ],
   },
   {
     name: 'Manage Users',
-    href: routes.support.dashboard,
-    icon: <PiHeadsetDuotone />,
+    href: routes.manageUser,
+    icon: <PiUsersThreeDuotone />,
   },
   {
     name: 'Manage Admins',
-    href: routes.support.dashboard,
-    icon: <PiHeadsetDuotone />,
+    href: routes.manageAdmin,
+    icon: <PiUsersDuotone />,
   },
   {
     name: 'General Settings',
-    href: routes.support.dashboard,
-    icon: <PiHeadsetDuotone />,
+    href: routes.generalSettings,
+    icon: <PiGearDuotone />,
   },
 
   // // label start

@@ -1,4 +1,26 @@
 export const routes = {
+  dashboard: '/super-admin/dashboard',
+  manageLive: {
+    home: '/super-admin/manage-live-matches',
+    create: '/super-admin/manage-live-matches/create',
+    details: (id: string) => `/super-admin/manage-live-matches/${id}`,
+    edit: (id: string) => `/super-admin/manage-live-matches/${id}/edit`,
+  },
+  fixture: '/super-admin/fixtures',
+  manageUser: '/super-admin/manage-users',
+  manageAdmin: '/super-admin/manage-admins',
+  generalSettings: '/super-admin/general-settings',
+  highlights: {
+    home: '/super-admin/highlights',
+    create: '/super-admin/highlights/create',
+    details: (id: string) => `/super-admin/highlights/${id}`,
+    edit: (id: string) => `/super-admin/highlights/${id}/edit`,
+  },
+  popular: {
+    league: '/super-admin/popular/leagues',
+    team: '/super-admin/popular/teams',
+    player: '/super-admin/popular/players',
+  },
   eCommerce: {
     dashboard: '/ecommerce',
     products: '/ecommerce/products',
