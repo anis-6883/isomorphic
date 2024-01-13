@@ -1,17 +1,16 @@
 'use client';
 
-import Link from 'next/link';
-import { Fragment } from 'react';
-import { usePathname } from 'next/navigation';
-import { Title } from '@/components/ui/text';
-
-import { Collapse } from '@/components/ui/collapse';
-import cn from '@/utils/class-names';
-import { PiCaretDownBold } from 'react-icons/pi';
-import SimpleBar from '@/components/ui/simplebar';
-import { menuItems } from './menu-items';
-import Logo from '@/components/logo';
 import getStatusBadge from '@/components/get-status-badge';
+import Logo from '@/components/logo';
+import { Collapse } from '@/components/ui/collapse';
+import SimpleBar from '@/components/ui/simplebar';
+import { Title } from '@/components/ui/text';
+import cn from '@/utils/class-names';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Fragment } from 'react';
+import { PiCaretDownBold } from 'react-icons/pi';
+import { menuItems } from './menu-items';
 
 export default function Sidebar({ className }: { className?: string }) {
   const pathname = usePathname();

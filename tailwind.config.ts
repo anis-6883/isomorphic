@@ -141,5 +141,6 @@ export default {
       // required this to prevent any style on readOnly input elements
       addVariant('not-read-only', '&:not(:read-only)');
     }),
+    require('daisyui'),
   ],
 } satisfies Config;
