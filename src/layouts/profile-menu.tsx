@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Popover } from '@/components/ui/popover';
 import { Text, Title } from '@/components/ui/text';
 import { routes } from '@/config/routes';
+import { userLoggedOut } from '@/features/auth/authSlice';
 import cn from '@/utils/class-names';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 const menuItems = [
   {
@@ -28,12 +30,16 @@ const menuItems = [
 
 function DropdownMenu() {
   const { replace } = useRouter();
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
+    dispatch(userLoggedOut());
+
     await signOut({
       redirect: false,
       callbackUrl: '/super-admin/login',
     });
+
     replace('/super-admin/login');
   };
 

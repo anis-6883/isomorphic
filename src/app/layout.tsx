@@ -5,6 +5,7 @@ import GlobalDrawer from '@/app/shared/drawer-views/container';
 import GlobalModal from '@/app/shared/modal-views/container';
 import { ThemeProvider } from '@/app/shared/theme-provider';
 import { siteConfig } from '@/config/site.config';
+import ReduxProvider from '@/features/redux-provider';
 import cn from '@/utils/class-names';
 import { getServerSession } from 'next-auth/next';
 import dynamic from 'next/dynamic';
@@ -39,15 +40,17 @@ export default async function RootLayout({
         suppressHydrationWarning
         className={cn(inter.variable, lexendDeca.variable, 'font-inter')}
       >
-        <AuthProvider session={session}>
-          <ThemeProvider>
-            <NextProgress />
-            {children}
-            <Toaster />
-            <GlobalDrawer />
-            <GlobalModal />
-          </ThemeProvider>
-        </AuthProvider>
+        <ReduxProvider>
+          <AuthProvider session={session}>
+            <ThemeProvider>
+              <NextProgress />
+              {children}
+              <Toaster />
+              <GlobalDrawer />
+              <GlobalModal />
+            </ThemeProvider>
+          </AuthProvider>
+        </ReduxProvider>
       </body>
     </html>
   );

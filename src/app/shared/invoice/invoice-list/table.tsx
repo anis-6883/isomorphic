@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
-import dynamic from 'next/dynamic';
-import { useTable } from '@/hooks/use-table';
-import { useColumn } from '@/hooks/use-column';
-import { Button } from '@/components/ui/button';
-import ControlledTable from '@/components/controlled-table';
 import { getColumns } from '@/app/shared/invoice/invoice-list/columns';
+import ControlledTable from '@/components/controlled-table';
+import { Button } from '@/components/ui/button';
+import { useColumn } from '@/hooks/use-column';
+import { useTable } from '@/hooks/use-table';
+import dynamic from 'next/dynamic';
+import React, { useCallback, useState } from 'react';
 const FilterElement = dynamic(
   () => import('@/app/shared/invoice/invoice-list/filter-element'),
   { ssr: false }
@@ -112,14 +112,14 @@ export default function InvoiceTable({ data = [] }: { data: any[] }) {
           checkedColumns,
           setCheckedColumns,
         }}
-        filterElement={
-          <FilterElement
-            isFiltered={isFiltered}
-            filters={filters}
-            updateFilter={updateFilter}
-            handleReset={handleReset}
-          />
-        }
+        // filterElement={
+        //   <FilterElement
+        //     isFiltered={isFiltered}
+        //     filters={filters}
+        //     updateFilter={updateFilter}
+        //     handleReset={handleReset}
+        //   />
+        // }
         tableFooter={
           <TableFooter
             checkedItems={selectedRowKeys}

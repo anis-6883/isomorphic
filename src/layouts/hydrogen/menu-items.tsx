@@ -1,14 +1,10 @@
 import { routes } from '@/config/routes';
-import {
-  PiCalendarCheckDuotone,
-  PiGearDuotone,
-  PiLayoutDuotone,
-  PiPresentationDuotone,
-  PiShootingStarDuotone,
-  PiUsersDuotone,
-  PiUsersThreeDuotone,
-  PiVideoCameraDuotone,
-} from 'react-icons/pi';
+import { BiVideoRecording } from 'react-icons/bi';
+import { FaCogs } from 'react-icons/fa';
+import { IoIosStarHalf } from 'react-icons/io';
+import { IoCalendarOutline } from 'react-icons/io5';
+import { LuLayoutDashboard, LuUserCog, LuUsers } from 'react-icons/lu';
+import { PiTelevisionFill } from 'react-icons/pi';
 
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
@@ -20,28 +16,28 @@ export const menuItems = [
   {
     name: 'Dashboard',
     href: routes.dashboard,
-    icon: <PiLayoutDuotone />,
+    icon: <LuLayoutDashboard />,
   },
   {
     name: 'Manage Live',
     href: routes.manageLive.home,
-    icon: <PiVideoCameraDuotone />,
+    icon: <BiVideoRecording />,
     // badge: 'New',
   },
   {
     name: 'Fixtures',
     href: routes.fixture,
-    icon: <PiCalendarCheckDuotone />,
+    icon: <IoCalendarOutline />,
   },
   {
     name: 'Highlights',
     href: routes.highlights.home,
-    icon: <PiPresentationDuotone />,
+    icon: <PiTelevisionFill />,
   },
   {
     name: 'Popular',
     href: '#',
-    icon: <PiShootingStarDuotone />,
+    icon: <IoIosStarHalf />,
     dropdownItems: [
       {
         name: 'Leagues',
@@ -60,17 +56,17 @@ export const menuItems = [
   {
     name: 'Manage Users',
     href: routes.manageUser,
-    icon: <PiUsersThreeDuotone />,
+    icon: <LuUsers />,
   },
   {
     name: 'Manage Admins',
     href: routes.manageAdmin,
-    icon: <PiUsersDuotone />,
+    icon: <LuUserCog />,
   },
   {
     name: 'General Settings',
     href: routes.generalSettings,
-    icon: <PiGearDuotone />,
+    icon: <FaCogs />,
   },
 
   // // label start

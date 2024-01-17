@@ -1,4 +1,6 @@
 export const routes = {
+  signIn: '/signin',
+  adminLogin: '/super-admin/login',
   dashboard: '/super-admin/dashboard',
   manageLive: {
     home: '/super-admin/manage-live-matches',
@@ -144,5 +146,4 @@ export const routes = {
     otp4: '/auth/otp-4',
     otp5: '/auth/otp-5',
   },
-  signIn: '/signin',
 };
