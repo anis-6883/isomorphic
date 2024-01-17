@@ -1,12 +1,7 @@
-import InvoiceTable from '@/app/shared/invoice/invoice-list/table';
-import { routes } from '@/config/routes';
-import { metaObject } from '@/config/site.config';
-import { invoiceData } from '@/data/invoice-data';
-import TableLayout from './table-layout';
+'use client';
 
-export const metadata = {
-  ...metaObject('Enhanced Table'),
-};
+import { routes } from '@/config/routes';
+import LiveMatchIndex from './components/LiveMatchIndex';
 
 const pageHeader = {
   title: 'Enhanced Table',
@@ -24,16 +19,6 @@ const pageHeader = {
   ],
 };
 
-export default function EnhancedTablePage() {
-  return (
-    <TableLayout
-      title={pageHeader.title}
-      breadcrumb={pageHeader.breadcrumb}
-      data={invoiceData}
-      fileName="invoice_data"
-      header="ID,Name,Username,Avatar,Email,Due Date,Amount,Status,Created At"
-    >
-      <InvoiceTable data={invoiceData} />
-    </TableLayout>
-  );
+export default function Page() {
+  return <LiveMatchIndex />;
 }

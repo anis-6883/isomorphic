@@ -7,6 +7,7 @@ import BerylLiumLayout from '@/layouts/beryllium/beryllium-layout';
 import HeliumLayout from '@/layouts/helium/helium-layout';
 import HydrogenLayout from '@/layouts/hydrogen/layout';
 import LithiumLayout from '@/layouts/lithium/lithium-layout';
+import { WiDaySnowThunderstorm } from 'react-icons/wi';
 
 export default function DefaultLayout({
   children,
@@ -17,7 +18,13 @@ export default function DefaultLayout({
   const isMounted = useIsMounted();
 
   if (!isMounted) {
-    return null;
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <span>
+          <WiDaySnowThunderstorm className="animate-bounce text-6xl" />
+        </span>
+      </div>
+    );
   }
 
   if (layout === LAYOUT_OPTIONS.HELIUM) {

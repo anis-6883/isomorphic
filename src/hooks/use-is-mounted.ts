@@ -21,7 +21,10 @@ export function useIsMounted() {
     } else {
       dispatch(userLoggedOut());
     }
-    setMounted(true);
+
+    setTimeout(() => {
+      setMounted(true);
+    }, 1500);
   }, [dispatch, session]);
 
   return mounted;
