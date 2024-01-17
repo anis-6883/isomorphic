@@ -1,5 +1,11 @@
 import { CouponType } from '@/config/enums';
 
+export interface ILeague {
+  id?: any;
+  name: string;
+  image_path: string;
+}
+
 export interface Coupon {
   id: string;
   name: string;
@@ -77,6 +83,7 @@ export type PosProduct = {
   discount?: number;
   base64?: string;
 };
+
 export interface CalendarEvent {
   id?: string;
   start: Date;

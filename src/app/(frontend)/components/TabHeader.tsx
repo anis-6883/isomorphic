@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import DatePicker from './DatePicker';
 
-export default function TabHeader({ datePicker }: { datePicker: boolean }) {
+export default function TabHeader() {
   return (
     <div className="mx-auto mb-1 mt-4 max-w-screen-xl  ">
       <div className=" grid h-20 grid-cols-12 content-center">
@@ -32,11 +32,9 @@ export default function TabHeader({ datePicker }: { datePicker: boolean }) {
           </div>
         </div>
         <div className="col-span-6">
-          {datePicker && (
-            <div>
-              <DatePicker live={true} />
-            </div>
-          )}
+          <div>
+            <DatePicker live={true} />
+          </div>
           <div></div>
         </div>
       </div>
