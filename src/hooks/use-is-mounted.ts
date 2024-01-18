@@ -24,7 +24,7 @@ export function useIsMounted() {
 
     setTimeout(() => {
       setMounted(true);
-    }, 1500);
+    }, 1000);
   }, [dispatch, session]);
 
   return mounted;

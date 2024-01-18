@@ -48,6 +48,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn.sportmonks.com',
       },
+      {
+        protocol: 'https',
+        hostname: '*',
+      },
     ],
   },
   reactStrictMode: false,

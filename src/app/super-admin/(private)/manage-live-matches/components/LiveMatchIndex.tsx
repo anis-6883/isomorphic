@@ -1,166 +1,154 @@
 'use client';
 
-import { routes } from '@/config/routes';
 import { useGetLiveMatchesQuery } from '@/features/super-admin/live-match/liveMatchApi';
 import { ColorScheme, MantineProvider, useMantineTheme } from '@mantine/core';
-import {
-  MantineReactTable,
-  useMantineReactTable,
-  type MRT_ColumnDef,
-} from 'mantine-react-table';
+import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
+import moment from 'moment';
 import { useTheme } from 'next-themes';
-import { useMemo } from 'react';
-
-type Person = {
-  name: {
-    firstName: string;
-    lastName: string;
-  };
-  address: string;
-  city: string;
-  state: string;
-};
-
-//nested data is ok, see accessorKeys in ColumnDef below
-const data: Person[] = [
-  {
-    name: {
-      firstName: 'Zachary',
-      lastName: 'Davis',
-    },
-    address: '261 Battle Ford',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    name: {
-      firstName: 'Zachary',
-      lastName: 'Davis',
-    },
-    address: '261 Battle Ford',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    name: {
-      firstName: 'Zachary',
-      lastName: 'Davis',
-    },
-    address: '261 Battle Ford',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    name: {
-      firstName: 'Zachary',
-      lastName: 'Davis',
-    },
-    address: '261 Battle Ford',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    name: {
-      firstName: 'Zachary',
-      lastName: 'Davis',
-    },
-    address: '261 Battle Ford',
-    city: 'Columbus',
-    state: 'Ohio',
-  },
-  {
-    name: {
-      firstName: 'Robert',
-      lastName: 'Smith',
-    },
-    address: '566 Brakus Inlet',
-    city: 'Westerville',
-    state: 'West Virginia',
-  },
-  {
-    name: {
-      firstName: 'Kevin',
-      lastName: 'Yan',
-    },
-    address: '7777 Kuhic Knoll',
-    city: 'South Linda',
-    state: 'West Virginia',
-  },
-  {
-    name: {
-      firstName: 'John',
-      lastName: 'Upton',
-    },
-    address: '722 Emie Stream',
-    city: 'Huntington',
-    state: 'Washington',
-  },
-  {
-    name: {
-      firstName: 'Nathan',
-      lastName: 'Harris',
-    },
-    address: '1 Kuhic Knoll',
-    city: 'Ohiowa',
-    state: 'Nebraska',
-  },
-];
-
-// export const metadata = {
-//   ...metaObject('Enhanced Table'),
-// };
-
-const pageHeader = {
-  title: 'Enhanced Table',
-  breadcrumb: [
-    {
-      href: routes.dashboard,
-      name: 'Home',
-    },
-    {
-      name: 'Tables',
-    },
-    {
-      name: 'Enhanced',
-    },
-  ],
-};
+import Image from 'next/image';
+import { useEffect, useMemo, useState } from 'react';
+import LiveMatchActions from './LiveMatchActions';
 
 export default function LiveMatchIndex() {
+  const { theme } = useTheme();
+  const globalTheme = useMantineTheme();
+  const [finalData, setFinalData] = useState([]);
+  const [finalDataLoading, setFinalDataLoading] = useState(true);
+
   const {
     data: liveMatches,
     isLoading,
     isError,
+    isFetching,
   } = useGetLiveMatchesQuery(undefined);
 
-  if (!isLoading && !isError) {
-    console.log('liveMatches: ', liveMatches);
-  }
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      setFinalData(liveMatches?.data || []);
+      setFinalDataLoading(false);
+    }
+  }, [isError, isLoading, liveMatches]);
 
-  const globalTheme = useMantineTheme();
-  const { theme } = useTheme();
-
-  const columns = useMemo<MRT_ColumnDef<Person>[]>(
+  const columns = useMemo(
     () => [
       {
-        accessorKey: 'name.firstName', //access nested data with dot notation
-        header: 'First Name',
+        accessorKey: 'team_one_name',
+        header: 'Team One',
+        id: 'team_one_image',
+        Cell: ({ row }) => (
+          <div className="flex items-center">
+            {row?.original?.team_one_image ? (
+              <Image
+                className="h-10 w-10 rounded-full"
+                src={row?.original?.team_one_image}
+                width={0}
+                height={0}
+                sizes="100vw"
+                alt={row?.original?.team_one_name}
+              />
+            ) : (
+              <Image
+                src="/default-placeholder.png"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="h-10 w-10 rounded-full"
+                alt={row?.original?.team_one_name}
+              />
+            )}
+
+            <span className="ml-2">{row?.original?.team_one_name}</span>
+          </div>
+        ),
       },
       {
-        accessorKey: 'name.lastName',
-        header: 'Last Name',
+        accessorKey: 'team_two_name',
+        header: 'Team Two',
+        id: 'team_two_image',
+        Cell: ({ row }) => (
+          <div className="flex items-center">
+            {row?.original?.team_two_image ? (
+              <Image
+                className="h-10 w-10 rounded-full"
+                src={row?.original?.team_two_image}
+                width={0}
+                height={0}
+                sizes="100vw"
+                alt={row?.original?.team_two_name}
+              />
+            ) : (
+              <Image
+                src="/default-placeholder.png"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="h-10 w-10 rounded-full"
+                alt={row?.original?.team_two_name}
+              />
+            )}
+
+            <span className="ml-2">{row?.original?.team_two_name}</span>
+          </div>
+        ),
       },
       {
-        accessorKey: 'address', //normal accessorKey
-        header: 'Address',
+        accessorKey: 'match_title',
+        header: 'Title & Time',
+        mantineTableHeadCellProps: {
+          align: 'center',
+        },
+        mantineTableBodyCellProps: {
+          align: 'center',
+        },
+        Cell: ({ row }) => (
+          <div>
+            <p className="mb-1 text-center text-sm font-medium">
+              {row.original.match_title}
+            </p>
+            <p className="text-center">
+              {moment(row.original.time).format('MMMM Do YYYY / h:mm')}
+            </p>
+          </div>
+        ),
       },
       {
-        accessorKey: 'city',
-        header: 'City',
+        accessorKey: 'status',
+        header: 'Status',
+        columnDefType: 'display',
+        mantineTableHeadCellProps: {
+          align: 'center',
+        },
+        mantineTableBodyCellProps: {
+          align: 'center',
+        },
+        Cell: ({ row }) => {
+          return row.original.status == '1' ? (
+            <span className="badge rounded-full bg-success">Active</span>
+          ) : (
+            <span className="bg-danger badge rounded-full">Inactive</span>
+          );
+        },
       },
       {
-        accessorKey: 'state',
-        header: 'State',
+        id: 'edit',
+        header: 'Action',
+        columnDefType: 'display',
+        enableColumnOrdering: false,
+        Cell: ({ row }) => (
+          <div>
+            <LiveMatchActions
+              id={row.original.id}
+              title={`Delete Confirmation`}
+              description={`Are you sure you want to delete this "${row.original.match_title}" match?`}
+            />
+          </div>
+        ),
+        mantineTableHeadCellProps: {
+          align: 'center',
+        },
+        mantineTableBodyCellProps: {
+          align: 'center',
+        },
       },
     ],
     []
@@ -168,15 +156,50 @@ export default function LiveMatchIndex() {
 
   const table = useMantineReactTable({
     columns,
-    data, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
+    data: finalData, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
     paginationDisplayMode: 'pages',
-    // enableDensityToggle: false,
+    mantinePaginationProps: {
+      rowsPerPageOptions: ['5', '10', '20', '50', '100'],
+    },
+    rowCount: finalData.length as number,
+    initialState: {
+      density: 'xs',
+      pagination: {
+        pageSize: 10,
+        pageIndex: 0,
+      },
+    },
+    enableDensityToggle: false,
     // enableFilters: false,
     // enableFullScreenToggle: false,
     // enableColumnVirtualization: false,
     // enableRowNumbers: true,
     // enablePinning: true,
-    // state: { isLoading: loading },
+    state: { isLoading: finalDataLoading, showProgressBars: isFetching },
+    enableRowDragging: true,
+    enableRowOrdering: true,
+    enableSorting: false,
+    autoResetPageIndex: false,
+    mantineRowDragHandleProps: ({ table }) => ({
+      onDragEnd: () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        // console.log('draggingRow: ', draggingRow);
+        // console.log('hoveredRow: ', hoveredRow);
+
+        let copiedArray = [...finalData];
+        const elementToMove = copiedArray.splice(draggingRow.index, 1)[0];
+        copiedArray.splice(hoveredRow.index, 0, elementToMove);
+
+        const updatedArray = copiedArray.map((obj, index) => ({
+          ...obj,
+          position: index + 1,
+        }));
+
+        console.log('updatedArray: ', updatedArray);
+
+        setFinalData(updatedArray);
+      },
+    }),
   });
 
   return (
