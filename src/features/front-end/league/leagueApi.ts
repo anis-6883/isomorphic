@@ -5,7 +5,10 @@ export const leagueApi = apiSlice.injectEndpoints({
     getTopLeagues: builder.query({
       query: () => '/api/league/top-leagues',
     }),
+    getSelectedPointTable: builder.query({
+      query: () => '/api/league/selected-point-table',
+    }),
   }),
 });
 
-export const { useGetTopLeaguesQuery } = leagueApi;
+export const { useGetTopLeaguesQuery, useGetSelectedPointTableQuery } = leagueApi;

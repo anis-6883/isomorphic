@@ -15,7 +15,7 @@ export default function Footer() {
   const updateYear = moment().format('YYYY [escaped] YYYY').split(' ');
 
   return (
-    <div className="bg-accent">
+    <div className="bg-[#051C34]">
       <div className=" hidden lg:block">
         <div className="mx-auto mt-5 grid max-w-[1200px] select-none grid-cols-2 gap-10">
           <div className="col-span-2 md:col-span-1">
