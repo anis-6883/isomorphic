@@ -194,7 +194,7 @@
   }
 
   /* typography style for the Text component */
-  h1,
+  /* h1,
   h2,
   h3,
   h4,
@@ -229,7 +229,7 @@
 
   q {
     @apply text-lg;
-  }
+  } */
 }
 
 @layer utilities {
@@ -359,7 +359,7 @@ select:-webkit-autofill:focus {
 /* ?React Datepicker Styling */
 /* ................................................... */
 .react-datepicker-popper .react-datepicker {
-  @apply bg-gray-0 font-inter text-gray-600 dark:border-gray-300 dark:bg-gray-100;
+  @apply bg-gray-0 font-poppins text-gray-600 dark:border-gray-300 dark:bg-gray-100;
 }
 
 input[type='checkbox']:checked ~ svg {
@@ -773,7 +773,7 @@ td.rc-table-cell-fix-right {
 }
 
 .react-quill .ql-container {
-  @apply font-inter;
+  @apply font-poppins;
 }
 
 .react-quill .ql-container.ql-snow {
@@ -988,7 +988,7 @@ div[style='z-index: 1000001;'],
 }
 
 .pac-item {
-  @apply px-3 py-1.5 font-inter;
+  @apply px-3 py-1.5 font-poppins;
 }
 
 /* google location search auto complete  */

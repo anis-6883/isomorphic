@@ -72,7 +72,7 @@ export default {
         },
       },
       fontFamily: {
-        inter: ['var(--font-inter)'],
+        poppins: ['var(--font-poppins)'],
         lexend: ['var(--font-lexend)'],
       },
       // required these animations for the Loader component

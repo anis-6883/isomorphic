@@ -1,9 +1,50 @@
 import { CouponType } from '@/config/enums';
 
+interface ICountry {
+  name: string;
+}
+
 export interface ILeague {
   id?: any;
   name: string;
   image_path: string;
+  fixtures: Array<{
+    league?: {
+      country?: ICountry;
+    };
+    state?: {
+      state: string;
+    };
+  }>;
+  image:string
+ 
+}
+export interface Score {
+  description: string;
+  score?: {
+    participant: string;
+    goals: number;
+  };
+}
+export interface IMatch {
+  id:string
+  state:{state:string , short_name:string};
+  scores:Score;
+  starting_at_timestamp:number;
+  periods:Array<{
+    minutes: string
+  }>;
+  participants:Array<{
+    minutes: string
+    meta:{location:string }
+    
+    short_code:string
+    image_path:string
+    name:string
+    
+  }>;
+  
+  
 }
 
 export interface Coupon {

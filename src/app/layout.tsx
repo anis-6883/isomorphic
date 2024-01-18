@@ -1,6 +1,6 @@
 import { authOptions } from '@/app/api/auth/[...nextauth]/auth-options';
 import AuthProvider from '@/app/api/auth/[...nextauth]/auth-provider';
-import { inter, lexendDeca } from '@/app/fonts';
+import { poppins, lexendDeca } from '@/app/fonts';
 import GlobalDrawer from '@/app/shared/drawer-views/container';
 import GlobalModal from '@/app/shared/modal-views/container';
 import { ThemeProvider } from '@/app/shared/theme-provider';
@@ -38,7 +38,7 @@ export default async function RootLayout({
       <body
         // to prevent any warning that is caused by third party extensions like Grammarly
         suppressHydrationWarning
-        className={cn(inter.variable, lexendDeca.variable, 'font-inter')}
+        className={cn(poppins.variable, lexendDeca.variable, 'font-inter')}
       >
         <ReduxProvider>
           <AuthProvider session={session}>
