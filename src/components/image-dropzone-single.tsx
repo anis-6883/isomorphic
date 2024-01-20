@@ -38,7 +38,10 @@ export default function ImageDropzoneSingle({
   );
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
+    accept: {
+      'image/png': ['.png'],
+      'image/jpeg': ['.jpg', '.jpeg'],
+    },
     maxSize: 1024 * 1000, // 1 MB
     onDrop,
   });

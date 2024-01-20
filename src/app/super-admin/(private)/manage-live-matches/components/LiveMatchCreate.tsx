@@ -1,10 +1,10 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import getStreamObject from '@/utils/get-stream-object';
 import { Form, Formik } from 'formik';
 import { useState } from 'react';
-import { PiPlusBold } from 'react-icons/pi';
+import { FiCheckCircle } from 'react-icons/fi';
+import { ImSpinner } from 'react-icons/im';
 import * as Yup from 'yup';
 import MatchInfoForm from './MatchInfoForm';
 import StreamingInfoForm from './StreamingInfoForm';
@@ -13,6 +13,7 @@ import TeamInfoForm from './TeamInfoForm';
 export default function LiveMatchCreate({ queryString }) {
   const [teamOneImage, setTeamOneImage] = useState(null);
   const [teamTwoImage, setTeamTwoImage] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const initialValues = {
     fixture_id: queryString?.fixture_id || '',
@@ -42,6 +43,16 @@ export default function LiveMatchCreate({ queryString }) {
     team_two_image_type: Yup.string(),
     team_one_image: Yup.string(),
     team_two_image: Yup.string(),
+    streaming_sources: Yup.array().of(
+      Yup.object().shape({
+        stream_title: Yup.string().required('Required!'),
+        stream_type: Yup.string().required('Required!'),
+        stream_url: Yup.string().when('stream_type', {
+          is: (value: string) => ['web', 'm3u8', 'restricted'].includes(value),
+          then: () => Yup.string().required('Required!'),
+        }),
+      })
+    ),
   });
 
   const handleSubmit = async (values) => {
@@ -99,32 +110,39 @@ export default function LiveMatchCreate({ queryString }) {
           enableReinitialize
           onSubmit={handleSubmit}
         >
-          {({ values, setFieldValue, errors, touched }) => (
-            <Form>
-              <MatchInfoForm values={values} setFieldValue={setFieldValue} />
-              <div className="my-5 border-b border-dashed border-slate-300"></div>
-              <TeamInfoForm
-                values={values}
-                teamOneImage={teamOneImage}
-                setTeamOneImage={setTeamOneImage}
-                teamTwoImage={teamTwoImage}
-                setTeamTwoImage={setTeamTwoImage}
-              />
-              <div className="my-5 border-b border-dashed border-slate-300"></div>
-              <StreamingInfoForm values={values} />
-              <div className="mt-5 flex justify-end">
-                <Button
-                  tag="button"
-                  type="submit"
-                  size="sm"
-                  className="@lg:w-auto dark:bg-gray-100 dark:text-white dark:active:bg-gray-100"
-                >
-                  <PiPlusBold className="me-1.5 h-[17px] w-[17px]" />
-                  Add New Live
-                </Button>
-              </div>
-            </Form>
-          )}
+          {({ values, setFieldValue, errors, touched }) => {
+            console.log('errors: ', errors);
+            console.log('touched: ', touched);
+
+            return (
+              <Form>
+                <MatchInfoForm values={values} setFieldValue={setFieldValue} />
+                <div className="my-5 border-b border-dashed border-slate-300"></div>
+                <TeamInfoForm
+                  values={values}
+                  teamOneImage={teamOneImage}
+                  setTeamOneImage={setTeamOneImage}
+                  teamTwoImage={teamTwoImage}
+                  setTeamTwoImage={setTeamTwoImage}
+                />
+                <div className="my-5 border-b border-dashed border-slate-300"></div>
+                <StreamingInfoForm values={values} />
+                <div className="fixed bottom-[50px] right-[47px] mt-3 animate-bounce hover:animate-none">
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-sm rounded-md text-white"
+                  >
+                    Submit{' '}
+                    {isSubmitting ? (
+                      <ImSpinner className="ml-1 animate-spin" />
+                    ) : (
+                      <FiCheckCircle className="ml-1" />
+                    )}
+                  </button>
+                </div>
+              </Form>
+            );
+          }}
         </Formik>
       </div>
     </div>

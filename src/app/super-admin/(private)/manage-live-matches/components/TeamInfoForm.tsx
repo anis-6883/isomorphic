@@ -11,7 +11,7 @@ export default function TeamInfoForm({
   setTeamTwoImage,
 }) {
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <FormBlockWrapper title="Team One">
         <div className="grid grid-cols-1 gap-2">
           <Field name="team_one_name">

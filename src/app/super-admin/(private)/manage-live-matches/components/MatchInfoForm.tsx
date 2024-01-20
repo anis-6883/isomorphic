@@ -7,7 +7,7 @@ import FormBlockWrapper from './FormBlockWrapper';
 export default function MatchInfoForm({ values, setFieldValue }) {
   return (
     <FormBlockWrapper title="Match Information">
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Field name="match_title">
           {({ field, meta }) => (
             <>
@@ -43,7 +43,7 @@ export default function MatchInfoForm({ values, setFieldValue }) {
                   <label className="form-control w-full">
                     <div className="label">
                       <span className="label-text font-semibold">
-                        Match Title{' '}
+                        Match Time{' '}
                         <span className="text-red-600">
                           *{' '}
                           {meta.touched && meta.error && (
@@ -95,7 +95,7 @@ export default function MatchInfoForm({ values, setFieldValue }) {
         </Field>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Field name="is_hot">
           {({ field }) => (
             <>
@@ -127,10 +127,6 @@ export default function MatchInfoForm({ values, setFieldValue }) {
                   <option value="tennis">Tennis</option>
                   <option value="baseball">Baseball</option>
                   <option value="volleyball">Volleyball</option>
-                  <option value="golf">Golf</option>
-                  <option value="rugby">Rugby</option>
-                  <option value="swimming">Swimming</option>
-                  <option value="table_tennis">Table Tennis</option>
                 </select>
               </label>
             </>
