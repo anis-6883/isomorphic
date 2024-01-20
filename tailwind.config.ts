@@ -134,6 +134,17 @@ export default {
       },
     },
   },
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          primary: '#3872FA',
+          neutral: '#D6DAE1',
+          accent: '#111111',
+        },
+      },
+    ],
+  },
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/container-queries'),

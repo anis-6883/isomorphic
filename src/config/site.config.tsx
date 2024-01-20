@@ -1,7 +1,7 @@
 import { LAYOUT_OPTIONS } from '@/config/enums';
 import logo from '@public/images/asia-sport-logo.svg';
 import { Metadata } from 'next';
-import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
+// import { OpenGraph } from 'next/dist/lib/metadata/types/opengraph-types';
 
 enum MODE {
   DARK = 'dark',
@@ -20,24 +20,24 @@ export const siteConfig = {
 
 export const metaObject = (
   title?: string,
-  openGraph?: OpenGraph,
+  // openGraph?: OpenGraph,
   description: string = siteConfig.description
 ): Metadata => {
   return {
     title: title ? `${title} - AsiaSport` : siteConfig.title,
     description,
-    openGraph: openGraph ?? {
-      title: title ? `${title} - AsiaSport` : title,
-      description,
-      url: 'https://isomorphic-furyroad.vercel.app',
-      siteName: 'AsiaSport', // https://developers.google.com/search/docs/appearance/site-names
-      images: {
-        url: 'https://s3.amazonaws.com/redqteam.com/isomorphic-furyroad/itemdep/isobanner.png',
-        width: 1200,
-        height: 630,
-      },
-      locale: 'en_US',
-      type: 'website',
-    },
+    // openGraph: openGraph ?? {
+    //   title: title ? `${title} - AsiaSport` : title,
+    //   description,
+    //   url: 'https://isomorphic-furyroad.vercel.app',
+    //   siteName: 'AsiaSport', // https://developers.google.com/search/docs/appearance/site-names
+    //   images: {
+    //     url: 'https://s3.amazonaws.com/redqteam.com/isomorphic-furyroad/itemdep/isobanner.png',
+    //     width: 1200,
+    //     height: 630,
+    //   },
+    //   locale: 'en_US',
+    //   type: 'website',
+    // },
   };
 };

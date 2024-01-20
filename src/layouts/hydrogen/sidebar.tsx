@@ -17,11 +17,11 @@ export default function Sidebar({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        'fixed bottom-0 start-0 z-50 h-full w-[270px] border-e-2 border-gray-100 bg-white dark:bg-gray-100/50 2xl:w-72',
+        'fixed bottom-0 start-0 z-50 h-full w-[270px] border-e-2 border-gray-100 bg-white 2xl:w-72 dark:bg-gray-100/50',
         className
       )}
     >
-      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 dark:bg-gray-100/5 2xl:px-8 2xl:pt-6">
+      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 2xl:px-8 2xl:pt-6 dark:bg-gray-100/5">
         <Link href={'/'} aria-label="Site Logo">
           <Logo className="max-w-[155px]" />
         </Link>
@@ -30,7 +30,9 @@ export default function Sidebar({ className }: { className?: string }) {
       <SimpleBar className="h-[calc(100%-80px)]">
         <div className="mt-4 pb-3 3xl:mt-6">
           {menuItems.map((item, index) => {
-            const isActive = pathname === (item?.href as string);
+            const isActive =
+              pathname === (item?.href as string) ||
+              pathname.includes(item?.href as string);
             const pathnameExistInDropdowns: any = item?.dropdownItems?.filter(
               (dropdownItem) => dropdownItem.href === pathname
             );
@@ -94,7 +96,7 @@ export default function Sidebar({ className }: { className?: string }) {
                                   : 'text-gray-500 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900'
                               )}
                             >
-                              <div className='flex items-center truncate'>
+                              <div className="flex items-center truncate">
                                 <span
                                   className={cn(
                                     'me-[18px] ms-1 inline-flex h-1 w-1 rounded-full bg-current transition-all duration-200',
@@ -103,11 +105,13 @@ export default function Sidebar({ className }: { className?: string }) {
                                       : 'opacity-40'
                                   )}
                                 />{' '}
-                                <span className='truncate'>
+                                <span className="truncate">
                                   {dropdownItem?.name}
                                 </span>
                               </div>
-                              {dropdownItem?.badge?.length ? (getStatusBadge(dropdownItem?.badge)) : null}
+                              {dropdownItem?.badge?.length
+                                ? getStatusBadge(dropdownItem?.badge)
+                                : null}
                             </Link>
                           );
                         })}
@@ -122,7 +126,7 @@ export default function Sidebar({ className }: { className?: string }) {
                             : 'text-gray-700 transition-colors duration-200 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-700/90'
                         )}
                       >
-                        <div className='flex items-center truncate'>
+                        <div className="flex items-center truncate">
                           {item?.icon && (
                             <span
                               className={cn(
@@ -135,10 +139,11 @@ export default function Sidebar({ className }: { className?: string }) {
                               {item?.icon}
                             </span>
                           )}
-                          <span className='truncate'>{item.name}</span>
+                          <span className="truncate">{item.name}</span>
                         </div>
-                          {item?.badge?.length ? (getStatusBadge(item?.badge)) : null}
-
+                        {item?.badge?.length
+                          ? getStatusBadge(item?.badge)
+                          : null}
                       </Link>
                     )}
                   </>

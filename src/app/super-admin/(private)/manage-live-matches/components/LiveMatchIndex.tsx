@@ -160,6 +160,8 @@ export default function LiveMatchIndex() {
     paginationDisplayMode: 'pages',
     mantinePaginationProps: {
       rowsPerPageOptions: ['5', '10', '20', '50', '100'],
+      color: 'rgb(56, 114, 250)',
+      withEdges: true,
     },
     rowCount: finalData.length as number,
     initialState: {
@@ -195,7 +197,7 @@ export default function LiveMatchIndex() {
           position: index + 1,
         }));
 
-        console.log('updatedArray: ', updatedArray);
+        // console.log('updatedArray: ', updatedArray);
 
         setFinalData(updatedArray);
       },

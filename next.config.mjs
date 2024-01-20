@@ -55,6 +55,10 @@ const nextConfig = {
     ],
   },
   reactStrictMode: false,
+  // optimizeFonts: false,
+  // productionBrowserSourceMaps: false,
+  // generateEtags: false,
+  // poweredByHeader: false,
 };
 
 export default nextConfig;
