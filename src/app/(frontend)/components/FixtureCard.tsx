@@ -14,6 +14,7 @@ import MatchScore from '../(three-columns)/components/fixtureCardInfo/MatchScore
 import BetDroopDown, { BetMobileModal } from '../(three-columns)/components/fixtureCardInfo/BetDroopDown';
 import Probability from '../(three-columns)/components/fixtureCardInfo/Probability';
 import { number } from 'prop-types';
+import { useGetSelectedPointTableQuery } from '@/features/front-end/league/leagueApi';
 
 const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
   const { data: session } = useSession();
@@ -61,7 +62,6 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
     'POSTPONED',
   ];
   const isPreviewPage = upcomingStatus.includes(match?.state?.short_name);
-
   // Add To Favorites
   // const addToFavorites = async (e, matchId) => {
   //   e.preventDefault();

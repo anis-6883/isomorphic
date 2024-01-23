@@ -1,8 +1,13 @@
-
 import { IMatch } from '@/types';
 import { getCurrentGoals } from '@/utils/get-current-goals';
 
-export default function MatchScore({ match, large }:{match:IMatch ; large:boolean}) {
+export default function MatchScore({
+  match,
+  large,
+}: {
+  match: IMatch;
+  large: boolean;
+}) {
   const liveStatus = [
     'INPLAY_1ST_HALF',
     'INPLAY_2ND_HALF',
@@ -32,13 +37,13 @@ export default function MatchScore({ match, large }:{match:IMatch ; large:boolea
   const { tOne, tTwo } = getCurrentGoals(match?.scores);
 
   return (
-    <div className="me-2 ">
+    <div className="me-2 grid content-center">
       {!isLive && !isUpcoming && (
         <div
           className={
             large
-              ? 'my-auto text-gray-400 grid justify-items-center text-xs md:text-md -mt-1 md:mt-2 '
-              : 'my-auto text-gray-400 grid justify-items-center text-xs mt-1 md:mt-2'
+              ? 'md:text-md text-sm text-gray-400 '
+              : 'my-auto text-xs text-gray-400'
           }
         >
           <div className="pb-1">
