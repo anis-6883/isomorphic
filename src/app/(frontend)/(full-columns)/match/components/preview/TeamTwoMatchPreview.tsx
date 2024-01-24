@@ -26,7 +26,7 @@ const MatchResultIcon = ({ result }: { result: string }) => {
 
   return (
     <span
-      className={`flex h-7 w-7 items-center justify-center rounded-full p-1 ring-1 ${
+      className={`flex h-4 w-4 items-center justify-center rounded-full p-1 ring-1 md:h-7 md:w-7 ${
         text === 'D' ? 'text-black' : 'text-white'
       }  font-semibold ring-black ${bgColor}`}
     >
@@ -57,7 +57,7 @@ export default function TeamTwoMatchPreview({ matchData }: INestedObject) {
             <h4 className="font-bold uppercase text-white">
               {teamInfoData2?.data.name}
             </h4>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-2 lg:gap-5">
               {teamResults?.map((result, index) => (
                 <MatchResultIcon key={index} result={result} />
               ))}

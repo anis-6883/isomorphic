@@ -4,14 +4,17 @@ import { useGetLeagueStandingQuery } from '@/features/front-end/league/leagueApi
 import StandingsShimmer from './StandingsShimmer';
 
 export default function Standings({ seasonId }) {
-  const { isLoading: leagueStandingsLoading, data: leagueStandingsData } =
-    useGetLeagueStandingQuery(seasonId, { skip: !seasonId });
+  const {
+    isLoading: leagueStandingsLoading,
+    data: leagueStandingsData,
+    isFetching,
+  } = useGetLeagueStandingQuery(seasonId, { skip: !seasonId });
 
-  if (leagueStandingsLoading) {
+  if (leagueStandingsLoading || isFetching) {
     return <StandingsShimmer size={17} />;
   }
 
-  if (!leagueStandingsData.status) {
+  if (!leagueStandingsData?.status) {
     return <NoDataFound />;
   }
 

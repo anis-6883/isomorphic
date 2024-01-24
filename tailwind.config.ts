@@ -41,10 +41,7 @@ export default {
           dark: 'rgb(var(--primary-dark) / <alpha-value>)',
         },
         secondary: {
-          lighter: 'rgb(var(--secondary-lighter) / <alpha-value>)',
-          light: 'rgb(var(--secondary-light) / <alpha-value>)',
-          DEFAULT: 'rgb(var(--secondary-default) / <alpha-value>)',
-          dark: 'rgb(var(--secondary-dark) / <alpha-value>)',
+          DEFAULT: '#3388FF',
         },
         red: {
           lighter: 'rgb(var(--red-lighter) / <alpha-value>)',
@@ -141,6 +138,7 @@ export default {
           primary: '#3872FA',
           neutral: '#D6DAE1',
           accent: '#111111',
+          error: '#FC003D',
         },
       },
     ],

@@ -8,7 +8,8 @@ import TabItem from '@/app/shared/TabItems';
 import TabPanel from '@/app/shared/TabPanel';
 import TopDetailsCard from '@/app/shared/TopDetailsCard';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { IoIosArrowDown } from 'react-icons/io';
 import LeagueFixture from './LeagueFixture';
 import Recent from './Recent';
 import Standings from './Standings';
@@ -17,16 +18,21 @@ export default function LeagueDetails({ leagueId }) {
   const [currentTab, setCurrentTab] = useState(0);
   //   const { data: session } = useSession();
   //   const { userProfile } = useGetUserProfile(session);
+  const [seasonId, setSeasonId] = useState(null);
   const { isLoading, data: leagueData } = useGetSingleLeagueByIdQuery(
-    leagueId,
+    leagueId || null,
     { skip: !leagueId }
   );
+
+  useEffect(() => {
+    if (!isLoading && leagueData?.data?.currentseason?.id) {
+      setSeasonId(leagueData.data.currentseason.id);
+    }
+  }, [isLoading, leagueData]);
 
   if (isLoading) {
     return <MainLoading />;
   }
-
-  const seasonId = leagueData?.data.currentseason?.id;
 
   //   const favoriteSelected =
   //     userProfile?.favorites?.leagues.some(
@@ -142,7 +148,11 @@ export default function LeagueDetails({ leagueId }) {
           <div className="flex w-full items-center justify-between py-6">
             <div className="flex items-center">
               <Image
-                src={leagueData?.data.image_path}
+                src={
+                  leagueData?.data.image_path
+                    ? leagueData?.data.image_path
+                    : 'team_placeholder.png'
+                }
                 alt={leagueData?.data.name}
                 height={0}
                 width={0}
@@ -153,14 +163,14 @@ export default function LeagueDetails({ leagueId }) {
               <div className="text-white">
                 <p className="select-none text-2xl">{leagueData?.data.name}</p>
                 <div className="flex gap-4">
-                  <p className="select-none text-base font-light">
+                  <p className="my-auto select-none text-base font-light">
                     {leagueData?.data.country?.name}
                   </p>
                   <div>
                     <select
                       id="seasons"
                       name="seasons"
-                      className="select-none bg-transparent text-secondary outline-none"
+                      className="select-none border-none bg-transparent text-secondary outline-none"
                       onChange={(e) => setSeasonId(e.target.value)}
                     >
                       {leagueData?.data.seasons
@@ -177,6 +187,7 @@ export default function LeagueDetails({ leagueId }) {
                             value={season?.id}
                           >
                             {season?.name}
+                            <IoIosArrowDown />
                           </option>
                         ))}
                     </select>

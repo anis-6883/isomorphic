@@ -5,7 +5,7 @@ import Link from 'next/link';
 export default function PlayerCard({ player }) {
   return (
     <Link
-      href={`/player/${getSlugify(player?.displayName)}/${player.playerId}`}
+      href={`/player/${getSlugify(player?.displayName)}/${player?.playerId}`}
       className="my-2 flex flex-col items-center justify-center gap-2 text-white"
     >
       <Image

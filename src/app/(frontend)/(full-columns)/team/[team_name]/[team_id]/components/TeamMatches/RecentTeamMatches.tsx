@@ -138,7 +138,7 @@ import moment from 'moment';
 //   );
 // };
 
-const RecentTeamMatches = ({ recentMatches, teamId }) => {
+const RecentTeamMatches = ({ recentMatches }) => {
   return (
     <div className="">
       {recentMatches?.map((match) => (
@@ -149,12 +149,7 @@ const RecentTeamMatches = ({ recentMatches, teamId }) => {
               .local()
               .format('DD MMM YYYY')}
           </p>
-          <FixtureCard
-            key={match.id}
-            large={true}
-            match={match}
-            teamId={teamId}
-          />
+          <FixtureCard key={match.id} large={true} match={match} />
         </div>
       ))}
     </div>

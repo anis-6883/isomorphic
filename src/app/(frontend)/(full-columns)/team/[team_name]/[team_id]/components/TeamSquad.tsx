@@ -18,7 +18,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
     return <MainLoading />;
   }
   function groupSquadDataByPosition(squadData) {
-    return squadData.reduce((groupedData, player) => {
+    return squadData?.reduce((groupedData, player) => {
       const positionCode = player?.player?.position?.code;
 
       if (!groupedData[positionCode]) {
@@ -65,7 +65,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
         {groupedData?.goalkeeper?.map((player) => (
-          <PlayerCard key={player.playerId} player={player} />
+          <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>
 
@@ -74,7 +74,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
         {groupedData?.defender?.map((player) => (
-          <PlayerCard key={player.playerId} player={player} />
+          <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>
 
@@ -83,7 +83,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
         {groupedData?.midfielder?.map((player) => (
-          <PlayerCard key={player.playerId} player={player} />
+          <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>
 
@@ -92,7 +92,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
         {groupedData?.attacker?.map((player) => (
-          <PlayerCard key={player.playerId} player={player} />
+          <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>
     </div>

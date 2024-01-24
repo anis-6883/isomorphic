@@ -73,7 +73,7 @@ export default function Fixtures() {
 
   if (isLoading || isFetching) {
     return (
-      <div className=" mb-2 px-4">
+      <div className=" m-2 mb-2 rounded-2xl border-[1px] border-primary p-2 px-4 lg:m-0">
         {arr.map((item) => (
           <div className="grid grid-cols-12 gap-2 py-2" key={item}>
             <div className="col-span-1 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
