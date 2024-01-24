@@ -1,20 +1,12 @@
 'use client';
 import FixtureCard from '@/app/(frontend)/components/FixtureCard';
 import moment from 'moment';
-import { useState } from 'react';
 import RecentTeamMatches from './RecentTeamMatches';
 
 export default function UpcomingTeamMatches({
   upcomingMatches,
   recentMatches,
 }) {
-  const [isStarClicked, setIsStarClicked] = useState(false);
-
-  const handleButtonClick = (event) => {
-    event.preventDefault();
-    setIsStarClicked(!isStarClicked);
-  };
-
   return (
     <div className=" mx-auto">
       {upcomingMatches?.map((match) => (

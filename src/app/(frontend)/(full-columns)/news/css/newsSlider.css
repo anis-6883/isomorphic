@@ -1,0 +1,30 @@
+button.slick-prev {
+  left: 92%;
+  top: 87%;
+  z-index: 1;
+}
+
+button.slick-next {
+  left: 95%;
+  top: 87%;
+  z-index: 1;
+}
+
+button.slick-prev::before {
+  background-image: url('./arrow.png');
+  background-size: 30px 30px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  content: '';
+  rotate: 180deg;
+}
+
+button.slick-next::before {
+  background-image: url('./arrow.png');
+  background-size: 30px 30px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  content: '';
+}

@@ -29,13 +29,13 @@ export default function TeamOneMatchPreview({ matchData }: INestedObject) {
             <h4 className="font-bold uppercase text-white">
               {teamInfoData1?.data.name}
             </h4>
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-2 lg:gap-5">
               {teamResults?.map((match, index) => {
                 if (match === 'win') {
                   return (
                     <span
                       key={index}
-                      className="flex h-7 w-7 items-center justify-center rounded-full bg-green-600 p-1 font-semibold text-white ring-1 ring-black md:h-4 md:w-4"
+                      className="flex h-4 w-4 items-center justify-center rounded-full bg-green-600 p-1 font-semibold text-white ring-1 ring-black md:h-7 md:w-7"
                     >
                       W
                     </span>
@@ -44,7 +44,7 @@ export default function TeamOneMatchPreview({ matchData }: INestedObject) {
                   return (
                     <span
                       key={index}
-                      className="flex h-7 w-7 items-center justify-center rounded-full bg-red-600 p-1 font-semibold text-white ring-1 ring-black md:h-4 md:w-4"
+                      className="flex h-4 w-4 items-center justify-center rounded-full bg-red-600 p-1 font-semibold text-white ring-1 ring-black md:h-7 md:w-7"
                     >
                       L
                     </span>
@@ -53,7 +53,7 @@ export default function TeamOneMatchPreview({ matchData }: INestedObject) {
                   return (
                     <span
                       key={index}
-                      className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 p-1 font-semibold text-black ring-1 ring-black md:h-4 md:w-4"
+                      className="flex h-4 w-4 items-center justify-center rounded-full bg-gray-100 p-1 font-semibold text-black ring-1 ring-black md:h-7 md:w-7"
                     >
                       D
                     </span>

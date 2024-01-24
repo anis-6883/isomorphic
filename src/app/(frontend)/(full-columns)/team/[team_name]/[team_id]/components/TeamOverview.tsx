@@ -48,9 +48,9 @@ export default function TeamOverview({ teamDetails, teamTransfers }) {
           Transfer In Players
         </h4>
         <div className="h-[350px] overflow-y-scroll p-5">
-          {teamTransfers.map((transfer) => (
+          {teamTransfers?.map((transfer) => (
             <div
-              key={transfer.id}
+              key={transfer?.id}
               className="my-3 grid grid-cols-12 items-center"
             >
               <div className="col-span-5">

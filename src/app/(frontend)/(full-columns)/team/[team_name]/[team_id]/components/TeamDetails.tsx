@@ -15,7 +15,11 @@ import TeamMatches from './TeamMatches';
 import TeamOverview from './TeamOverview';
 import TeamSquad from './TeamSquad';
 
-export default function TeamDetails({ teamId }: { teamId: string }) {
+export default function TeamDetails({
+  teamId,
+}: {
+  teamId: string | undefined;
+}) {
   // const { data: session } = useSession();
   // const { userProfile } = useGetUserProfile(session);
   const [currentTab, setCurrentTab] = useState(0);
@@ -24,6 +28,10 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
     useGetTeamDetailsQuery(teamId, { skip: !teamId });
   const { isLoading: teamTransfersLoading, data: teamTransfers } =
     useGetTeamTransfersQuery(teamId, { skip: !teamId });
+
+  if (teamDetailsLoading || teamTransfersLoading) {
+    return <MainLoading />;
+  }
   // const favoriteSelected =
   //   userProfile?.favorites?.teams.some(
   //     (item) => parseInt(item.id) === parseInt(teamId)
@@ -37,9 +45,6 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
   //   }
   // }, [favoriteSelected, userProfile]);
 
-  if (teamDetailsLoading || teamTransfersLoading) {
-    return <MainLoading />;
-  }
   const tabs = ['Overview', 'Matches', 'Squad'];
 
   const tabContents = [
@@ -47,12 +52,10 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
       key={'team_details_tab_001'}
       teamDetails={teamDetails?.data}
       teamTransfers={teamTransfers?.data}
-      teamId={teamId}
     />,
     <TeamMatches
       key={'team_details_tab_002'}
-      teamDetails={teamDetails.data}
-      teamId={teamId}
+      teamDetails={teamDetails?.data}
     />,
     <TeamSquad
       key={'team_details_tab_003'}
@@ -155,7 +158,11 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
           <div className="flex w-full items-center justify-between py-6">
             <div className="flex items-center">
               <Image
-                src={teamDetails?.image_path}
+                src={
+                  teamDetails?.data.image_path
+                    ? teamDetails?.data.image_path
+                    : 'team_placeholder.png'
+                }
                 alt="team-logo"
                 height={0}
                 width={0}
@@ -164,9 +171,9 @@ export default function TeamDetails({ teamId }: { teamId: string }) {
               />
 
               <div className="text-white">
-                <p className="select-none text-2xl">{teamDetails?.name}</p>
+                <p className="select-none text-2xl">{teamDetails?.data.name}</p>
                 <p className="select-none text-base font-light">
-                  {teamDetails?.country?.name}
+                  {teamDetails?.data.country?.name}
                 </p>
               </div>
             </div>
