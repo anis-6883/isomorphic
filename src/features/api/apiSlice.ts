@@ -20,4 +20,5 @@ export const apiSlice = createApi({
     },
   }),
   endpoints: () => ({}),
+  tagTypes: ['liveMatches', 'liveMatch'],
 });

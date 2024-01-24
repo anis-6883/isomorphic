@@ -176,35 +176,32 @@ export default function StreamingInfoForm({ values }) {
                   </Field>
 
                   <Field name={`streaming_sources[${sourceIndex}].stream_type`}>
-                    {({ field, meta }) => {
-                      console.log('meta: ', meta);
-                      return (
-                        <>
-                          <label className="form-control w-full">
-                            <div className="label">
-                              <span className="label-text font-semibold">
-                                Stream Type{' '}
-                                <span className="text-red-600">
-                                  * {meta.error && <span>({meta.error})</span>}
-                                </span>
+                    {({ field, meta }) => (
+                      <>
+                        <label className="form-control w-full">
+                          <div className="label">
+                            <span className="label-text font-semibold">
+                              Stream Type{' '}
+                              <span className="text-red-600">
+                                * {meta.error && <span>({meta.error})</span>}
                               </span>
-                            </div>
-                            <select
-                              className={`select select-bordered ${
-                                meta.error && 'select-error'
-                              }`}
-                              {...field}
-                            >
-                              <option value="">Select One</option>
-                              <option value="root_stream">Root Stream</option>
-                              <option value="restricted">Restricted</option>
-                              <option value="m3u8">M3u8</option>
-                              <option value="web">Web</option>
-                            </select>
-                          </label>
-                        </>
-                      );
-                    }}
+                            </span>
+                          </div>
+                          <select
+                            className={`select select-bordered ${
+                              meta.error && 'select-error'
+                            }`}
+                            {...field}
+                          >
+                            <option value="">Select One</option>
+                            <option value="root_stream">Own Stream</option>
+                            <option value="m3u8">M3u8</option>
+                            {/* <option value="restricted">Restricted</option> */}
+                            {/* <option value="web">Web</option> */}
+                          </select>
+                        </label>
+                      </>
+                    )}
                   </Field>
 
                   {streamSource.stream_type !== 'root_stream' && (
@@ -463,7 +460,7 @@ export default function StreamingInfoForm({ values }) {
                             </div>
                           )
                         )}
-                        <div className="mt-6">
+                        {/* <div className="mt-6">
                           <button
                             className="btn btn-outline btn-accent btn-sm rounded-md"
                             type="button"
@@ -479,7 +476,7 @@ export default function StreamingInfoForm({ values }) {
                             <AiOutlinePlus />
                             Add Root Streams
                           </button>
-                        </div>
+                        </div> */}
                       </div>
                     )}
                   </FieldArray>

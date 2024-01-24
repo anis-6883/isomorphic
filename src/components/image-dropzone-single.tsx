@@ -42,7 +42,7 @@ export default function ImageDropzoneSingle({
       'image/png': ['.png'],
       'image/jpeg': ['.jpg', '.jpeg'],
     },
-    maxSize: 1024 * 1000, // 1 MB
+    maxSize: size, // 1 MB
     onDrop,
   });
 
@@ -131,3 +131,40 @@ export default function ImageDropzoneSingle({
     </>
   );
 }
+
+// const onDrop = useCallback(
+//   (acceptedFiles, fileRejections) => {
+//     if (fileRejections.length > 0) {
+//       // Handle file rejections
+//       fileRejections.forEach((file) => {
+//         file.errors.forEach((err) => {
+//           if (err.code === 'file-too-large') {
+//             setError('File size exceeds 1MB. Please choose a smaller file.');
+//           }
+
+//           if (err.code === 'file-invalid-type') {
+//             setError(
+//               'Invalid file type. Please choose a valid image file (JPEG, PNG, or JPG).'
+//             );
+//           }
+//         });
+//       });
+//     } else if (acceptedFiles.length > 0) {
+//       // Process accepted files
+//       const file = acceptedFiles[0];
+
+//       // Check if the file size is within limits (1 MB in this example)
+//       if (file.size <= 1024 * 1024) {
+//         const fileWithPreview = Object.assign(file, {
+//           preview: URL.createObjectURL(file),
+//         });
+//         setPreview(fileWithPreview.preview);
+//         onChange(fileWithPreview);
+//         setError(null); // Clear any previous errors
+//       } else {
+//         setError('File size exceeds 1MB. Please choose a smaller file.');
+//       }
+//     }
+//   },
+//   [onChange]
+// );

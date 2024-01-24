@@ -6,7 +6,7 @@ export const routes = {
     home: '/super-admin/manage-live-matches',
     create: '/super-admin/manage-live-matches/create',
     details: (id: string) => `/super-admin/manage-live-matches/${id}`,
-    edit: (id: string) => `/super-admin/manage-live-matches/${id}/edit`,
+    edit: (id: string) => `/super-admin/manage-live-matches/update/${id}`,
   },
   fixture: '/super-admin/fixtures',
   manageUser: '/super-admin/manage-users',

@@ -2,10 +2,10 @@
 
 import { routes } from '@/config/routes';
 import {
-  useCreateLiveMatchMutation,
+  useGetLiveMatchQuery,
   useGetLiveMatchesQuery,
+  useUpdateLiveMatchMutation,
 } from '@/features/super-admin/live-match/liveMatchApi';
-import { generateRandomId } from '@/utils/generate-random-id';
 import getStreamObject from '@/utils/get-stream-object';
 import { Form, Formik } from 'formik';
 import moment from 'moment';
@@ -19,34 +19,25 @@ import MatchInfoForm from './MatchInfoForm';
 import StreamingInfoForm from './StreamingInfoForm';
 import TeamInfoForm from './TeamInfoForm';
 
-export default function LiveMatchCreate() {
+export default function LiveMatchUpdate({
+  liveMatchId,
+}: {
+  liveMatchId: number;
+}) {
   const router = useRouter();
-  const [createLiveMatch, { data: response, isSuccess, isError }] =
-    useCreateLiveMatchMutation();
+  const [updateLiveMatch, { data: response, isSuccess, isError }] =
+    useUpdateLiveMatchMutation();
+  const { data: liveMatch, isLoading } = useGetLiveMatchQuery(liveMatchId);
   const { refetch } = useGetLiveMatchesQuery(undefined);
   const [teamOneImage, setTeamOneImage] = useState(null);
   const [teamTwoImage, setTeamTwoImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (isError) {
-      setIsSubmitting(false);
-      toast.error('Something went wrong!');
-    }
-    if (isSuccess) {
-      setIsSubmitting(false);
-      toast.success('Live match created successfully!');
-      refetch();
-      router.push(routes.manageLive.home);
-    }
-  }, [isError, isSuccess, refetch, response, router]);
-
-  const initialValues = {
+  const [initialValues, setInitialValues] = useState({
     fixture_id: '',
     match_title: '',
     time: '',
     is_hot: '0',
-    sports_type_name: 'football',
+    sports_type_name: '',
     status: '1',
     team_one_name: '',
     team_two_name: '',
@@ -55,13 +46,43 @@ export default function LiveMatchCreate() {
     team_one_image: '',
     team_two_image: '',
     streaming_sources: getStreamObject(false),
-  };
+  });
+
+  useEffect(() => {
+    if (!isLoading) {
+      const matchData = liveMatch?.data;
+      const updatedData = {
+        ...matchData,
+        // team_one_image_type: 'url',
+        // team_two_image_type: 'url',
+        streaming_sources: matchData?.streaming_sources?.map((source) => ({
+          ...source,
+          headers: Object.entries(JSON.parse(source?.headers)).map(
+            ([key, value]) => ({ key, value })
+          ),
+        })),
+      };
+
+      setInitialValues(updatedData);
+    }
+
+    if (isError) {
+      setIsSubmitting(false);
+      toast.error('Something went wrong!');
+    }
+    if (isSuccess) {
+      setIsSubmitting(false);
+      toast.success('Live match updated successfully!');
+      refetch();
+      router.push(routes.manageLive.home);
+    }
+  }, [isError, isLoading, isSuccess, liveMatch, refetch, response, router]);
 
   const matchSchema = Yup.object().shape({
     match_title: Yup.string().required('Required!'),
     time: Yup.string().required('Required!'),
     sports_type_name: Yup.string().required('Required!'),
-    fixture_id: Yup.string(),
+    fixture_id: Yup.string().nullable(),
     team_one_name: Yup.string().required('Required!'),
     team_two_name: Yup.string().required('Required!'),
     status: Yup.string(),
@@ -82,10 +103,10 @@ export default function LiveMatchCreate() {
   });
 
   // Live Match Create Handler
-  const handleSubmit = async (values) => {
+  const handleUpdate = async (values) => {
     setIsSubmitting(true);
 
-    values.id = generateRandomId(15);
+    // values.id = generateRandomId(15);
     values.utcTime = moment(values.time).utc().unix();
 
     const liveMatchData = {
@@ -93,13 +114,13 @@ export default function LiveMatchCreate() {
       team_one_image:
         values.team_one_image_type === ''
           ? `${process.env.NEXT_PUBLIC_ASIASPORT_BACKEND_URL}/public/default/team-logo.png`
-          : values.team_one_image_type === 'image'
+          : values.team_one_image_type === 'image' && teamOneImage
           ? teamOneImage
           : values?.team_one_image,
       team_two_image:
         values.team_two_image_type === ''
           ? `${process.env.NEXT_PUBLIC_ASIASPORT_BACKEND_URL}/public/default/team-logo.png`
-          : values.team_two_image_type === 'image'
+          : values.team_two_image_type === 'image' && teamTwoImage
           ? teamTwoImage
           : values?.team_two_image,
     };
@@ -137,7 +158,7 @@ export default function LiveMatchCreate() {
       ? formBody.append('team_two_image', teamTwoImage)
       : formBody.append('team_two_image_url', liveMatchData?.team_two_image);
 
-    createLiveMatch(formBody);
+    updateLiveMatch({ id: liveMatchId, data: formBody });
   };
 
   return (
@@ -147,14 +168,15 @@ export default function LiveMatchCreate() {
           initialValues={initialValues}
           validationSchema={matchSchema}
           enableReinitialize
-          onSubmit={handleSubmit}
+          onSubmit={handleUpdate}
         >
-          {({ values, setFieldValue }) => {
+          {({ values, setFieldValue, errors }) => {
             return (
               <Form>
                 <MatchInfoForm values={values} setFieldValue={setFieldValue} />
                 <div className="my-5 border-b border-dashed border-slate-300"></div>
                 <TeamInfoForm
+                  setFieldValue={setFieldValue}
                   values={values}
                   teamOneImage={teamOneImage}
                   setTeamOneImage={setTeamOneImage}
@@ -168,7 +190,7 @@ export default function LiveMatchCreate() {
                     type="submit"
                     className="btn btn-primary btn-sm rounded-md text-white"
                   >
-                    Submit{' '}
+                    Update{' '}
                     {isSubmitting ? (
                       <ImSpinner className="ml-1 animate-spin" />
                     ) : (

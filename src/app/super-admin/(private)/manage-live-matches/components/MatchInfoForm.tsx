@@ -38,6 +38,7 @@ export default function MatchInfoForm({ values, setFieldValue }) {
         <Field name="time">
           {({ field, meta }) => (
             <Flatpickr
+              value={values?.time}
               render={({ defaultValue, value, ...props }, ref) => (
                 <>
                   <label className="form-control w-full">
@@ -71,7 +72,6 @@ export default function MatchInfoForm({ values, setFieldValue }) {
                 enableTime: true,
                 disableMobile: true,
                 allowInput: false,
-                defaultDate: values?.time || '',
               }}
             />
           )}

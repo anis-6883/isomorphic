@@ -8,10 +8,16 @@ import { useTheme } from 'next-themes';
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
 import LiveMatchActions from './LiveMatchActions';
+import LiveMatchDeleteModal from './LiveMatchDeleteModal';
 
 export default function LiveMatchIndex() {
   const { theme } = useTheme();
   const globalTheme = useMantineTheme();
+  const [deleteItem, setDeleteItem] = useState<{
+    id: number;
+    description: string;
+  } | null>(null);
+
   const [finalData, setFinalData] = useState([]);
   const [finalDataLoading, setFinalDataLoading] = useState(true);
 
@@ -28,6 +34,17 @@ export default function LiveMatchIndex() {
       setFinalDataLoading(false);
     }
   }, [isError, isLoading, liveMatches]);
+
+  const handleDeleteModal = (deletedItem: {
+    id: number;
+    description: string;
+  }) => {
+    setDeleteItem(deletedItem);
+    const modal = document.getElementById('liveMatchDeleteModal');
+    if (modal) {
+      modal.showModal();
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -138,7 +155,7 @@ export default function LiveMatchIndex() {
           <div>
             <LiveMatchActions
               id={row.original.id}
-              title={`Delete Confirmation`}
+              handleDeleteModal={handleDeleteModal}
               description={`Are you sure you want to delete this "${row.original.match_title}" match?`}
             />
           </div>
@@ -205,14 +222,20 @@ export default function LiveMatchIndex() {
   });
 
   return (
-    <MantineProvider
-      theme={{
-        ...globalTheme,
-        primaryShade: 5,
-        colorScheme: (theme as ColorScheme) || 'light',
-      }}
-    >
-      <MantineReactTable table={table} />
-    </MantineProvider>
+    <>
+      <MantineProvider
+        theme={{
+          ...globalTheme,
+          primaryShade: 5,
+          colorScheme: (theme as ColorScheme) || 'light',
+        }}
+      >
+        <MantineReactTable table={table} />
+      </MantineProvider>
+      <LiveMatchDeleteModal
+        description={deleteItem?.description}
+        id={deleteItem?.id}
+      />
+    </>
   );
 }

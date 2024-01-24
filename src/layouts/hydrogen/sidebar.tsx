@@ -1,11 +1,11 @@
 'use client';
 
 import getStatusBadge from '@/components/get-status-badge';
-import Logo from '@/components/logo';
 import { Collapse } from '@/components/ui/collapse';
 import SimpleBar from '@/components/ui/simplebar';
 import { Title } from '@/components/ui/text';
 import cn from '@/utils/class-names';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fragment } from 'react';
@@ -21,9 +21,15 @@ export default function Sidebar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 2xl:px-8 2xl:pt-6 dark:bg-gray-100/5">
+      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-2 pt-2 2xl:px-6 2xl:pt-2 dark:bg-gray-100/5">
         <Link href={'/'} aria-label="Site Logo">
-          <Logo className="max-w-[155px]" />
+          {/* <Logo className="max-w-[155px]" /> */}
+          <Image
+            src="/images/banner-logo.png"
+            width={200}
+            height={20}
+            alt="logo"
+          />
         </Link>
       </div>
 
