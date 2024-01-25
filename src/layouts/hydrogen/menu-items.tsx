@@ -26,8 +26,18 @@ export const menuItems = [
   },
   {
     name: 'Fixtures',
-    href: routes.fixture,
+    href: '#',
     icon: <IoCalendarOutline />,
+    dropdownItems: [
+      {
+        name: 'Football',
+        href: routes.fixture.football,
+      },
+      {
+        name: 'Cricket',
+        href: routes.fixture.cricket,
+      },
+    ],
   },
   {
     name: 'Highlights',

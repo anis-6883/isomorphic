@@ -86,6 +86,7 @@
     "react-quill": "^2.0.0",
     "react-redux": "^9.1.0",
     "react-scroll": "^1.9.0",
+    "react-select": "^5.8.0",
     "react-slick": "^0.29.0",
     "react-svg-worldmap": "2.0.0-alpha.16",
     "react-use": "^17.4.0",

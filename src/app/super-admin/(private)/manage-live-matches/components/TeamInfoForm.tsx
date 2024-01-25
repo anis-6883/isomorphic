@@ -2,7 +2,7 @@ import ImageDropzoneSingle from '@/components/image-dropzone-single';
 import { Field } from 'formik';
 import Image from 'next/image';
 import { FaTrashAlt } from 'react-icons/fa';
-import FormBlockWrapper from './FormBlockWrapper';
+import FormBlockWrapper from '../../components/FormBlockWrapper';
 
 export default function TeamInfoForm({
   values,

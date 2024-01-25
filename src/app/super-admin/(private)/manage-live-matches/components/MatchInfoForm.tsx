@@ -2,7 +2,7 @@ import 'flatpickr/dist/flatpickr.css';
 import 'flatpickr/dist/themes/dark.css';
 import { Field } from 'formik';
 import Flatpickr from 'react-flatpickr';
-import FormBlockWrapper from './FormBlockWrapper';
+import FormBlockWrapper from '../../components/FormBlockWrapper';
 
 export default function MatchInfoForm({ values, setFieldValue }) {
   return (

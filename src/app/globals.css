@@ -278,6 +278,34 @@
 }
 
 /* ................................................... */
+/* Default Button Color Change */
+/* ................................................... */
+
+.btn-primary {
+  color: #ffffff;
+}
+
+.btn-outline.btn-primary:hover {
+  color: #ffffff;
+}
+
+/* ................................................... */
+/* React Select CSS Change */
+/* ................................................... */
+.css-13cymwt-control {
+  min-height: 48px !important;
+  border-color: #484848 !important;
+  border-radius: 10px !important;
+}
+
+.css-t3ipsp-control {
+  min-height: 48px !important;
+  border-color: #484848 !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+/* ................................................... */
 /* scrollbar design starts from here */
 /* ................................................... */
 .simplebar-scrollbar:before {

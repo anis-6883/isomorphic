@@ -1,7 +1,7 @@
 import { Field, FieldArray } from 'formik';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { RiCloseCircleFill } from 'react-icons/ri';
-import FormBlockWrapper from './FormBlockWrapper';
+import FormBlockWrapper from '../../components/FormBlockWrapper';
 
 export default function StreamingInfoForm({ values }) {
   return (
