@@ -13,12 +13,13 @@ import { IoIosArrowForward } from 'react-icons/io';
 import { useSelector } from 'react-redux';
 import FixtureCard from './FixtureCard';
 
-export default function Fixtures() {
+export default function FootballFixtures() {
   const { selectedDate, checkLive } = useSelector(
     (state: RootState) => state.fixtureSlice
   );
   const { data, isLoading, isError, refetch, isFetching } =
     useGetFixtureDataQuery(selectedDate);
+
   const fixturesData = data?.data;
 
   const liveStatus: string[] = [
@@ -42,7 +43,7 @@ export default function Fixtures() {
   // Filter live matches based on the isLive status
   function filterLiveFixturesAndRemoveEmpty(
     leagues: ILeague[] | undefined,
-    liveStatus: any
+    liveStatus: string[] | undefined
   ) {
     if (!leagues || !Array.isArray(leagues)) {
       return [];
@@ -50,8 +51,11 @@ export default function Fixtures() {
 
     return leagues
       .map((league: ILeague) => {
-        const liveFixtures = league?.fixtures?.filter((fixture) =>
-          liveStatus.includes(fixture.state?.state)
+        const liveFixtures = league?.fixtures?.filter(
+          (fixture) =>
+            liveStatus !== undefined &&
+            fixture?.state?.state !== undefined &&
+            liveStatus.includes(fixture?.state?.state)
         );
         return { ...league, fixtures: liveFixtures };
       })
@@ -145,9 +149,9 @@ export default function Fixtures() {
                       </div>
                     </Link>
                     {/* card body  */}
-                    {league?.fixtures?.map((match) => (
+                    {league?.fixtures?.map((match, index: number) => (
                       <FixtureCard
-                        key={match.id}
+                        key={index}
                         match={match}
                         refetchFixtures={refetch}
                       />
@@ -195,9 +199,9 @@ export default function Fixtures() {
                 </Link>
 
                 {/* card body  */}
-                {league?.fixtures?.map((match) => (
+                {league?.fixtures?.map((match, index: number) => (
                   <FixtureCard
-                    key={match.id}
+                    key={index}
                     match={match}
                     refetchFixtures={refetch}
                   />

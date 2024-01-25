@@ -1,9 +1,9 @@
-import Footer from '../components/Footer';
-import Header from '../components/Header';
-import SelectedPointTable from '../components/SelectedPointTable';
-import SkewCard from '../components/SkewCard';
-import TabHeader from '../components/TabHeader';
-import TopLeaguesList from '../components/TopLeaguesList';
+import Footer from '../../components/Footer';
+import Header from '../../components/Header';
+import SelectedPointTable from '../../components/SelectedPointTable';
+import SkewCard from '../../components/SkewCard';
+import TabHeader from '../../components/TabHeader';
+import TopLeaguesList from '../../components/TopLeaguesList';
 
 export default function ThreeColumnsLayout({
   children,
@@ -13,7 +13,7 @@ export default function ThreeColumnsLayout({
   return (
     <div className="flex min-h-screen flex-col bg-[#061626]">
       <Header />
-      <main className="flex-1 mb-0 md:mb-8">
+      <main className="mb-0 flex-1 md:mb-8">
         <div className="mx-auto max-w-[1200px]">
           <TabHeader />
           <div className="grid grid-cols-12 gap-4">

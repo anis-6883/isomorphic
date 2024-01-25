@@ -3,7 +3,7 @@ import StandingTeamItem from '@/app/shared/StandingTeamItem';
 import { useGetLeagueStandingQuery } from '@/features/front-end/league/leagueApi';
 import StandingsShimmer from './StandingsShimmer';
 
-export default function Standings({ seasonId }) {
+export default function Standings({ seasonId }: { seasonId: number | null }) {
   const {
     isLoading: leagueStandingsLoading,
     data: leagueStandingsData,

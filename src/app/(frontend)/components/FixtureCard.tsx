@@ -1,25 +1,22 @@
-
+import { IMatch, TModalElementType } from '@/types';
+import getShortName from '@/utils/get-short-name';
+import getSlugify from '@/utils/get-slugify';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { IoStar, IoStarOutline } from 'react-icons/io5';
-import getSlugify from '@/utils/get-slugify';
-import { IMatch } from '@/types';
 import MatchState from '../(three-columns)/components/fixtureCardInfo/MatchState';
-import getShortName from '@/utils/get-short-name';
 // import useGetUserProfile from '@/hooks/use-get-userprofile';
+import BetDroopDown, {
+  BetMobileModal,
+} from '../(three-columns)/components/fixtureCardInfo/BetDroopDown';
 import MatchScore from '../(three-columns)/components/fixtureCardInfo/MatchScore';
-import BetDroopDown, { BetMobileModal } from '../(three-columns)/components/fixtureCardInfo/BetDroopDown';
 import Probability from '../(three-columns)/components/fixtureCardInfo/Probability';
-import { number } from 'prop-types';
-import { useGetSelectedPointTableQuery } from '@/features/front-end/league/leagueApi';
 
-const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
+const FixtureCard = ({ match, large }: { match: IMatch; large: boolean }) => {
   const { data: session } = useSession();
   // const { userProfile, refetchProfile } = useGetUserProfile(session);
-  const [screenWidth, setScreenWidth] = useState<number | null>(null);
+  const [screenWidth, setScreenWidth] = useState<number>(0);
 
   // const favoriteSelected =
   //   userProfile?.favorites?.matches.some(
@@ -61,7 +58,7 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
     'INTERRUPTED',
     'POSTPONED',
   ];
-  const isPreviewPage = upcomingStatus.includes(match?.state?.short_name);
+  const isPreviewPage = upcomingStatus.includes(match?.state?.short_name ?? '');
   // Add To Favorites
   // const addToFavorites = async (e, matchId) => {
   //   e.preventDefault();
@@ -143,15 +140,16 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
   //   }
   // };
 
-  const teamByLocation = (location:string) => match?.participants?.find((team) => team?.meta?.location === location);
+  const teamByLocation = (location: string) =>
+    match?.participants?.find((team) => team?.meta?.location === location);
 
   return (
-    <div className="relative my-2 mx-2 lg:mx-0">
+    <div className="relative mx-2 my-2 lg:mx-0">
       <Link
         className={
           large
-            ? 'bg-[#1B2435] hover:bg-[#122948] grid grid-cols-12 content-center gap-4 my-4 h-20 lg:h-fit text-xs md:text-sm'
-            : 'bg-[#1B2435] hover:bg-[#122948] grid grid-cols-12 content-normal lg:content-center gap-4 h-20 md:h-full text-xs'
+            ? 'my-4 grid h-20 grid-cols-12 content-center gap-4 bg-[#1B2435] text-xs hover:bg-[#122948] md:text-sm lg:h-fit'
+            : 'grid h-20 grid-cols-12 content-normal gap-4 bg-[#1B2435] text-xs hover:bg-[#122948] md:h-full lg:content-center'
         }
         href={`/match/${isPreviewPage ? 'preview' : 'details'}/${getSlugify(
           teamByLocation('home')?.name
@@ -161,24 +159,27 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
         <div
           className={
             large
-              ? 'py-1 col-span-4 lg:col-span-6 flex items-center'
-              : 'py-1 col-span-4 lg:col-span-5  flex items-center'
+              ? 'col-span-4 flex items-center py-1 lg:col-span-6'
+              : 'col-span-4 flex items-center  py-1 lg:col-span-5'
           }
         >
           <div>
-            <div className="flex justify-between text-gray-400 pb-2">
-              <div className="flex gap-2 items-center">
+            <div className="flex justify-between pb-2 text-gray-400">
+              <div className="flex items-center gap-2">
                 <div>
                   <Image
-                    src={teamByLocation('home')?.image_path}
+                    src={
+                      teamByLocation('home')?.image_path ||
+                      '/images/team_placeholder.png'
+                    }
                     alt="team one"
                     height={0}
                     width={0}
                     sizes="100vw"
-                    className={large ? 'w-5 h-5' : 'w-4 h-4'}
+                    className={large ? 'h-5 w-5' : 'h-4 w-4'}
                   />
                 </div>
-                <h2 className='text-gray-500'>
+                <h2 className="text-gray-500">
                   {getShortName(
                     teamByLocation('home')?.name,
                     teamByLocation('home')?.short_code
@@ -187,18 +188,21 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
               </div>
             </div>
             <div className="flex justify-between text-gray-400 ">
-              <div className="flex gap-2 items-center ">
+              <div className="flex items-center gap-2 ">
                 <div>
                   <Image
-                    src={teamByLocation('away')?.image_path}
+                    src={
+                      teamByLocation('away')?.image_path ||
+                      '/images/team_placeholder.png'
+                    }
                     alt="team two"
                     height={0}
                     width={0}
                     sizes="100vw"
-                    className={large ? 'w-5 h-5' : 'w-4 h-4'}
+                    className={large ? 'h-5 w-5' : 'h-4 w-4'}
                   />
                 </div>
-                <h2 className='text-gray-500'>
+                <h2 className="text-gray-500">
                   {getShortName(
                     teamByLocation('away')?.name,
                     teamByLocation('away')?.short_code
@@ -215,8 +219,8 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
       <div
         className={
           large
-            ? 'my-auto flex gap-6 item-center absolute right-[4.5rem] lg:right-[13.5rem] top-[55px] lg:top-[20px] '
-            : 'my-auto flex gap-4  item-center absolute right-[3.5rem] lg:right-[12.5rem] top-[47px] lg:top-[9px] h-8 '
+            ? 'item-center absolute right-[4.5rem] top-[55px] my-auto flex gap-6 lg:right-[13.5rem] lg:top-[20px] '
+            : 'item-center absolute right-[3.5rem]  top-[47px] my-auto flex h-8 gap-4 lg:right-[12.5rem] lg:top-[9px] '
         }
       >
         <div className="dropdown dropdown-hover my-auto">
@@ -227,14 +231,14 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
               height={0}
               width={0}
               sizes="100vw"
-              className="w-4 h-4 "
+              className="h-4 w-4 "
             />
             <div
               tabIndex={0}
-              className="dropdown-content menu w-[600px] hidden lg:block  !right-[-241px] absolute z-[1000]"
+              className="menu dropdown-content absolute !right-[-241px] z-[1000]  hidden w-[600px] lg:block"
             >
-              <div className="mt-5 bg-[#1B2435]  shadow-lg  shadow-pink-50 rounded-md  relative">
-                <div className="bg-[#1B2435] w-3 h-3 ms-[21.3rem] rotate-45 absolute -mt-1 z-20 "></div>
+              <div className="relative mt-5  rounded-md  bg-[#1B2435] shadow-lg  shadow-pink-50">
+                <div className="absolute z-20 -mt-1 ms-[21.3rem] h-3 w-3 rotate-45 bg-[#1B2435] "></div>
                 <Probability />
               </div>
             </div>
@@ -247,7 +251,7 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
             height={0}
             width={0}
             sizes="100vw"
-            className="w-4 h-3 lg:w-5 lg:h-4 z-[999]"
+            className="z-[999] h-3 w-4 lg:h-4 lg:w-5"
           />
         </div>
       </div>
@@ -255,51 +259,57 @@ const FixtureCard = ({ match, large }:{match:IMatch ; large:boolean}) => {
       <div
         className={
           large
-            ? 'col-span-2 p-2 bg-[#122948] mx-auto dropdown dropdown-hover my-auto dropdown-end absolute right-[2.8rem] top-[0px] lg:right-[3.5rem] h-12 lg:h-full  text-xs '
-            : 'col-span-2 p-2  bg-[#122948] mx-auto dropdown dropdown-hover my-auto dropdown-end absolute right-[2.3rem] lg:right-[3.5rem] h-12 top-[0px] text-xs '
+            ? 'dropdown dropdown-end dropdown-hover absolute right-[2.8rem] top-[0px] col-span-2 mx-auto my-auto h-12 bg-[#122948] p-2 text-xs lg:right-[3.5rem]  lg:h-full '
+            : 'dropdown dropdown-end  dropdown-hover absolute right-[2.3rem] top-[0px] col-span-2 mx-auto my-auto h-12 bg-[#122948] p-2 text-xs lg:right-[3.5rem] '
         }
       >
         <div className="my-auto">
           <div
             onClick={() => {
               if (screenWidth < 400) {
-                document.getElementById('my_modal_4').showModal();
+                const model = document.getElementById(
+                  'my_modal_4'
+                ) as TModalElementType;
+
+                if (model) {
+                  model.showModal();
+                }
               }
             }}
-            className=" grid grid-cols-3 gap-2 lg:gap-4 text-gray-500 my-auto "
+            className=" my-auto grid grid-cols-3 gap-2 text-gray-500 lg:gap-4 "
           >
-            <div className="grid grid-cols content-between h-full">
+            <div className="grid-cols grid h-full content-between">
               <h2>324</h2>
               <h2 className="text-green-700">324</h2>
             </div>
-            <div className="grid grid-cols content-between">
+            <div className="grid-cols grid content-between">
               <h2 className="text-red-700">324</h2>
               <h2>324</h2>
             </div>
-            <div className="grid grid-cols content-between">
+            <div className="grid-cols grid content-between">
               <h2 className="text-red-700">324</h2>
               <h2>324</h2>
             </div>
           </div>
           <div
             tabIndex={1}
-            className="dropdown-content hidden lg:block z-[1] menu w-[600px] !right-[-60px]"
+            className="menu dropdown-content !right-[-60px] z-[1] hidden w-[600px] lg:block"
           >
-            <div className=" mt-5 bg-[#1B2435] shadow-xl shadow-blue-500/50  rounded-none relative">
-              <div className="bg-[#1B2435] w-2 h-2 ms-[30rem] border-none p-0 m-0 rotate-45 absolute -mt-1"></div>
+            <div className=" relative mt-5 rounded-none bg-[#1B2435]  shadow-xl shadow-blue-500/50">
+              <div className="absolute m-0 -mt-1 ms-[30rem] h-2 w-2 rotate-45 border-none bg-[#1B2435] p-0"></div>
               <BetDroopDown />
             </div>
           </div>
           {/* Open the modal using document.getElementById('ID').showModal() method */}
           <div className="">
             <dialog id="my_modal_4" className="modal">
-              <div className="modal-box p-0 rounded-md w-11/12 max-w-5xl ">
+              <div className="modal-box w-11/12 max-w-5xl rounded-md p-0 ">
                 <BetMobileModal />
                 <div className="modal-action">
                   <form method="dialog">
                     {/* if there is a button in form, it will close the modal */}
 
-                    <button className="btn btn-sm btn-circle btn-ghost ring-0 absolute right-2 top-1 text-white">
+                    <button className="btn btn-circle btn-ghost btn-sm absolute right-2 top-1 text-white ring-0">
                       ✕
                     </button>
                   </form>

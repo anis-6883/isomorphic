@@ -1,4 +1,4 @@
-export default function getSlugify(inputString: string) {
+export default function getSlugify(inputString: string | undefined) {
   if (inputString == null) {
     // Handle the case where inputString is undefined or null
     return '';

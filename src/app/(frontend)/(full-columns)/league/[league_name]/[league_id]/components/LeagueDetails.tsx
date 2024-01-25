@@ -7,18 +7,19 @@ import MainLoading from '@/app/shared/MainLoading';
 import TabItem from '@/app/shared/TabItems';
 import TabPanel from '@/app/shared/TabPanel';
 import TopDetailsCard from '@/app/shared/TopDetailsCard';
+import { ISeason } from '@/types';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { IoIosArrowDown } from 'react-icons/io';
 import LeagueFixture from './LeagueFixture';
 import Recent from './Recent';
 import Standings from './Standings';
 
-export default function LeagueDetails({ leagueId }) {
+export default function LeagueDetails({ leagueId }: { leagueId: number }) {
   const [currentTab, setCurrentTab] = useState(0);
   //   const { data: session } = useSession();
   //   const { userProfile } = useGetUserProfile(session);
-  const [seasonId, setSeasonId] = useState(null);
+  const [seasonId, setSeasonId] = useState<number | null>(null);
   const { isLoading, data: leagueData } = useGetSingleLeagueByIdQuery(
     leagueId || null,
     { skip: !leagueId }
@@ -55,7 +56,7 @@ export default function LeagueDetails({ leagueId }) {
     <Standings key={'003'} seasonId={seasonId} />,
   ];
 
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab: number) => {
     setCurrentTab(tab);
   };
 
@@ -140,6 +141,7 @@ export default function LeagueDetails({ leagueId }) {
   //       toast.error('Please login first');
   //     }
   //   };
+
   return (
     <div className="mx-auto max-w-screen-xl">
       <div className="grid grid-cols-12 gap-5">
@@ -171,16 +173,18 @@ export default function LeagueDetails({ leagueId }) {
                       id="seasons"
                       name="seasons"
                       className="select-none border-none bg-transparent text-secondary outline-none"
-                      onChange={(e) => setSeasonId(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                        setSeasonId(Number(e.target.value))
+                      }
                     >
                       {leagueData?.data.seasons
                         .slice()
-                        .sort((a, b) => {
-                          const firstYear1 = a?.name.split('/')[0];
-                          const firstYear2 = b?.name.split('/')[0];
+                        .sort((a: { name: string }, b: { name: string }) => {
+                          const firstYear1 = Number(a?.name.split('/')[0]);
+                          const firstYear2 = Number(b?.name.split('/')[0]);
                           return firstYear2 - firstYear1;
                         })
-                        .map((season) => (
+                        .map((season: ISeason) => (
                           <option
                             className="bg-primary text-white"
                             key={season?.id}

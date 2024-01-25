@@ -1,9 +1,9 @@
 'use client';
-import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { FaCrown, FaRegNewspaper } from 'react-icons/fa';
-import { IoStarSharp } from 'react-icons/io5';
+import { FaRegNewspaper } from 'react-icons/fa';
+import { IoMdFootball } from 'react-icons/io';
+import { IoLogIn, IoStarSharp } from 'react-icons/io5';
 import { PiVideoLight } from 'react-icons/pi';
 
 export const MobileNavbar = () => {
@@ -25,33 +25,21 @@ export const MobileNavbar = () => {
             <div className="flex justify-center">
               {pathname === '/' ? (
                 <div>
-                  <Image
-                    src="/images/football (12).png"
-                    alt="football logo"
-                    height={0}
-                    width={0}
-                    sizes="100vw"
-                    className="h-5 w-5"
-                  />
+                  <IoMdFootball className="text-2xl font-extrabold text-green-400" />
                 </div>
               ) : (
                 <div>
-                  <Image
-                    src="/images/football (12).png"
-                    alt="football logo"
-                    height={0}
-                    width={0}
-                    sizes="100vw"
-                    className="h-5 w-5"
-                  />
+                  <IoMdFootball className="text-2xl font-extrabold" />
                 </div>
               )}
             </div>
+
             <div className="font-xs">
-              <small className="text-center uppercase">matches</small>
+              <small className="text-center uppercase">Matches</small>
             </div>
           </Link>
         </div>
+
         <div className="flex flex-col justify-center">
           <Link
             className={` ${
@@ -72,11 +60,13 @@ export const MobileNavbar = () => {
                 </div>
               )}
             </div>
+
             <div className="font-xs">
               <small className="text-center uppercase">Favorites</small>
             </div>
           </Link>
         </div>
+
         <div className="flex flex-col justify-center">
           <Link
             className={` ${
@@ -97,11 +87,13 @@ export const MobileNavbar = () => {
                 </div>
               )}
             </div>
+
             <div className="font-xs">
               <small className="text-center uppercase">Watch</small>
             </div>
           </Link>
         </div>
+
         <div className="flex flex-col justify-center">
           <Link
             className={` ${
@@ -127,22 +119,23 @@ export const MobileNavbar = () => {
             </div>
           </Link>
         </div>
+
         <div className="flex flex-col justify-center">
           <Link
             className={` ${
-              pathname === '/subscription'
+              pathname === '/signin'
                 ? "relative text-green-400 after:absolute after:left-11 after:top-4 after:text-white after:content-['']"
                 : 'text-white'
             }`}
-            href="/subscription"
+            href="/signin"
           >
             <div className="flex justify-center">
               <div>
-                <FaCrown className="text-2xl text-yellow-400" />
+                <IoLogIn className="text-2xl" />
               </div>
             </div>
             <div className="font-xs">
-              <small className="text-center uppercase">Premium</small>
+              <small className="text-center uppercase">Sign In</small>
             </div>
           </Link>
         </div>

@@ -1,7 +1,34 @@
 import { CouponType } from '@/config/enums';
 
+export interface IParams {
+  player_id?: string;
+  league_id?: string;
+}
+
+export type TModalElementType = HTMLDialogElement | null;
+
 export interface INestedObject {
   [key: string]: INestedObject | any;
+}
+
+export interface ISeason {
+  id: number;
+  name: string;
+}
+
+export interface ISingleStanding {
+  teamId: string;
+  position: string;
+  teamName: string;
+  teamImage: string;
+  GP: string;
+  W: string;
+  D: string;
+  L: string;
+  GF: string;
+  GA: string;
+  GD: string;
+  PTS: string;
 }
 export interface IMatchData {
   data: INestedObject;
@@ -29,9 +56,27 @@ export interface ITabItems {
 
 export interface ICountry {
   name: string;
+  id: string;
 }
 
-export interface ILeague {
+interface CommonProperties {
+  id?: string; // Make id optional here
+  state: { state: string; short_name: string } | undefined;
+  scores?: Score | null;
+  starting_at_timestamp?: number;
+  periods: Array<{
+    minutes: string;
+  }>;
+  participants: Array<{
+    minutes: string;
+    meta: { location: string };
+    short_code: string;
+    image_path: string;
+    name: string;
+  }>;
+}
+
+export interface ILeague extends CommonProperties {
   id?: any;
   name: string;
   image_path: string;
@@ -45,29 +90,17 @@ export interface ILeague {
   }>;
   image: string;
 }
+
+export interface IMatch extends CommonProperties {
+  season_id: string;
+}
+
 export interface Score {
   description: string;
   score?: {
     participant: string;
     goals: number;
   };
-}
-export interface IMatch {
-  id: string;
-  state: { state: string; short_name: string };
-  scores: Score;
-  starting_at_timestamp: number;
-  periods: Array<{
-    minutes: string;
-  }>;
-  participants: Array<{
-    minutes: string;
-    meta: { location: string };
-
-    short_code: string;
-    image_path: string;
-    name: string;
-  }>;
 }
 
 export interface Coupon {

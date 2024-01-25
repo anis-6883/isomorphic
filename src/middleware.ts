@@ -26,6 +26,6 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|images|icons|favicon.ico|league|match|team|player|favorites|watch|highlights|news|signup|signin|test|super-admin/login|$).*)',
+    '/((?!api|_next/static|_next/image|images|icons|favicon.ico|cricket|league|match|team|player|favorites|watch|highlights|news|signup|signin|test|super-admin/login|$).*)',
   ],
 };
