@@ -1,9 +1,10 @@
 import FixtureCard from '@/app/(frontend)/components/FixtureCard';
 import NoDataFound from '@/app/shared/NoDataFound';
+import { IMatch } from '@/types';
 import { filterSortAndGroupMatches } from '@/utils/filterSortAndGroupMatches';
 import moment from 'moment';
 
-export default function LeagueFixture({ upcoming }) {
+export default function LeagueFixture<T>({ upcoming }: { upcoming: Array<T> }) {
   if (upcoming) {
     const filteredSortedGroupedMatches = filterSortAndGroupMatches(
       upcoming,
@@ -24,7 +25,7 @@ export default function LeagueFixture({ upcoming }) {
                   </div>
                 </div>
 
-                {league?.matches?.map((match) => (
+                {league?.matches?.map((match: IMatch) => (
                   <FixtureCard key={match.id} match={match} large={true} />
                 ))}
               </div>

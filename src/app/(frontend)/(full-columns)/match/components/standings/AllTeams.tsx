@@ -1,9 +1,10 @@
 import NoDataFound from '@/app/shared/NoDataFound';
 import StandingTeamItem from '@/app/shared/StandingTeamItem';
 import { useGetLeagueStandingQuery } from '@/features/front-end/league/leagueApi';
+import { IMatch } from '@/types';
 import StandingsShimmer from './StandingShimmer';
 
-export default function AllTeams({ matchData }) {
+export default function AllTeams({ matchData }: { matchData: IMatch }) {
   const { isLoading: leagueStandingsLoading, data: leagueStandingsData } =
     useGetLeagueStandingQuery(matchData?.season_id);
 
@@ -126,6 +127,7 @@ export default function AllTeams({ matchData }) {
               {group.standings?.length > 0 ? (
                 group.standings.map((singleStandings, index) => (
                   <StandingTeamItem
+                    index={index}
                     key={singleStandings.position}
                     singleStandings={singleStandings}
                   />
