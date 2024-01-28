@@ -1,0 +1,37 @@
+function sortByPriority(originalArray, priorityArray) {
+  // Create a map to store the index of each element in the priorityArray
+  const priorityMap = new Map();
+  priorityArray.forEach((element, index) => {
+    priorityMap.set(element, index);
+  });
+
+  // Custom sorting function
+  originalArray.sort((a, b) => {
+    const indexA = priorityMap.get(a);
+    const indexB = priorityMap.get(b);
+
+    // If both elements are in the priorityArray, sort based on their indices
+    if (indexA !== undefined && indexB !== undefined) {
+      return indexA - indexB;
+    }
+
+    // If only one element is in the priorityArray, prioritize it
+    if (indexA !== undefined) {
+      return -1;
+    } else if (indexB !== undefined) {
+      return 1;
+    }
+
+    // If neither element is in the priorityArray, maintain the original order
+    return 0;
+  });
+
+  return originalArray;
+}
+
+// Example usage
+const mainArray = ['apple', 'banana', 'kiwi', 'orange'];
+const priorityArray = ['kiwi', 'banana'];
+
+const sortedArray = sortByPriority(mainArray, priorityArray);
+console.log(sortedArray);

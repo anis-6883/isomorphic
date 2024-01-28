@@ -5,6 +5,7 @@ import {
   useCreateLiveMatchMutation,
   useGetLiveMatchesQuery,
 } from '@/features/super-admin/live-match/liveMatchApi';
+import { IFixtureSearchParams } from '@/types';
 import { generateRandomId } from '@/utils/generate-random-id';
 import getStreamObject from '@/utils/get-stream-object';
 import { Form, Formik } from 'formik';
@@ -19,7 +20,11 @@ import MatchInfoForm from './MatchInfoForm';
 import StreamingInfoForm from './StreamingInfoForm';
 import TeamInfoForm from './TeamInfoForm';
 
-export default function LiveMatchCreate() {
+export default function LiveMatchCreate({
+  searchParams,
+}: {
+  searchParams: IFixtureSearchParams;
+}) {
   const router = useRouter();
   const [createLiveMatch, { data: response, isSuccess, isError }] =
     useCreateLiveMatchMutation();
@@ -42,18 +47,18 @@ export default function LiveMatchCreate() {
   }, [isError, isSuccess, refetch, response, router]);
 
   const initialValues = {
-    fixture_id: '',
-    match_title: '',
-    time: '',
+    fixture_id: searchParams?.fixture_id || '',
+    match_title: searchParams?.match_title || '',
+    time: searchParams?.time || '',
     is_hot: '0',
-    sports_type_name: 'football',
+    sports_type_name: searchParams?.sport_type || 'football',
     status: '1',
-    team_one_name: '',
-    team_two_name: '',
-    team_one_image_type: '',
-    team_two_image_type: '',
-    team_one_image: '',
-    team_two_image: '',
+    team_one_name: searchParams?.t1_name || '',
+    team_two_name: searchParams?.t2_name || '',
+    team_one_image_type: searchParams?.t1_img ? 'url' : '',
+    team_two_image_type: searchParams?.t2_img ? 'url' : '',
+    team_one_image: searchParams?.t1_img || '',
+    team_two_image: searchParams?.t2_img || '',
     streaming_sources: getStreamObject(false),
   };
 

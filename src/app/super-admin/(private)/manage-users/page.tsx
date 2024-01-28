@@ -3,23 +3,23 @@ import { routes } from '@/config/routes';
 import { metaObject } from '@/config/site.config';
 import Link from 'next/link';
 import { HiPlus } from 'react-icons/hi2';
-import LiveMatchIndex from './components/LiveMatchIndex';
+import ManageUserIndex from './components/ManageUserIndex';
 
 const pageHeader = {
-  title: 'Manage Live Matches',
+  title: 'Manage Users',
   breadcrumb: [
     {
       href: routes.dashboard,
       name: 'Dashboard',
     },
     {
-      name: 'Manage Live',
+      name: 'Manage Users',
     },
   ],
 };
 
 export const metadata = {
-  ...metaObject('Manage Live'),
+  ...metaObject('Manage Users'),
 };
 
 export default function Page() {
@@ -27,13 +27,13 @@ export default function Page() {
     <>
       <PageHeader title={pageHeader.title} breadcrumb={pageHeader.breadcrumb}>
         <Link
-          href={routes.manageLive.create}
+          href={routes.manageUser}
           className="btn btn-primary btn-sm text-white"
         >
-          <HiPlus className="text-lg" /> Add New Live
+          <HiPlus className="text-lg" /> Add New User
         </Link>
       </PageHeader>
-      <LiveMatchIndex />
+      <ManageUserIndex />
     </>
   );
 }

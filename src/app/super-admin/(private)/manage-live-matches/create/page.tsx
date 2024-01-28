@@ -1,6 +1,7 @@
 import PageHeader from '@/app/shared/page-header';
 import { routes } from '@/config/routes';
 import { metaObject } from '@/config/site.config';
+import { IFixtureSearchParams } from '@/types';
 import LiveMatchCreate from '../components/LiveMatchCreate';
 
 const pageHeader = {
@@ -24,14 +25,18 @@ export const metadata = {
   ...metaObject('Manage Live'),
 };
 
-export default function Page() {
+export default function Page({
+  searchParams,
+}: {
+  searchParams: IFixtureSearchParams;
+}) {
   return (
     <>
       <PageHeader
         title={pageHeader.title}
         breadcrumb={pageHeader.breadcrumb}
       ></PageHeader>
-      <LiveMatchCreate />
+      <LiveMatchCreate searchParams={searchParams} />
     </>
   );
 }

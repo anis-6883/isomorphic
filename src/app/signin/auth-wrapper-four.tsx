@@ -150,10 +150,10 @@ function AuthFooter() {
       <div className="text-center leading-relaxed text-gray-500 lg:text-start">
         © Copyright 2023. Developed By{' '}
         <Link
-          href="https://redq.io/"
+          href="/"
           className="font-medium transition-colors hover:text-primary"
         >
-          {siteConfig.title}
+          {siteConfig.title}{' '}
         </Link>
         | All rights reserved!
       </div>

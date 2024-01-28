@@ -1,6 +1,6 @@
 import AuthWrapperFour from '@/app/signin/auth-wrapper-four';
 import { metaObject } from '@/config/site.config';
-import SignInForm from './sign-in-form';
+import SignInForm from './components/SignInForm';
 
 export const metadata = {
   ...metaObject('User Sign In'),

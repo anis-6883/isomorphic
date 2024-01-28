@@ -1,6 +1,7 @@
 'use client';
 
 import { useGetLiveMatchesQuery } from '@/features/super-admin/live-match/liveMatchApi';
+import { TModalElementType } from '@/types';
 import { ColorScheme, MantineProvider, useMantineTheme } from '@mantine/core';
 import { MantineReactTable, useMantineReactTable } from 'mantine-react-table';
 import moment from 'moment';
@@ -40,7 +41,9 @@ export default function LiveMatchIndex() {
     description: string;
   }) => {
     setDeleteItem(deletedItem);
-    const modal = document.getElementById('liveMatchDeleteModal');
+    const modal = document.getElementById(
+      'liveMatchDeleteModal'
+    ) as TModalElementType;
     if (modal) {
       modal.showModal();
     }

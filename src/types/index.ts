@@ -11,6 +11,66 @@ export interface INestedObject {
   [key: string]: INestedObject | any;
 }
 
+export interface IFixtureSearchParams {
+  fixture_id: string;
+  match_title: string;
+  t1_name: string;
+  t1_img: string;
+  t2_name: string;
+  t2_img: string;
+  time: string;
+  sport_type: string;
+}
+
+export interface IFixtureGroup {
+  id: number;
+  name: string;
+  image: string;
+  fixtures: {
+    id: number;
+    name: string;
+    league: {
+      name: string;
+    };
+    starting_at: string;
+    state: {
+      state: string;
+    };
+    scores: {
+      description: string;
+    }[];
+    participants: {
+      name: string;
+      image_path: string;
+      meta: {
+        location: string;
+      };
+    }[];
+  }[];
+}
+
+export interface IFixture {
+  id: number;
+  name: string;
+  league: {
+    name: string;
+  };
+  starting_at: string;
+  state: {
+    state: string;
+  };
+  scores: {
+    description: string;
+  }[];
+  participants: {
+    name: string;
+    image_path: string;
+    meta: {
+      location: string;
+    };
+  }[];
+}
+
 export interface ISeason {
   id: number;
   name: string;
