@@ -1,4 +1,4 @@
-export default function getDateRange(initialDate: Date) {
+export default function getDateRange(initialDate: Date | undefined) {
   const currentDate = initialDate ? new Date(initialDate) : new Date();
 
   const startDate = new Date(currentDate);

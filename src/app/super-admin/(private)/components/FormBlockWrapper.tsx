@@ -19,7 +19,7 @@ export default function FormBlockWrapper({
           <Text className="mt-1 text-sm text-gray-500">{description}</Text>
         ) : null}
       </header>
-      <div className="col-span-4 space-y-2">{children}</div>
+      <div className="col-span-4 space-y-4">{children}</div>
     </section>
   );
 }

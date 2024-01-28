@@ -6,7 +6,9 @@ import {
 } from '@/features/super-admin/general-settings/generalSettingsApi';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import { ImSpinner } from 'react-icons/im';
+import toast from 'react-hot-toast';
+import { FiCheckCircle } from 'react-icons/fi';
+import { PiSpinnerLight } from 'react-icons/pi';
 import * as Yup from 'yup';
 import CloudinaryForm from './CloudinaryForm';
 import GeneralSettingsForm from './GeneralSettingsForm';
@@ -23,24 +25,21 @@ export default function SettingsMainForm() {
     isError,
   } = useGetGeneralSettingsQuery(undefined);
 
-  const [updateSettings, {}] = useUpdateGeneralSettingsMutation();
+  const [
+    updateSettings,
+    { data: updatedData, isSuccess, isError: updatingError },
+  ] = useUpdateGeneralSettingsMutation();
 
   const [currentTab, setCurrentTab] = useState(0);
   const [siteLogo, setSiteLogo] = useState(null);
-  const [siteLogoOnline, setSiteLogoOnline] = useState(null);
   const [siteIcon, setSiteIcon] = useState(null);
-  const [siteIconOnline, setSiteIconOnline] = useState(null);
-  const [timezoneOption, setTimezoneOption] = useState('');
-  const [languageOption, setLanguageOption] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [allowedCountry, setAllowedCountry] = useState([]);
 
   const [initialValues, setInitialValues] = useState({
     company_name: '',
     site_title: '',
     timezone: {},
     allowed_country: [],
-    // language: {},
     facebook: 'https://www.facebook.com/',
     youtube: 'https://www.youtube.com/',
     instagram: 'https://www.instagram.com/',
@@ -51,30 +50,34 @@ export default function SettingsMainForm() {
     cloudinary_cloud_name: '',
     cloudinary_api_key: '',
     cloudinary_app_secret: '',
+    android_download_link: '',
+    ios_download_link: '',
   });
 
   useEffect(() => {
-    if (!isLoading && !isError) {
-      console.log(generalSetting);
+    if (updatingError) {
+      setIsSubmitting(false);
+      toast.error('Something went wrong!');
+    }
 
-      setInitialValues({
-        company_name: generalSetting?.data?.company_name || '',
-        site_title: generalSetting?.data?.site_title || '',
-        timezone: {},
-        allowed_country: [],
-        facebook: generalSetting?.data?.facebook || '',
-        youtube: generalSetting?.data?.youtube || '',
-        instagram: generalSetting?.data?.instagram || '',
-        site_logo: generalSetting?.data?.site_logo || '',
-        site_icon: generalSetting?.data?.site_icon || '',
-        terms: generalSetting?.data?.terms || '',
-        policy: generalSetting?.data?.policy || '',
-        cloudinary_cloud_name:
-          generalSetting?.data?.cloudinary_cloud_name || '',
-        cloudinary_api_key: generalSetting?.data?.cloudinary_api_key || '',
-        cloudinary_app_secret:
-          generalSetting?.data?.cloudinary_app_secret || '',
-      });
+    if (isSuccess) {
+      setSiteLogo(null);
+      setSiteIcon(null);
+      setIsSubmitting(false);
+      setInitialValues((prevValues) => ({
+        ...prevValues,
+        ...updatedData?.data,
+      }));
+      toast.success('General Setting Updated Successfully!');
+    }
+  }, [isSuccess, updatedData, updatingError]);
+
+  useEffect(() => {
+    if (!isLoading && !isError) {
+      setInitialValues((prevValues) => ({
+        ...prevValues,
+        ...generalSetting?.data,
+      }));
     }
   }, [generalSetting, isError, isLoading]);
 
@@ -102,48 +105,41 @@ export default function SettingsMainForm() {
 
   // Submit Handler
   const handleSubmit = async (values) => {
-    // setIsSubmitting(true);
-    console.log(values);
+    setIsSubmitting(true);
 
     var formBody = new FormData();
 
-    formBody.append('company_name', values?.company_name);
-    formBody.append('site_title', values?.site_title);
-    formBody.append('timezone', JSON.stringify(values?.timezone));
-    formBody.append('allowed_country', JSON.stringify(values?.allowed_country));
-    formBody.append('facebook', values?.facebook);
-    formBody.append('youtube', values?.youtube);
-    formBody.append('instagram', values?.instagram);
-    formBody.append('terms', values?.terms);
-    formBody.append('policy', values?.policy);
+    const fieldsToAppend = [
+      'company_name',
+      'site_title',
+      'timezone',
+      'allowed_country',
+      'facebook',
+      'youtube',
+      'instagram',
+      'terms',
+      'policy',
+      'android_download_link',
+      'ios_download_link',
+      'cloudinary_cloud_name',
+      'cloudinary_api_key',
+      'cloudinary_app_secret',
+    ];
+
+    fieldsToAppend.forEach((field) => {
+      if (values[field] !== undefined) {
+        if (field === 'timezone' || field === 'allowed_country') {
+          formBody.append(field, JSON.stringify(values[field]));
+        } else {
+          formBody.append(field, values[field]);
+        }
+      }
+    });
+
+    if (siteLogo) formBody.append('site_logo', siteLogo);
+    if (siteIcon) formBody.append('site_icon', siteIcon);
 
     updateSettings(formBody);
-
-    // let siteLogoUrl = siteLogoOnline
-    //   ? siteLogoOnline
-    //   : `${process.env.NEXT_PUBLIC_ASIASPORT_BACKEND_URL}/public/default/company-logo.png`;
-    // let siteIconUrl = siteIconOnline
-    //   ? siteIconOnline
-    //   : `${process.env.NEXT_PUBLIC_ASIASPORT_BACKEND_URL}/public/default/company-logo.png`;
-
-    // if (siteLogo) siteLogoUrl = await uploadImage(siteLogo);
-    // if (siteIcon) siteIconUrl = await uploadImage(siteIcon);
-
-    // values.site_logo = siteLogoUrl;
-    // values.site_icon = siteIconUrl;
-
-    // const { data } = await asiaSportBackendUrl.post(
-    //   '/api/admin/administration-settings/update',
-    //   values
-    // );
-
-    // if (data?.status) {
-    //   setIsSubmitting(false);
-    //   toast.success('General settings updated successfully!');
-    // } else {
-    //   setIsSubmitting(false);
-    //   toast.error('Something went wrong!');
-    // }
   };
 
   return (
@@ -170,14 +166,8 @@ export default function SettingsMainForm() {
               <div className="col-span-1 w-full rounded-lg border border-gray-200 bg-white p-5 shadow md:col-span-9">
                 <div hidden={currentTab === 0 ? false : true}>
                   <GeneralSettingsForm
-                    setTimezoneOption={setTimezoneOption}
-                    timezoneOption={timezoneOption}
                     setFieldValue={setFieldValue}
-                    setLanguageOption={setLanguageOption}
-                    setAllowedCountry={setAllowedCountry}
-                    allowedCountry={allowedCountry}
-                    // languageOption={languageOption}
-                    // allowedCountryIntoDb={allowedCountryIntoDb}
+                    values={values}
                   />
                 </div>
 
@@ -222,7 +212,11 @@ export default function SettingsMainForm() {
                 disabled={isSubmitting}
               >
                 Submit{' '}
-                {isSubmitting && <ImSpinner className="ml-2 animate-spin" />}
+                {isSubmitting ? (
+                  <PiSpinnerLight className="ml-1 animate-spin" />
+                ) : (
+                  <FiCheckCircle className="ml-1" />
+                )}
               </button>
             </div>
           </div>

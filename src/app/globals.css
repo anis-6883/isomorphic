@@ -281,8 +281,15 @@
 /* Default Button Color Change */
 /* ................................................... */
 
-.btn-primary {
+.btn-primary,
+.bg-primary,
+.badge-primary {
   color: #ffffff;
+}
+
+.btn-primary:disabled {
+  background-color: #1b32b2;
+  color: #dae7ff;
 }
 
 .btn-outline.btn-primary:hover {

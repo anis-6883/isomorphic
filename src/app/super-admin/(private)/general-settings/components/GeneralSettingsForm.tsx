@@ -5,16 +5,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import FormBlockWrapper from '../../components/FormBlockWrapper';
 
-export default function GeneralSettingsForm({
-  setTimezoneOption,
-  timezoneOption,
-  setFieldValue,
-  setLanguageOption,
-  // languageOption,
-  setAllowedCountry,
-  allowedCountry,
-}) {
-  // const languageOptions = [{ value: 'english', label: 'English' }];
+export default function GeneralSettingsForm({ setFieldValue, values }) {
   const animatedComponents = makeAnimated();
   const convertedData = convertDataToObject(es);
 
@@ -38,9 +29,7 @@ export default function GeneralSettingsForm({
                 </div>
                 <input
                   type="text"
-                  className={`input input-bordered w-full ${
-                    meta.touched && meta.error && 'input-error'
-                  }`}
+                  className="input input-bordered w-full"
                   {...field}
                 />
               </label>
@@ -65,9 +54,7 @@ export default function GeneralSettingsForm({
                 </div>
                 <input
                   type="text"
-                  className={`input input-bordered w-full ${
-                    meta.touched && meta.error && 'input-error'
-                  }`}
+                  className="input input-bordered w-full"
                   {...field}
                 />
               </label>
@@ -92,10 +79,9 @@ export default function GeneralSettingsForm({
                   placeholder="Select an option"
                   options={timeZoneData}
                   onChange={(timezoneOption) => {
-                    setTimezoneOption(timezoneOption);
                     setFieldValue('timezone', timezoneOption);
                   }}
-                  value={timezoneOption}
+                  value={values?.timezone}
                 />
               </label>
             </>
@@ -118,11 +104,10 @@ export default function GeneralSettingsForm({
                   isMulti
                   name="Country"
                   onChange={(allowedCountry) => {
-                    setAllowedCountry(allowedCountry);
                     setFieldValue('allowed_country', allowedCountry);
                   }}
                   options={convertedData}
-                  value={allowedCountry}
+                  value={values?.allowed_country}
                 />
               </label>
             </>

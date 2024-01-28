@@ -1,10 +1,9 @@
 import { routes } from '@/config/routes';
-import { BiVideoRecording } from 'react-icons/bi';
+import { BiSolidCricketBall, BiVideoRecording } from 'react-icons/bi';
 import { FaCogs } from 'react-icons/fa';
-import { IoIosStarHalf } from 'react-icons/io';
 import { IoCalendarOutline } from 'react-icons/io5';
 import { LuLayoutDashboard, LuUserCog, LuUsers } from 'react-icons/lu';
-import { PiTelevisionFill } from 'react-icons/pi';
+import { PiSoccerBallFill, PiTelevisionFill } from 'react-icons/pi';
 
 // Note: do not add href in the label object, it is rendering as label
 export const menuItems = [
@@ -41,25 +40,54 @@ export const menuItems = [
   },
   {
     name: 'Highlights',
-    href: routes.highlights.home,
+    href: '#',
     icon: <PiTelevisionFill />,
+    dropdownItems: [
+      {
+        name: 'Football',
+        href: routes.highlights.football.home,
+      },
+      {
+        name: 'Cricket',
+        href: routes.highlights.cricket.home,
+      },
+    ],
   },
   {
-    name: 'Popular',
+    name: 'Football Popular Entity',
     href: '#',
-    icon: <IoIosStarHalf />,
+    icon: <PiSoccerBallFill />,
     dropdownItems: [
       {
         name: 'Leagues',
-        href: routes.popular.league,
+        href: routes.popular.football.league,
       },
       {
         name: 'Teams',
-        href: routes.popular.team,
+        href: routes.popular.football.team,
       },
       {
         name: 'Players',
-        href: routes.popular.player,
+        href: routes.popular.football.player,
+      },
+    ],
+  },
+  {
+    name: 'Cricket Popular Entity',
+    href: '#',
+    icon: <BiSolidCricketBall />,
+    dropdownItems: [
+      {
+        name: 'Leagues',
+        href: routes.popular.cricket.league,
+      },
+      {
+        name: 'Teams',
+        href: routes.popular.cricket.team,
+      },
+      {
+        name: 'Players',
+        href: routes.popular.cricket.player,
       },
     ],
   },

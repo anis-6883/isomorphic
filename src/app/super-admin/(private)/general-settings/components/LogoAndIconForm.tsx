@@ -15,7 +15,7 @@ export default function LogoAndIconForm({
     <FormBlockWrapper title="Logo & Icon">
       <div className="grid grid-cols-1 gap-y-8">
         <div className="w-full">
-          <div>
+          <div className="mb-2">
             <span className="label-text font-semibold">Site Logo</span>
           </div>
           {values?.site_logo ? (
@@ -48,7 +48,7 @@ export default function LogoAndIconForm({
         </div>
 
         <div className="w-full">
-          <div>
+          <div className="mb-2">
             <span className="label-text font-semibold">Site Icon</span>
           </div>
           {values?.site_icon ? (
@@ -64,7 +64,7 @@ export default function LogoAndIconForm({
               <button
                 type="button"
                 className="rounded bg-red-500 p-1"
-                onClick={() => setFieldValue('site_logo', '')}
+                onClick={() => setFieldValue('site_icon', '')}
               >
                 <FaTrashAlt className="hover:fill-secondary-400 h-5 w-5 fill-white transition-colors" />
               </button>

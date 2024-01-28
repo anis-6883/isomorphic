@@ -16,15 +16,30 @@ export const routes = {
   manageAdmin: '/super-admin/manage-admins',
   generalSettings: '/super-admin/general-settings',
   highlights: {
-    home: '/super-admin/highlights',
-    create: '/super-admin/highlights/create',
-    details: (id: string) => `/super-admin/highlights/${id}`,
-    edit: (id: string) => `/super-admin/highlights/${id}/edit`,
+    football: {
+      home: '/super-admin/highlights/football',
+      create: '/super-admin/highlights/football/create',
+      details: (id: string) => `/super-admin/highlights/football/${id}`,
+      edit: (id: string) => `/super-admin/highlights/football/update/${id}`,
+    },
+    cricket: {
+      home: '/super-admin/highlights/cricket',
+      create: '/super-admin/highlights/cricket/create',
+      details: (id: string) => `/super-admin/highlights/cricket/${id}`,
+      edit: (id: string) => `/super-admin/highlights/cricket/update/${id}`,
+    },
   },
   popular: {
-    league: '/super-admin/popular/leagues',
-    team: '/super-admin/popular/teams',
-    player: '/super-admin/popular/players',
+    football: {
+      league: '/super-admin/popular/football/leagues',
+      team: '/super-admin/popular/football/teams',
+      player: '/super-admin/popular/football/players',
+    },
+    cricket: {
+      league: '/super-admin/popular/cricket/leagues',
+      team: '/super-admin/popular/cricket/teams',
+      player: '/super-admin/popular/cricket/players',
+    },
   },
   eCommerce: {
     dashboard: '/ecommerce',

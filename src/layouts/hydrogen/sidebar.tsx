@@ -23,7 +23,6 @@ export default function Sidebar({ className }: { className?: string }) {
     >
       <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-2 pt-2 2xl:px-6 2xl:pt-2 dark:bg-gray-100/5">
         <Link href={'/'} aria-label="Site Logo">
-          {/* <Logo className="max-w-[155px]" /> */}
           <Image
             src="/images/banner-logo.png"
             width={200}

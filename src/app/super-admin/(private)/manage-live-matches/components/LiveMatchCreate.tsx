@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FiCheckCircle } from 'react-icons/fi';
-import { ImSpinner } from 'react-icons/im';
+import { PiSpinnerLight } from 'react-icons/pi';
 import * as Yup from 'yup';
 import MatchInfoForm from './MatchInfoForm';
 import StreamingInfoForm from './StreamingInfoForm';
@@ -167,10 +167,11 @@ export default function LiveMatchCreate() {
                   <button
                     type="submit"
                     className="btn btn-primary btn-sm rounded-md text-white"
+                    disabled={isSubmitting}
                   >
                     Submit{' '}
                     {isSubmitting ? (
-                      <ImSpinner className="ml-1 animate-spin" />
+                      <PiSpinnerLight className="ml-1 animate-spin" />
                     ) : (
                       <FiCheckCircle className="ml-1" />
                     )}
