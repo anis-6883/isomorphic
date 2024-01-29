@@ -312,7 +312,7 @@
   box-shadow: none !important;
 }
 
-.react-tel-input .flag-dropdown {
+/* .react-tel-input .flag-dropdown {
   background: #f5f5f5 !important;
   border: none !important;
 }
@@ -333,7 +333,7 @@
 .react-tel-input .selected-flag:hover,
 .react-tel-input .selected-flag:focus {
   background: #f5f5f5 !important;
-}
+} */
 
 /* ................................................... */
 /* scrollbar design starts from here */

@@ -55,41 +55,13 @@ export const menuItems = [
   },
   {
     name: 'Football Popular Entity',
-    href: '#',
+    href: routes.popularFootballEntity,
     icon: <PiSoccerBallFill />,
-    dropdownItems: [
-      {
-        name: 'Leagues',
-        href: routes.popular.football.league,
-      },
-      {
-        name: 'Teams',
-        href: routes.popular.football.team,
-      },
-      {
-        name: 'Players',
-        href: routes.popular.football.player,
-      },
-    ],
   },
   {
     name: 'Cricket Popular Entity',
-    href: '#',
+    href: routes.popularCricketEntity,
     icon: <BiSolidCricketBall />,
-    dropdownItems: [
-      {
-        name: 'Leagues',
-        href: routes.popular.cricket.league,
-      },
-      {
-        name: 'Teams',
-        href: routes.popular.cricket.team,
-      },
-      {
-        name: 'Players',
-        href: routes.popular.cricket.player,
-      },
-    ],
   },
   {
     name: 'Manage Users',

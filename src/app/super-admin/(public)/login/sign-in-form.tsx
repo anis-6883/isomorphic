@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { BsEye, BsEyeSlash } from 'react-icons/bs';
-import { ImSpinner6 } from 'react-icons/im';
+import { PiSpinnerLight } from 'react-icons/pi';
 import * as Yup from 'yup';
 
 // const initialValues: LoginSchema = {
@@ -204,7 +204,7 @@ export default function SignInForm() {
                 >
                   {loginFormSubmitted ? 'Requesting...' : 'Login'}
                   {loginFormSubmitted && (
-                    <ImSpinner6 className="animate-spin" />
+                    <PiSpinnerLight className="animate-spin" />
                   )}
                 </button>
               </div>

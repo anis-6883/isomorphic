@@ -6,14 +6,14 @@ import { redirect } from 'next/navigation';
 import SignInForm from './sign-in-form';
 
 export const metadata = {
-  ...metaObject('User Sign In'),
+  ...metaObject('Admin Sign In'),
 };
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
 
-  if (session) {
-    if ((session?.user?.role as string) === 'admin') {
+  if (session?.user) {
+    if (session.user.role === 'admin') {
       redirect('/super-admin/dashboard');
     } else {
       redirect('/');

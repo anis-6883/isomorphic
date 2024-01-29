@@ -1,5 +1,6 @@
 export const routes = {
-  signIn: '/signin',
+  signIn: '/user/signin',
+  signUp: '/user/signup',
   adminLogin: '/super-admin/login',
   dashboard: '/super-admin/dashboard',
   manageLive: {
@@ -29,18 +30,8 @@ export const routes = {
       edit: (id: string) => `/super-admin/highlights/cricket/update/${id}`,
     },
   },
-  popular: {
-    football: {
-      league: '/super-admin/popular/football/leagues',
-      team: '/super-admin/popular/football/teams',
-      player: '/super-admin/popular/football/players',
-    },
-    cricket: {
-      league: '/super-admin/popular/cricket/leagues',
-      team: '/super-admin/popular/cricket/teams',
-      player: '/super-admin/popular/cricket/players',
-    },
-  },
+  popularFootballEntity: '/super-admin/popular/football-entities',
+  popularCricketEntity: '/super-admin/popular/cricket-entities',
   eCommerce: {
     dashboard: '/ecommerce',
     products: '/ecommerce/products',
