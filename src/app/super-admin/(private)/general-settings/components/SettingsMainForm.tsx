@@ -40,6 +40,8 @@ export default function SettingsMainForm() {
     site_title: '',
     timezone: {},
     allowed_country: [],
+    qpsms_appkey: '',
+    qpsms_secretkey: '',
     facebook: 'https://www.facebook.com/',
     youtube: 'https://www.youtube.com/',
     instagram: 'https://www.instagram.com/',
@@ -124,6 +126,8 @@ export default function SettingsMainForm() {
       'cloudinary_cloud_name',
       'cloudinary_api_key',
       'cloudinary_app_secret',
+      'qpsms_appkey',
+      'qpsms_secretkey',
     ];
 
     fieldsToAppend.forEach((field) => {

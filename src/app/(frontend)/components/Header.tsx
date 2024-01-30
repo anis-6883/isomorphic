@@ -12,6 +12,7 @@ import { HiMenuAlt2 } from 'react-icons/hi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoLogoInstagram } from 'react-icons/io5';
 import './header.css';
+
 export default function Header() {
   const pathname = usePathname();
   const { data: session } = useSession();

@@ -1,20 +1,83 @@
+import { routes } from '@/config/routes';
+import { useVerifyPhoneMutation } from '@/features/auth/authApi';
+import { TModalElementType } from '@/types';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { SetStateAction, useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { PiSpinnerLight } from 'react-icons/pi';
 import { PinCode } from 'rizzui';
 
-export default function OtpModal({
-  phone,
-  country,
-}: {
-  phone: string;
-  country: string;
-}) {
+export default function OtpModal({ phone }: { phone: string }) {
   const { replace } = useRouter();
   const [otp, setOtp] =
     useState<SetStateAction<string | number | undefined>>('');
   const [otpSubmitting, setOtpSubmitting] = useState(false);
   const [otpValidMsg, setOtpValidMsg] = useState('');
+
+  const [verifyPhone, { data: responseData, isSuccess, isError }] =
+    useVerifyPhoneMutation();
+
+  useEffect(() => {
+    if (isError) {
+      setOtpSubmitting(false);
+      toast.error('Something went wrong! Try Again');
+    }
+
+    if (isSuccess) {
+      console.log(responseData?.data);
+
+      if (!responseData?.status) {
+        setOtpSubmitting(false);
+        setOtpValidMsg(responseData?.message);
+      } else {
+        toast.success(responseData?.message);
+
+        signIn('credentials', {
+          userData: JSON.stringify(responseData?.data),
+          adminLogin: false,
+          redirect: false,
+        }).then((callback) => {
+          if (callback?.error) {
+            setOtpSubmitting(false);
+            toast.error(callback?.error);
+          }
+          if (callback?.ok && !callback?.error) {
+            replace(routes.home);
+            const modal = document.getElementById(
+              'otpModalVerify'
+            ) as TModalElementType;
+
+            if (modal) {
+              modal.close();
+            }
+            // toast.success('Login Successfully!');
+          }
+        });
+      }
+    }
+  }, [isError, isSuccess, replace, responseData]);
+
+  // Submit Handler
+  const otpSubmitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    setOtpSubmitting(true);
+    setOtpValidMsg('');
+
+    if (typeof otp === 'string') {
+      if (otp.length < 6) {
+        setOtpSubmitting(false);
+        setOtpValidMsg('Please, Enter Valid OTP!');
+      } else {
+        verifyPhone({
+          phone,
+          otp,
+        });
+      }
+    } else {
+      setOtpValidMsg('Please, Enter Valid OTP!');
+    }
+  };
 
   return (
     <dialog id="otpModalVerify" className="modal">
@@ -23,14 +86,19 @@ export default function OtpModal({
         <div className="py-4">
           <div className="label mb-4">
             <span className="text-sm font-semibold text-white">
-              Enter valid OTP Code within 2 minutes, sent to +{phone}!
+              We sent an OTP to your phone (+{phone}). You have 2 minutes to
+              complete this verification. Thank you!
             </span>
           </div>
-          <form>
+          <form onSubmit={otpSubmitHandler}>
             <div>
               <PinCode length={6} setValue={(input) => setOtp(input)} />
             </div>
-            {/* <p className="mt-4 px-1 text-error font-medium">{otpValidMsg}</p> */}
+            {otpValidMsg && (
+              <p className="mt-4 px-1 text-center font-medium text-error">
+                {otpValidMsg}
+              </p>
+            )}
             <div className="card-actions mt-10 justify-end">
               <button
                 className="btn btn-primary w-full disabled:bg-[#0053d7] disabled:text-[#d1f2ff]"

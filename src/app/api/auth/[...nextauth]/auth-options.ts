@@ -14,7 +14,7 @@ export const authOptions: NextAuthOptions = {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60 * 12, // Expire in 12 Hours
+    maxAge: 60 * 60 * 24 * 30, // Expire in 30 Days
   },
   callbacks: {
     async jwt({ token, user, account }) {
@@ -26,6 +26,9 @@ export const authOptions: NextAuthOptions = {
           };
         }
       }
+
+      // console.log('user: ', user);
+      // console.log('token 1212: ', token);
 
       // Handle Social Auth
       if (account?.provider === 'google' || account?.provider === 'apple') {
@@ -106,6 +109,9 @@ export const authOptions: NextAuthOptions = {
           }
         } else {
           // User Otp Verify & Sign In
+          const user = JSON.parse(credentials.userData);
+          // console.log('userData: ', user);
+          return user; // userData come from otp verify
 
           // if (credentials?.signUp === 'true') {
           //   try {
@@ -154,23 +160,23 @@ export const authOptions: NextAuthOptions = {
           // }
 
           // After verified otp by firebase
-          try {
-            const { data } = await asiaSportBackendUrl.post(
-              '/api/user/login-with-phone',
-              { phone: credentials?.phone, country: credentials?.country }
-            );
+          // try {
+          //   const { data } = await asiaSportBackendUrl.post(
+          //     '/api/user/login-with-phone',
+          //     { phone: credentials?.phone, country: credentials?.country }
+          //   );
 
-            if (data.status === false) {
-              throw new Error(data?.message);
-            }
+          //   if (data.status === false) {
+          //     throw new Error(data?.message);
+          //   }
 
-            const user = data?.data;
+          //   const user = data?.data;
 
-            return user; // return the user's data
-          } catch (err) {
-            console.log(err);
-            throw new Error(err.message);
-          }
+          //   return user; // return the user's data
+          // } catch (err) {
+          //   console.log(err);
+          //   throw new Error(err.message);
+          // }
         }
       },
     }),

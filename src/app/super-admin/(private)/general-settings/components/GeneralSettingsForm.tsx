@@ -88,6 +88,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
           )}
         </Field>
       </div>
+
       <div className="grid grid-cols-1 gap-x-4 gap-y-2">
         <Field name="allowed_country">
           {({ field }) => (
@@ -108,6 +109,46 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
                   }}
                   options={convertedData}
                   value={values?.allowed_country}
+                />
+              </label>
+            </>
+          )}
+        </Field>
+      </div>
+
+      <div className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
+        <Field name="qpsms_appkey">
+          {({ field, meta }) => (
+            <>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text font-semibold">
+                    QP SMS App Key (OTP)
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  className="input input-bordered w-full"
+                  {...field}
+                />
+              </label>
+            </>
+          )}
+        </Field>
+
+        <Field name="qpsms_secretkey">
+          {({ field, meta }) => (
+            <>
+              <label className="form-control w-full">
+                <div className="label">
+                  <span className="label-text font-semibold">
+                    QP SMS Secret Key (OTP)
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  className="input input-bordered w-full"
+                  {...field}
                 />
               </label>
             </>

@@ -1,10 +1,13 @@
 'use client';
 
 import { routes } from '@/config/routes';
+import { useLoginWithPhoneMutation } from '@/features/auth/authApi';
 import { useGetAllowedStatesQuery } from '@/features/front-end/settings/settingsApi';
-import _ from 'lodash';
+import { TModalElementType } from '@/types';
+import { CountryCode, isValidPhoneNumber } from 'libphonenumber-js';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { HiOutlineArrowSmLeft } from 'react-icons/hi';
 import { PiSpinnerLight } from 'react-icons/pi';
 import OtpModal from './OtpModal';
@@ -13,35 +16,59 @@ import { PhoneNumber } from './PhoneNumber';
 export default function SignInForm({ signUp }: { signUp: boolean }) {
   const [phone, setPhone] = useState('');
   const [country, setCountry] = useState('');
+  const [countryCode, setCountryCode] = useState<any>('');
+  const [dialCode, setDialCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [phoneValidMsg, setPhoneValidMsg] = useState('');
+
+  const [loginWithPhone, { data: responseData, isSuccess, isError }] =
+    useLoginWithPhoneMutation();
 
   const { data: allowedCountries, isLoading } =
     useGetAllowedStatesQuery(undefined);
 
+  // Handle Response
+  useEffect(() => {
+    if (isError) {
+      setSubmitting(false);
+      toast.error('Something went wrong! Try Again');
+    }
+
+    if (isSuccess) {
+      console.log(responseData);
+      setSubmitting(false);
+      toast.success(responseData?.message);
+      const modal = document.getElementById(
+        'otpModalVerify'
+      ) as TModalElementType;
+
+      if (modal) {
+        modal.showModal();
+      }
+    }
+  }, [isError, isSuccess, responseData]);
+
+  // Submit Handler
   const signInHandler = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setPhoneValidMsg('');
 
-    console.log('phone: ', phone);
-    console.log('country: ', country);
-
-    if (!phone || !country || phoneValidMsg) {
+    if (
+      !phone ||
+      !country ||
+      phone.length <= dialCode.length ||
+      !isValidPhoneNumber(phone.replace(dialCode, ''), countryCode)
+    ) {
+      setSubmitting(false);
       setPhoneValidMsg('Valid phone number is required!');
+      return;
     }
 
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 2000);
-
-    // const modal = document.getElementById(
-    //   'otpModalVerify'
-    // ) as TModalElementType;
-
-    // if (modal) {
-    //   modal.showModal();
-    // }
+    loginWithPhone({
+      phone,
+      country,
+    });
   };
 
   return (
@@ -69,27 +96,20 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
                   labelClassName="text-base"
                   color="primary"
                   variant="outline"
-                  onChange={(phone, country: { name: string }) => {
+                  onChange={(
+                    phone,
+                    country: {
+                      name: string;
+                      countryCode: CountryCode;
+                      dialCode: string;
+                    }
+                  ) => {
                     setPhone(phone);
                     setCountry(country?.name);
+                    setCountryCode(country?.countryCode.toUpperCase());
+                    setDialCode(country?.dialCode);
                   }}
                   value={phone}
-                  isValid={(inputNumber, country, countries) => {
-                    const isValid = countries.some((country) => {
-                      return (
-                        _.startsWith(inputNumber, country.dialCode) ||
-                        _.startsWith(country.dialCode, inputNumber)
-                      );
-                    });
-
-                    if (!isValid) {
-                      setPhoneValidMsg('Please, provide valid phone number!');
-                    } else {
-                      setPhoneValidMsg('');
-                    }
-
-                    return isValid;
-                  }}
                 />
                 {phoneValidMsg && (
                   <p className="mt-1 select-none px-1 font-medium text-error">
@@ -134,7 +154,7 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
       </div>
 
       {/* Otp Modal */}
-      <OtpModal country={country} phone={phone} />
+      <OtpModal phone={phone} />
     </section>
   );
 }
