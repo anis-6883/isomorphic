@@ -1,8 +1,9 @@
+import { INestedObject } from '@/types';
 import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function TeamOverview({ teamDetails, teamTransfers }) {
+export default function TeamOverview({ teamDetails, teamTransfers } :{teamDetails:INestedObject;teamTransfers:INestedObject}) {
   return (
     <>
       <div className="mb-5 rounded-2xl border-[1px] border-primary p-5 text-white">
@@ -48,7 +49,7 @@ export default function TeamOverview({ teamDetails, teamTransfers }) {
           Transfer In Players
         </h4>
         <div className="h-[350px] overflow-y-scroll p-5">
-          {teamTransfers?.map((transfer) => (
+          {teamTransfers?.map((transfer:INestedObject) => (
             <div
               key={transfer?.id}
               className="my-3 grid grid-cols-12 items-center"

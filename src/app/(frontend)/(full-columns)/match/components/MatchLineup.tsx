@@ -3,10 +3,11 @@ import { useGetFixturesMatchLineupByIdQuery } from '@/features/front-end/fixture
 import Image from 'next/image';
 import { ImArrowLeft, ImArrowRight } from 'react-icons/im';
 import PlayerView from './PlayerView';
+import { INestedObject, Team } from '@/types';
 
-export default function MatchLineup({ matchData }) {
-  const findTeamInfo = (location, participants) => {
-    const team = participants.find((team) => team.meta.location === location);
+export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
+  const findTeamInfo = (location :string, participants:INestedObject) => {
+    const team = participants.find((team : Team | undefined) => team?.meta?.location === location);
     return {
       id: team?.id,
       name: team?.name,
@@ -18,17 +19,17 @@ export default function MatchLineup({ matchData }) {
   const awayTeamInfo = findTeamInfo('away', matchData?.data.participants);
 
   const { isLoading: matchLineupsLoading, data: matchLineupsData } =
-    useGetFixturesMatchLineupByIdQuery(matchData?.data.id);
-  console.log(matchLineupsData);
+    useGetFixturesMatchLineupByIdQuery(matchData?.data.id , {skip:!matchData?.data.id });
+
 
   if (matchLineupsLoading) {
     return <MainLoading />;
   }
 
-  const getAdjustedLineup = (apiResponse) => {
-    const getFormation = (location) =>
+  const getAdjustedLineup = (apiResponse:INestedObject) => {
+    const getFormation = (location:string) =>
       apiResponse.formations.find(
-        (formation) => formation.location === location
+        (formation :{location:string}) => formation.location === location
       )?.formation;
 
     // Main Schema
@@ -51,10 +52,48 @@ export default function MatchLineup({ matchData }) {
       },
     };
 
-    const addToPosition = (player, team, position, type, details) => {
+    interface Player {
+      player: {
+        id: string;
+        display_name: string;
+        image_path: string;
+        // Add other properties as needed
+      };
+      jersey_number: string;
+      // Add other properties as needed
+    }
+    
+    interface Details {
+      type_id: number;
+      data: {
+        value: string | undefined; // Adjust the type based on your data
+        // Add other properties as needed
+      };
+      // Add other properties as needed
+    }
+    
+    interface PlayerInfo {
+      id: string;
+      jersey: string;
+      name: string;
+      image: string;
+      rating?: string | undefined; // Adjust the type based on your data
+      playerGoals?: string | undefined; // Adjust the type based on your data
+      playerAssists?: string | undefined; // Adjust the type based on your data
+      playerYellowCards?: string | undefined; // Adjust the type based on your data
+      playerRedCards?: string | undefined; // Adjust the type based on your data
+      playerSubstitution?: string | undefined; // Adjust the type based on your data
+    }
+    
+    const addToPosition = (
+      player: Player,
+      team: string,
+      position: string,
+      type: string,
+      details: Details[]
+    ): void => {
       const rating = details.find((topic) => topic.type_id === 118)?.data.value;
-      const playerGoals = details.find((topic) => topic.type_id === 52)?.data
-        .value;
+      const playerGoals = details.find((topic) => topic.type_id === 52)?.data.value;
       const playerAssists = details.find((topic) => topic.type_id === 79)?.data
         .value;
       const playerYellowCards = details.find((topic) => topic.type_id === 84)
@@ -63,23 +102,22 @@ export default function MatchLineup({ matchData }) {
         .value;
       const playerSubstitution = details.find((topic) => topic.type_id === 18)
         ?.data.value;
-
-      const playerInfo = {
+    
+      const playerInfo: PlayerInfo = {
         id: player.player.id,
         jersey: player.jersey_number,
         name: player.player.display_name,
         image: player.player.image_path,
         rating,
-        playerGoals: playerGoals,
-        playerAssists: playerAssists,
-        playerYellowCards: playerYellowCards,
-        playerRedCards: playerRedCards,
-        playerSubstitution: playerSubstitution,
+        playerGoals,
+        playerAssists,
+        playerYellowCards,
+        playerRedCards,
+        playerSubstitution,
       };
-
+    
       formattedLineup[team][type][position] =
-        formattedLineup[team][type][position] || [];
-
+      formattedLineup[team][type][position] || [];
       formattedLineup[team][type][position].push(playerInfo);
     };
 

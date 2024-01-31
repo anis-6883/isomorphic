@@ -1,6 +1,7 @@
 'use client';
 
 import { useGetSelectedPointTableQuery } from '@/features/front-end/league/leagueApi';
+import { IIteam, INestedObject, Team } from '@/types';
 import getShortName from '@/utils/get-short-name';
 import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
@@ -72,7 +73,7 @@ export default function SelectedPointTable() {
               </p>
             </div>
 
-            {selectedPointTable?.data?.standings?.map((team, index: number) => (
+            {selectedPointTable?.data?.standings?.map((team :INestedObject, index: number) => (
               <Link
                 key={team.id}
                 href={`/team/${getSlugify(team?.participant?.name)}/${team
@@ -101,10 +102,10 @@ export default function SelectedPointTable() {
                     </p>
                   </div>
                   <p className="col-span-1 text-xs font-light text-white">
-                    {team?.details?.find((item) => item.type.id === 129)?.value}
+                    {team?.details?.find((item : IIteam | undefined) => item?.type?.id === 129)?.value}
                   </p>
                   <p className="col-span-1 text-xs font-light text-white">
-                    {team?.details?.find((item) => item.type.id === 179)?.value}
+                    {team?.details?.find((item : IIteam | undefined) => item?.type.id === 179)?.value}
                   </p>
                   <p className="col-span-1 text-xs font-light text-white">
                     {team?.points}

@@ -5,17 +5,19 @@ import getSlugify from '@/utils/get-slugify';
 import { UpcomingMatch } from './UpcomingMatch';
 import AwayTeams from './standings/AwayTeams';
 import HomeTeams from './standings/HomeTeams';
+import { IMatch, INestedObject, Team } from '@/types';
 
 export default function MatchStandings({
   matchData,
   homeMatchResponse,
   awayMatchResponse,
-}) {
+} :{matchData:INestedObject;homeMatchResponse:INestedObject;awayMatchResponse:INestedObject }) {
+ 
   const homeData = matchData?.data?.participants.filter(
-    (data) => data?.meta?.location === 'home'
+    (data:Team) => data?.meta?.location === 'home'
   );
   const awayData = matchData?.data.participants.filter(
-    (data) => data?.meta?.location === 'away'
+    (data:Team) => data?.meta?.location === 'away'
   );
 
   return (

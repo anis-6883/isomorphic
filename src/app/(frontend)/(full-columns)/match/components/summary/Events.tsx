@@ -1,5 +1,6 @@
 import MainLoading from '@/app/shared/MainLoading';
 import { useGetFixturesInfoAndCommentsQuery } from '@/features/front-end/fixture/fixtureApi';
+import { IEvent, IEventType, IFormattedEvent, IMatchData, INestedObject, Team } from '@/types';
 import Image from 'next/image';
 import { BiFootball } from 'react-icons/bi';
 import {
@@ -7,13 +8,13 @@ import {
   BsFillArrowRightCircleFill,
 } from 'react-icons/bs';
 
-export default function Events({ matchData, totalGoal }) {
+export default function Events({ matchData , totalGoal } :{matchData:INestedObject ;totalGoal:string}) {
   const awayTeam = matchData?.data.participants.find(
-    (team) => team?.meta?.location === 'away'
+    (team: Team | undefined) => team?.meta?.location === 'away'
   )?.id;
 
   const homeTeam = matchData?.data.participants.find(
-    (team) => team?.meta?.location === 'home'
+    (team : Team | undefined) => team?.meta?.location === 'home'
   )?.id;
 
   const { isLoading: matchEventsLoading, data: eventData } =
@@ -23,53 +24,59 @@ export default function Events({ matchData, totalGoal }) {
   if (matchEventsLoading) {
     return <MainLoading />;
   }
-  let newArray = [];
+  let newArray : IFormattedEvent[]= [];
 
-  eventData?.data?.events.forEach((event) => {
-    const formattedEvent = {
-      participant_id: event.participant_id || '',
-      minute: event.minute || '',
-      name: event.type.name || '',
-      code: event.type.code || '',
-      player: event.player_name || '',
-      related_player: event.related_player_name || '',
+  eventData?.data?.events.forEach((eventItem: IEventType) => {
+    const formattedEvent: IFormattedEvent = {
+      participant_id: eventItem.participant_id || '',
+      minute: eventItem.minute || '',
+      name: eventItem.type?.name || '',
+      code: eventItem.type?.code || '',
+      player: eventItem.player_name || '',
+      related_player: eventItem.related_player_name || '',
     };
-
+  
     if (
-      event.type.code === 'yellowcard' ||
-      event.type.code === 'redcard' ||
-      event.type.code === 'substitution' ||
-      event.type.code === 'VAR_CARD' ||
-      event.type.code === 'goal' ||
-      event.type.code === 'owngoal' ||
-      event.type.code === 'VAR'
+      eventItem.type &&
+      (eventItem.type.code === 'yellowcard' ||
+        eventItem.type.code === 'redcard' ||
+        eventItem.type.code === 'substitution' ||
+        eventItem.type.code === 'VAR_CARD' ||
+        eventItem.type.code === 'goal' ||
+        eventItem.type.code === 'owngoal' ||
+        eventItem.type.code === 'VAR')
     ) {
       newArray.push(formattedEvent);
     }
   });
 
-  const renderEvent = (event, style) => {
+
+  
+
+  type RenderedEvent = JSX.Element | null;
+
+  const renderEvent = (event :IEvent, style:string):RenderedEvent => {
     switch (event.code) {
       case 'yellowcard':
         return yellowCard(event, style);
       case 'redcard':
         return redCard(event, style);
       case 'substitution':
-        return substitution(event, style);
+        return substitution(event);
       case 'VAR':
-        return VAR(event, style);
+        return VAR(event);
       case 'VAR_CARD':
-        return VAR_CARD(event, style);
+        return VAR_CARD(event);
       case 'goal':
         return goal(event, style);
       case 'owngoal':
-        return ownGoal(event, style);
+        return ownGoal(event);
       default:
         return null;
     }
   };
 
-  const substitution = (event) => {
+  const substitution = (event : IEvent) => {
     return (
       <>
         <div className="flex flex-col gap-1 p-1">
@@ -84,7 +91,7 @@ export default function Events({ matchData, totalGoal }) {
     );
   };
 
-  const yellowCard = (event, style) => {
+  const yellowCard = (event:IEvent, style:string) => {
     return (
       <>
         <div className="flex h-8 w-4 flex-col gap-1 rounded bg-yellow-400"></div>
@@ -96,7 +103,7 @@ export default function Events({ matchData, totalGoal }) {
     );
   };
 
-  const redCard = (event, style) => {
+  const redCard = (event:IEvent, style:string) => {
     return (
       <>
         <div className="flex h-8 w-4 flex-col gap-1 rounded bg-red-600"></div>
@@ -106,7 +113,7 @@ export default function Events({ matchData, totalGoal }) {
     );
   };
 
-  const goal = (event, style) => {
+  const goal = (event:IEvent, style:string) => {
     return (
       <>
         <BiFootball className="text-2xl" />
@@ -118,7 +125,7 @@ export default function Events({ matchData, totalGoal }) {
     );
   };
 
-  const ownGoal = (event) => {
+  const ownGoal = (event:IEvent) => {
     return (
       <>
         <BiFootball className="text-[8px] md:text-base" />
@@ -127,7 +134,7 @@ export default function Events({ matchData, totalGoal }) {
     );
   };
 
-  const VAR_CARD = (event) => {
+  const VAR_CARD = (event:IEvent) => {
     return (
       <>
         <Image
@@ -146,7 +153,7 @@ export default function Events({ matchData, totalGoal }) {
     );
   };
 
-  const VAR = (event) => {
+  const VAR = (event:IEvent) => {
     return (
       <>
         <Image
@@ -166,11 +173,11 @@ export default function Events({ matchData, totalGoal }) {
   };
 
   const firstHalfAwayGoal = matchData?.data.scores?.filter(
-    (team) =>
+    (team : Team | undefined) =>
       team?.description === '1ST_HALF' && team?.score?.participant === 'away'
   );
   const firstHalfHomeGoal = matchData?.data.scores?.filter(
-    (team) =>
+    (team : Team | undefined) =>
       team?.description === '1ST_HALF' && team?.score?.participant === 'home'
   );
 
@@ -184,10 +191,15 @@ export default function Events({ matchData, totalGoal }) {
           <h2 className="text-white">{totalGoal}</h2>
         </div>
         {newArray
-          .sort((a, b) => b.minute - a.minute)
+          .sort((a, b) => {
+            const minuteA = a?.minute ? parseInt(a.minute, 10) : 0;
+            const minuteB = b?.minute ? parseInt(b.minute, 10) : 0;
+          
+            return minuteB - minuteA;
+          })
           .map((event, index) => {
             if (
-              event.minute >
+              Number(event.minute) >
               45 + Number(matchData?.data.periods[0]?.time_added)
             ) {
               return (
@@ -242,10 +254,15 @@ export default function Events({ matchData, totalGoal }) {
           <h2 className="text-white">{totalFirstHalfGoal}</h2>
         </div>
         {newArray
-          .sort((a, b) => b.minute - a.minute)
+          .sort((a, b) => {
+            const minuteA = a?.minute ? parseInt(a.minute, 10) : 0;
+            const minuteB = b?.minute ? parseInt(b.minute, 10) : 0;
+          
+            return minuteB - minuteA;
+          })
           .map((event, index) => {
             if (
-              event.minute <
+              Number(event.minute) <
               45 + Number(matchData?.data.periods[1]?.time_added)
             ) {
               return (

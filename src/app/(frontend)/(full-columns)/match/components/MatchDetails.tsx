@@ -142,7 +142,7 @@ export default function MatchDetails({ status, fixtureId }: IFixtureProps) {
             awayMatchResponse={awayMatchResponse}
           />,
           <MatchLineup key={'match_details_tab_07'} matchData={matchData} />,
-          <Feed key={'match_details_tab_08'} matchData={matchData} />,
+          <Feed key={'match_details_tab_08'} matchData={matchData.data} />,
           <MatchH2H key={'match_details_tab_9'} matchData={matchData} />,
         ];
 

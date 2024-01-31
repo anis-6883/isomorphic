@@ -1,4 +1,4 @@
-import { IMatch, TModalElementType } from '@/types';
+import { IMatch, INestedObject, TModalElementType, Team } from '@/types';
 import getShortName from '@/utils/get-short-name';
 import getSlugify from '@/utils/get-slugify';
 import { useSession } from 'next-auth/react';
@@ -13,7 +13,7 @@ import BetDroopDown, {
 import MatchScore from '../(three-columns)/components/fixtureCardInfo/MatchScore';
 import Probability from '../(three-columns)/components/fixtureCardInfo/Probability';
 
-const FixtureCard = ({ match, large }: { match: IMatch; large: boolean }) => {
+const FixtureCard = ({ match, large }: { match: INestedObject; large: boolean }) => {
   const { data: session } = useSession();
   // const { userProfile, refetchProfile } = useGetUserProfile(session);
   const [screenWidth, setScreenWidth] = useState<number>(0);
@@ -141,7 +141,7 @@ const FixtureCard = ({ match, large }: { match: IMatch; large: boolean }) => {
   // };
 
   const teamByLocation = (location: string) =>
-    match?.participants?.find((team) => team?.meta?.location === location);
+    match?.participants?.find((team : Team | undefined) => team?.meta?.location === location);
 
   return (
     <div className="relative mx-2 my-2 lg:mx-0">

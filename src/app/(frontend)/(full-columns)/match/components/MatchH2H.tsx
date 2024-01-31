@@ -1,6 +1,7 @@
 import MatchScore from '@/app/(frontend)/(three-columns)/components/fixtureCardInfo/MatchScore';
 import NoDataFound from '@/app/shared/NoDataFound';
 import { useGetFixturesMatchH2HByTeamQuery } from '@/features/front-end/fixture/fixtureApi';
+import { IEvent, IMatchData, INestedObject, Team } from '@/types';
 import getShortName from '@/utils/get-short-name';
 import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
@@ -8,13 +9,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { IoStar } from 'react-icons/io5';
 
-export default function MatchH2H({ matchData }) {
+export default function MatchH2H({ matchData }:{matchData:INestedObject}) {
   const [isStarClicked, setIsStarClicked] = useState(false);
   const homeId = matchData?.data.participants.find(
-    (team) => team.meta.location === 'home'
+    (team: Team | undefined) => team?.meta?.location === 'home'
   )?.id;
   const awayId = matchData?.data.participants.find(
-    (team) => team.meta.location === 'away'
+    (team: Team | undefined) => team?.meta?.location === 'away'
   )?.id;
 
   const { isLoading: headToHeadLoading, data: headToHeadData } =
@@ -31,31 +32,56 @@ export default function MatchH2H({ matchData }) {
     return <NoDataFound />;
   }
 
-  const handleButtonClick = (event) => {
-    event.preventDefault();
-    setIsStarClicked(!isStarClicked);
-  };
+  // const handleButtonClick = (event:EventListener) => {
+  //   event.preventDefault();
+  //   setIsStarClicked(!isStarClicked);
+  // };
 
-  function getPreviousEncounters(counters) {
-    if (!counters.length) {
+  interface Match {
+    id: string;
+    name: string;
+    starting_at: string;
+    participants: {
+      name: string;
+      image_path: string;
+    }[];
+    state: {
+      state: string;
+    };
+    // Add other properties as needed
+  }
+  
+  interface Encounter {
+    id: string;
+    league_name: string;
+    match_time: string;
+    home_team_name: string;
+    home_team_image: string;
+    away_team_name: string;
+    away_team_image: string;
+    match_state: string;
+    teamMatch: Match;
+    // Add other properties as needed
+  }
+  
+  const getPreviousEncounters = (counters: Match[] | undefined): Encounter[] | JSX.Element => {
+    if (!counters?.length) {
       return <NoDataFound />;
     }
-
-    let previousEncounters = [];
-
+  
+    let previousEncounters: Encounter[] = [];
+  
     counters?.forEach((match) => {
-      const teamMatch = match;
       const fixtureId = match?.id;
       const leagueName = match.name;
       const matchTime = match.starting_at;
       const homeTeamName = match.participants[0].name;
-      // const scores = getCurrentGoals(match?.scores);
       const homeTeamImage = match.participants[0].image_path;
       const awayTeamName = match.participants[1].name;
       const awayTeamImage = match.participants[1].image_path;
       const matchState = match.state.state;
-
-      const encounter = {
+  
+      const encounter: Encounter = {
         id: fixtureId,
         league_name: leagueName,
         match_time: matchTime,
@@ -64,27 +90,27 @@ export default function MatchH2H({ matchData }) {
         away_team_name: awayTeamName,
         away_team_image: awayTeamImage,
         match_state: matchState,
-        teamMatch: teamMatch,
-        // score: scores,
+        teamMatch: match,
       };
-
+  
       previousEncounters.push(encounter);
     });
-
+  
     return previousEncounters;
-  }
+  };
+  
 
   const previousEncounters = getPreviousEncounters(headToHeadData?.data);
-  const teamByLocation = (location) =>
+  const teamByLocation = (location:string) =>
     matchData?.data.participants?.find(
-      (team) => team?.meta?.location === location
+      (team : Team | undefined) => team?.meta?.location === location
     );
   return (
     <div className=" m-2 mb-20 mt-10 rounded-2xl border-[1px] border-primary text-[11px] md:m-0 md:mb-0 md:mb-8 md:text-base">
       <div className="">
         <div></div>
         <div>
-          {previousEncounters.map((match) => (
+        {((previousEncounters as Encounter[]) || []).map((match) => (
             <div key={match?.id}>
               <div className="grid grid-cols-5">
                 <div></div>

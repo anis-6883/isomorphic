@@ -2,12 +2,14 @@ import NoDataFound from '@/app/shared/NoDataFound';
 import StandingTeamItem from '@/app/shared/StandingTeamItem';
 import { useGetLeagueStandingQuery } from '@/features/front-end/league/leagueApi';
 import StandingsShimmer from './StandingShimmer';
+import { Detail, GroupedStandings, INestedObject, ISingleStanding, LeagueStanding, ResultObject, TransformedStandingDetails, TransformedStandingsArray } from '@/types';
 
-export default function AwayTeams({ matchData }) {
+export default function AwayTeams({ matchData }:{matchData:INestedObject}) {
   const { isLoading: leagueStandingsLoading, data: leagueStandingsData } =
-    useGetLeagueStandingQuery(matchData?.data.season_id);
+    useGetLeagueStandingQuery(matchData?.data.season_id, {skip:!matchData?.data.season_id});
+
   const awayData = matchData?.data.participants.filter(
-    (data) => data?.meta?.location === 'away'
+    (data :INestedObject ) => data?.meta?.location === 'away'
   );
   if (leagueStandingsLoading) {
     return <StandingsShimmer size={17} />;
@@ -17,8 +19,8 @@ export default function AwayTeams({ matchData }) {
     return <NoDataFound />;
   }
 
-  function transformDetailsToObj(details) {
-    const result = {};
+  function transformDetailsToObj(details:Detail[]):ResultObject {
+    const result:ResultObject = {};
 
     details.forEach((detail) => {
       const { type_id, value } = detail;
@@ -29,43 +31,60 @@ export default function AwayTeams({ matchData }) {
   }
 
   const isGrouped = leagueStandingsData?.data[0]?.group ? true : false;
-  let groupByGroupName = [];
-  let transformedStandings = [];
-  let transformedStandings2 = [];
+  let groupByGroupName : Array<GroupedStandings> = [];
+  let transformedStandings :Array<ISingleStanding> = [];
+  let transformedStandings2 :TransformedStandingsArray  = [];
 
   if (isGrouped) {
-    leagueStandingsData?.data?.forEach((standings) => {
+    leagueStandingsData?.data?.forEach((standings :LeagueStanding) => {
       const groupIndex = groupByGroupName.findIndex(
-        (group) => group.name === standings.group.name
+        (group) => group.name === standings?.group?.name
       );
+      const transformedData = transformDetailsToObj(standings.details || []);
+      const transformedStanding: TransformedStandingDetails = {
+      position: standings.position,
+      teamName: standings.participant?.name || "",
+      teamImage: standings.participant?.image_path || "",
+      teamId: standings.participant?.id || "",
+      GP: transformedData['129'] || 0,
+      W: transformedData['130'] || 0,
+      D: transformedData['131'] || 0,
+      L: transformedData['132'] || 0,
+      GF: transformedData['133'] || 0,
+      GA: transformedData['134'] || 0,
+      GD: transformedData['179'] || 0,
+      PTS: transformedData['187'] || 0,
+    };
 
       if (groupIndex !== -1) {
-        groupByGroupName[groupIndex].standings.push(standings);
+        groupByGroupName[groupIndex].standings.push(transformedStanding);
       } else {
         groupByGroupName.push({
-          name: standings.group.name,
-          standings: [standings],
+          name: standings?.group?.name || '',
+          standings: [transformedStanding],
         });
       }
     });
 
     transformedStandings2 = groupByGroupName.map((singleGroup) => {
-      const groupStandings = singleGroup.standings.map((standing) => {
-        const transformedData = transformDetailsToObj(standing?.details);
-
+      const groupStandings : Array<TransformedStandingDetails> = singleGroup.standings.map((standing) => {
+        const transformedData = transformDetailsToObj(standing?.details || []);
+        const teamName = standing?.participant?.name || "Unknown";
+        const teamImage = standing?.participant?.image_path || "/images/team_placeholder.png";
+      
         return {
-          teamId: standing?.participant?.id,
-          position: standing?.position,
-          teamName: standing?.participant?.name,
-          teamImage: standing?.participant?.image_path,
-          GP: transformedData['141'],
-          W: transformedData['142'],
-          D: transformedData['143'],
-          L: transformedData['144'],
-          GF: transformedData['145'],
-          GA: transformedData['146'],
-          GD: transformedData['179'],
-          PTS: transformedData['186'],
+          position: standing?.position || 0,
+          teamName: teamName,
+          teamImage: teamImage,
+          teamId: standing?.participant?.id || "",
+          GP: transformedData['141'] || 0,
+          W: transformedData['142'] || 0,
+          D: transformedData['143'] || 0,
+          L: transformedData['144'] || 0,
+          GF: transformedData['145'] || 0,
+          GA: transformedData['146'] || 0,
+          GD: transformedData['179'] || 0,
+          PTS: transformedData['186'] || 0,
         };
       });
 
@@ -86,26 +105,38 @@ export default function AwayTeams({ matchData }) {
       return partA > partB ? 1 : -1;
     });
   } else {
-    transformedStandings = leagueStandingsData?.data?.map((singleStandings) => {
-      const transformedData = transformDetailsToObj(singleStandings?.details);
-      return {
-        teamId: singleStandings?.participant?.id,
-        position: singleStandings?.position,
-        teamName: singleStandings?.participant?.name,
-        teamImage: singleStandings?.participant?.image_path,
-        GP: transformedData['141'],
-        W: transformedData['142'],
-        D: transformedData['143'],
-        L: transformedData['144'],
-        GF: transformedData['145'],
-        GA: transformedData['146'],
-        GD: transformedData['179'],
-        PTS: transformedData['186'],
-      };
+    transformedStandings = leagueStandingsData?.data?.map((singleStandings:INestedObject ) => {
+      const transformedData = transformDetailsToObj(singleStandings?.details || []);
+      const teamName = singleStandings?.participant?.name || "Unknown";
+        const teamImage = singleStandings?.participant?.image_path || "/images/team_placeholder.png";
+      
+        return {
+          position: singleStandings?.position || 0,
+          teamName: teamName,
+          teamImage: teamImage,
+          teamId: singleStandings?.participant?.id || "",
+          GP: transformedData['141'] || 0,
+          W: transformedData['142'] || 0,
+          D: transformedData['143'] || 0,
+          L: transformedData['144'] || 0,
+          GF: transformedData['145'] || 0,
+          GA: transformedData['146'] || 0,
+          GD: transformedData['179'] || 0,
+          PTS: transformedData['186'] || 0,
+        };;
     });
 
     // Sort standings by PTS
-    transformedStandings?.sort((a, b) => b.PTS - a.PTS);
+    transformedStandings?.sort((a, b) => {
+      // Check if both 'a' and 'b' are not undefined
+      if (a && b) {
+        // Check if PTS property is defined in both 'a' and 'b'
+        if (a.PTS !== undefined && b.PTS !== undefined) {
+          return b.PTS - a.PTS;
+        }
+      }
+      return 0; // Return 0 if either 'a' or 'b' is undefined, or if PTS is undefined in either 'a' or 'b'
+    });
   }
 
   return (

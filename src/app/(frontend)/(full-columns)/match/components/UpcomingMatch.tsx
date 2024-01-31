@@ -1,18 +1,19 @@
 'use client';
 
 import MatchScore from '@/app/(frontend)/(three-columns)/components/fixtureCardInfo/MatchScore';
+import { INestedObject } from '@/types';
 import moment from 'moment';
 import Image from 'next/image';
 import { IoStarOutline } from 'react-icons/io5';
 
-export function UpcomingMatch({ homeMatchResponse, awayMatchResponse }) {
+export function UpcomingMatch({ homeMatchResponse, awayMatchResponse }:{ homeMatchResponse:INestedObject; awayMatchResponse: INestedObject}) {
   return (
     <div className="m-4 text-[11px] md:w-full md:text-base">
       <h2 className="mx-5 text-white">Next 5 Matches</h2>
       <div className="grid gap-3 py-8 pb-14 md:grid-cols-2 md:pb-0">
         {/* Code for Home Matches */}
         <div className="rounded-2xl border-[1px] border-primary py-3 ">
-          {homeMatchResponse?.data.upcoming.slice(0, 5).map((data) => (
+          {homeMatchResponse?.data.upcoming.slice(0, 5).map((data:INestedObject) => (
             <div key={data?.id} className="mb-4">
               <p className="my-2 px-4 text-secondary">
                 {moment
@@ -22,7 +23,7 @@ export function UpcomingMatch({ homeMatchResponse, awayMatchResponse }) {
               </p>
               <div className="relative grid bg-[#1E293B] px-2 py-1 md:grid-cols-5 lg:px-0">
                 <div className="my-auto">
-                  <MatchScore match={data} />
+                  <MatchScore match={data} large={false} />
                 </div>
                 <div className="col-span-3 md:col-span-4">
                   <div className="flex justify-between pb-2 text-gray-400">
@@ -67,7 +68,7 @@ export function UpcomingMatch({ homeMatchResponse, awayMatchResponse }) {
         </div>
         {/* Code for Away Matches */}
         <div className="rounded-2xl border-[1px] border-primary py-3">
-          {awayMatchResponse?.data.upcoming.slice(0, 5).map((data) => (
+          {awayMatchResponse?.data.upcoming.slice(0, 5).map((data:INestedObject) => (
             <div key={data?.id} className="mb-4">
               <p className="my-2 px-4 text-secondary">
                 {moment
@@ -77,7 +78,7 @@ export function UpcomingMatch({ homeMatchResponse, awayMatchResponse }) {
               </p>
               <div className="relative grid bg-[#1E293B] px-2 py-1 md:grid-cols-5 lg:px-0">
                 <div className="my-auto ">
-                  <MatchScore match={data} />
+                  <MatchScore match={data} large={false}/>
                 </div>
                 <div className="col-span-3 md:col-span-4">
                   <div className="flex justify-between pb-2 text-gray-400">

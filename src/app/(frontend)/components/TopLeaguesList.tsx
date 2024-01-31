@@ -25,7 +25,6 @@ export default function TopLeaguesList() {
       </div>
     );
   }
-
   if (!popularLeagues?.data?.length) {
     return (
       <div className="border-t border-gray-300 pb-2">

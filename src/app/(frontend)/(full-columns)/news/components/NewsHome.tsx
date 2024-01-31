@@ -12,8 +12,9 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import '../css/newsSlider.css';
+import { IIteam, INestedObject } from '@/types';
 
-function formatNewsTimestamp(timestamp) {
+function formatNewsTimestamp(timestamp:string) {
   const momentTimestamp = moment(timestamp);
   if (momentTimestamp.isValid()) {
     return momentTimestamp.fromNow();
@@ -74,7 +75,7 @@ export default function NewsHome() {
 
       {newsData?.data.length > 0 && (
         <Slider {...sliderSettings}>
-          {newsData?.data.slice(0, 3).map((news) => (
+          {newsData?.data.slice(0, 3).map((news:INestedObject) => (
             <div key={news._id}>
               <Link href={`/news/${news.slug}`}>
                 <div className="grid grid-cols-12">
@@ -112,13 +113,13 @@ export default function NewsHome() {
       )}
 
       {groupByNewsData?.data.length > 0 &&
-        groupByNewsData?.data.map((group, index) => (
+        groupByNewsData?.data.map((group :  INestedObject, index:number) => (
           <div key={index}>
             <h3 className="mx-5 my-7 text-xl font-medium text-white md:mx-0">
               {group.league}
             </h3>
             <div className="mx-5 grid grid-cols-12 gap-5 md:mx-0">
-              {group.news.map((item) => (
+              {group.news.map((item : INestedObject) => (
                 <div
                   key={item._id}
                   className="col-span-12 flex flex-col rounded-xl text-white md:col-span-6 lg:col-span-3"

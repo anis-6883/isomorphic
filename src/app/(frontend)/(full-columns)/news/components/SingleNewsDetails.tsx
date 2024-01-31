@@ -2,12 +2,13 @@
 
 import MainLoading from '@/app/shared/MainLoading';
 import { useGetSingleNewsQuery } from '@/features/front-end/news/newsApi';
+import { INestedObject } from '@/types';
 import DOMPurify from 'dompurify';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 
-function formatNewsTimestamp(timestamp) {
+function formatNewsTimestamp(timestamp :string) {
   const momentTimestamp = moment(timestamp);
   if (momentTimestamp.isValid()) {
     return momentTimestamp.fromNow();
@@ -15,7 +16,7 @@ function formatNewsTimestamp(timestamp) {
   return 'Invalid Date';
 }
 
-export default function SingleNewsDetails({ newsSlug }) {
+export default function SingleNewsDetails({ newsSlug } : {newsSlug:string}) {
   const { isLoading, data: newsData } = useGetSingleNewsQuery(newsSlug, {
     skip: !newsSlug,
   });
@@ -56,7 +57,7 @@ export default function SingleNewsDetails({ newsSlug }) {
         </h2>
 
         <div>
-          {newsData?.data.relatedNews.map((relatedItem) => (
+          {newsData?.data.relatedNews.map((relatedItem : INestedObject) => (
             <div key={relatedItem._id} className="border-b-[1px]">
               <Link
                 className="my-4 flex gap-3"

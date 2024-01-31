@@ -1,7 +1,8 @@
+import { INestedObject } from '@/types';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-export default function PlayerView({ player }) {
+export default function PlayerView({ player }:{player:INestedObject}) {
   const [bgColor, setBgColor] = useState('');
 
   let playerGoals = [];

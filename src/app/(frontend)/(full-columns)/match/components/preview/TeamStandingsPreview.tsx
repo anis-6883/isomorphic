@@ -1,32 +1,32 @@
-import NoDataFound from '@/app/shared/NoDataFound';
-import StandingTeamItem from '@/app/shared/StandingTeamItem';
-import { IMatchData, INestedObject } from '@/types';
-import Image from 'next/image';
-import Link from 'next/link';
+import NoDataFound from "@/app/shared/NoDataFound";
+import StandingTeamItem from "@/app/shared/StandingTeamItem";
+import { INestedObject, ISingleStanding, LeagueStanding } from "@/types";
+import Image from "next/image";
+import Link from "next/link";
 
 interface TeamStandingsPreviewProps {
-  matchData: IMatchData;
+  matchData: INestedObject;
   leagueStandingsData: INestedObject;
   leagueStandingsLoading: boolean;
 }
+
+
 
 export default function TeamStandingsPreview({
   matchData,
   leagueStandingsData,
   leagueStandingsLoading,
-}: TeamStandingsPreviewProps): JSX.Element {
+}: TeamStandingsPreviewProps) {
   const getTeamIdByLocation = (location: string): string | null => {
-    const team = matchData?.participants.find(
-      (team: { meta: { location: string } } | undefined) =>
+    const participants = matchData.participants || [];
+    const team = participants.find(
+      (team: { meta: { location?: string; id?: string } } | undefined) =>
         team?.meta.location === location
     );
-    if (!team) {
-      console.error(`Team not found for location: ${location}`);
-    }
-    return team ? team.id : null;
+    return team ? team?.meta.id || null : null;
   };
 
-  if (!leagueStandingsData?.status) {
+  if (!leagueStandingsData.status) {
     return <NoDataFound />;
   }
 
@@ -46,25 +46,25 @@ export default function TeamStandingsPreview({
     return result;
   }
 
-  let transformedStandings = leagueStandingsData?.data?.map(
-    (singleStandings) => {
+  let transformedStandings: ISingleStanding[] = leagueStandingsData.data?.map(
+    (singleStandings: LeagueStanding) => {
       const transformedData = transformDetailsToObj(
-        singleStandings?.details || []
+        singleStandings.details || []
       );
-
+  
       return {
-        teamId: singleStandings?.participant?.id || '',
-        position: singleStandings?.position || '',
-        teamName: singleStandings?.participant?.name || '',
-        teamImage: singleStandings?.participant?.image_path || '',
-        GP: transformedData['129'] || '',
-        W: transformedData['130'] || '',
-        D: transformedData['131'] || '',
-        L: transformedData['132'] || '',
-        GF: transformedData['133'] || '',
-        GA: transformedData['134'] || '',
-        GD: transformedData['179'] || '',
-        PTS: transformedData['187'] || '',
+        teamId: String(singleStandings.participant?.id) || null,
+        position:singleStandings.position || '',
+        teamName: singleStandings.participant?.name || '',
+        teamImage: singleStandings.participant?.image_path || "/images/team_placeholder.png",
+        GP: Number(transformedData['129']) || 0,
+        W: Number(transformedData['130']) || 0,
+        D: Number(transformedData['131']) || 0,
+        L: Number(transformedData['132']) || 0,
+        GF: Number(transformedData['133']) || 0,
+        GA: Number(transformedData['134']) || 0,
+        GD: Number(transformedData['179']) || 0,
+        PTS:Number(transformedData['187'] )|| 0,
       };
     }
   );
@@ -82,7 +82,7 @@ export default function TeamStandingsPreview({
         className="my-5 ml-10 flex w-fit items-center gap-4"
       >
         <Image
-          src={matchData?.league?.image_path || ''}
+          src={matchData?.league?.image_path}
           width={0}
           height={0}
           alt="League logo"
@@ -114,10 +114,11 @@ export default function TeamStandingsPreview({
         </div>
         <div>
           {transformedStandings?.length > 0 ? (
-            transformedStandings?.map((singleStandings) => (
+            transformedStandings?.map((singleStandings ,index) => (
               <StandingTeamItem
                 key={singleStandings.position || ''}
                 singleStandings={singleStandings}
+                index={index}
               />
             ))
           ) : (

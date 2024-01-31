@@ -1,5 +1,113 @@
 import { CouponType } from '@/config/enums';
 
+export interface IEvent {
+  code: string;
+  player:string;
+  related_player:string
+
+}
+
+export interface IEventType {
+  participant_id: string;
+  minute: string;
+  type: {
+    name: string;
+    code: string;
+  };
+  player_name: string;
+  related_player_name: string;
+}
+export interface IFormattedEvent {
+  participant_id: string;
+  minute: string;
+  name: string;
+  code: string;
+  player: string;
+  related_player: string;
+}
+
+export interface ISingleStanding {
+  teamName?: string;
+  position?: string;
+  teamId?: string | null; // Allow string as well
+  teamImage?: string;
+  GP?: number;
+  W?: number;
+  D?: number;
+  L?: number;
+  GF?: number;
+  GA?: number;
+  GD?: number;
+  PTS?: number;
+}
+
+
+// Type Definitions for League Standings
+export type Detail = {
+  type_id: number;
+  value: number;
+};
+
+export type ResultObject = {
+  [type_id: number]: number;
+};
+
+export type LeagueStanding = {
+  position: number;
+  participant?: {
+    id: string;
+    name?: string;
+    image_path: string;
+  };
+  group?: {
+    name: string;
+  };
+  details?: Detail[] | undefined;
+  
+};
+
+export type TransformedStandingDetails = {
+  details?:[]
+  participant?: {
+    id?: string;
+    name: string;
+    image_path: string;
+    // Add other properties related to participant if needed
+  };
+  position: number;
+  teamName: string;
+  teamImage: string;
+  teamId: string;
+  GP: any;
+  W: any;
+  D: any;
+  L: any;
+  GF: any;
+  GA: any;
+  GD: any;
+  PTS: any;
+
+};
+
+export type GroupedStandings = {
+  id?: string;
+  name: string;
+  standings: TransformedStandingDetails[];
+};
+
+export type TransformedGroupedStandings = {
+  id?: string;
+  groupName: string;
+  standings: TransformedStandingDetails[];
+};
+
+export type TransformedStandingsArray = TransformedGroupedStandings[];
+
+export type LeagueStandingsData = {
+  status: boolean;
+  data?: LeagueStanding[];
+};
+
 export interface IParams {
   player_id?: string;
   league_id?: string;
@@ -75,25 +183,29 @@ export interface ISeason {
   id: number;
   name: string;
 }
-
-export interface ISingleStanding {
-  teamId: string;
-  position: string;
-  teamName: string;
-  teamImage: string;
-  GP: string;
-  W: string;
-  D: string;
-  L: string;
-  GF: string;
-  GA: string;
-  GD: string;
-  PTS: string;
+export interface Team {
+  meta?: {
+    location?: string;
+    id?: string;
+  };
+  location?:string
+  description?:string
+  
+  score:{participant:string}
+  // Add other properties as needed
+}
+export interface IIteam {
+  type: {
+    id?: number;
+  };
+  // Add other properties as needed
 }
 export interface IMatchData {
+  participants?: Team[]|undefined
   data: INestedObject;
   isLoading: boolean;
   isError?: any;
+  
 }
 
 export interface IFixtureProps {
@@ -124,15 +236,15 @@ interface CommonProperties {
   state: { state: string; short_name: string } | undefined;
   scores?: Score | null;
   starting_at_timestamp?: number;
-  periods: Array<{
-    minutes: string;
+  periods?: Array<{
+    minutes?: string;
   }>;
-  participants: Array<{
-    minutes: string;
-    meta: { location: string };
-    short_code: string;
-    image_path: string;
-    name: string;
+  participants?: Array<{
+    minutes?: string;
+    meta?: { location: string };
+    short_code?: string;
+    image_path?: string;
+    name?: string;
   }>;
 }
 
@@ -152,7 +264,7 @@ export interface ILeague extends CommonProperties {
 }
 
 export interface IMatch extends CommonProperties {
-  season_id: string;
+  season_id?: string;
 }
 
 export interface Score {

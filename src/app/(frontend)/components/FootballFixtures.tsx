@@ -14,13 +14,32 @@ import { useSelector } from 'react-redux';
 import FixtureCard from './FixtureCard';
 
 export default function FootballFixtures() {
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   const { selectedDate, checkLive } = useSelector(
     (state: RootState) => state.fixtureSlice
   );
   const { data, isLoading, isError, refetch, isFetching } =
-    useGetFixtureDataQuery(selectedDate);
+    useGetFixtureDataQuery(selectedDate , { skip :!selectedDate });
+
+    if (isLoading || isFetching) {
+      return (
+        <div className=" m-2 mb-2 rounded-2xl border-[1px] border-primary p-2 px-4 lg:m-0">
+          {arr.map((item) => (
+            <div className="grid grid-cols-12 gap-2 py-2" key={item}>
+              <div className="col-span-1 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
+              <div className="col-span-8 h-12 w-full animate-pulse rounded-md bg-neutral "></div>
+              <div className="col-span-2 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
+              <div className="col-span-1 flex h-12 w-full animate-pulse items-center justify-center">
+                <BiStar className="text-xl text-neutral" />
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
 
   const fixturesData = data?.data;
+  console.log('fixturesData' ,fixturesData)
 
   const liveStatus: string[] = [
     'INPLAY_1ST_HALF',
@@ -73,24 +92,6 @@ export default function FootballFixtures() {
     (a: { id: number }, b: { id: number }) => a.id - b.id
   );
 
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-
-  if (isLoading || isFetching) {
-    return (
-      <div className=" m-2 mb-2 rounded-2xl border-[1px] border-primary p-2 px-4 lg:m-0">
-        {arr.map((item) => (
-          <div className="grid grid-cols-12 gap-2 py-2" key={item}>
-            <div className="col-span-1 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
-            <div className="col-span-8 h-12 w-full animate-pulse rounded-md bg-neutral "></div>
-            <div className="col-span-2 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
-            <div className="col-span-1 flex h-12 w-full animate-pulse items-center justify-center">
-              <BiStar className="text-xl text-neutral" />
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   if (!fixturesData?.length) {
     return (
@@ -153,7 +154,7 @@ export default function FootballFixtures() {
                       <FixtureCard
                         key={index}
                         match={match}
-                        refetchFixtures={refetch}
+                        large={false}
                       />
                     ))}
                   </div>
@@ -201,9 +202,9 @@ export default function FootballFixtures() {
                 {/* card body  */}
                 {league?.fixtures?.map((match, index: number) => (
                   <FixtureCard
-                    key={index}
-                    match={match}
-                    refetchFixtures={refetch}
+                  key={index}
+                  match={match}
+                  large={false}
                   />
                 ))}
               </div>

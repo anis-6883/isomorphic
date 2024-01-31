@@ -6,8 +6,9 @@ import TopDetailsCard from '@/app/shared/TopDetailsCard';
 import { useGetPlayerDetailsQuery } from '@/features/front-end/player/playerApi';
 import Image from 'next/image';
 import PlayerProfile from './PlayerProfile';
+import { Team } from '@/types';
 
-export default function PlayerDetails({ playerId }) {
+export default function PlayerDetails({ playerId }:{playerId:number}) {
   const { isLoading, data: playerData } = useGetPlayerDetailsQuery(playerId, {
     skip: !playerId,
   });
@@ -15,8 +16,9 @@ export default function PlayerDetails({ playerId }) {
     return <MainLoading />;
   }
   const playerLeague = playerData?.data.teams?.find(
-    (team) => team.team.type === 'domestic'
+    (team :Team) => team?.team?.type === 'domestic'
   );
+  console.log('playerLeague' , playerLeague)
 
   return (
     <div className="mx-auto max-w-screen-xl">

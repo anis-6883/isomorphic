@@ -1,6 +1,7 @@
 import { useGetFixturesMatchStatisticsByIdQuery } from '@/features/front-end/fixture/fixtureApi';
+import { INestedObject, Team } from '@/types';
 
-export default function MatchStates({ matchData }) {
+export default function MatchStates({ matchData }:{matchData:INestedObject}) {
   const { isLoading: matchStatisticsLoading, data: matchStatisticsData } =
     useGetFixturesMatchStatisticsByIdQuery(matchData?.data.id);
   if (matchStatisticsLoading) {
@@ -9,10 +10,10 @@ export default function MatchStates({ matchData }) {
 
   // Extract relevant statistics for home and away teams
   const homeTeamStats = matchStatisticsData?.data.statistics.filter(
-    (stat) => stat.location === 'home'
+    (stat : Team) => stat?.location === 'home'
   );
   const awayTeamStats = matchStatisticsData?.data.statistics.filter(
-    (stat) => stat.location === 'away'
+    (stat : Team) => stat?.location === 'away'
   );
 
   // Define the statistics you want to include in the formatted data
@@ -32,7 +33,7 @@ export default function MatchStates({ matchData }) {
   ];
 
   // Format the statistics for home team
-  homeTeamStats.forEach((stat) => {
+  homeTeamStats.forEach((stat:INestedObject) => {
     const statType = stat.type.code;
     const formattedStat = desiredStats?.find((item) => item.code === statType);
 
@@ -42,7 +43,7 @@ export default function MatchStates({ matchData }) {
   });
 
   // Format the statistics for away team
-  awayTeamStats.forEach((stat) => {
+  awayTeamStats.forEach((stat :INestedObject) => {
     const statType = stat.type.code;
     const formattedStat = desiredStats?.find((item) => item.code === statType);
 

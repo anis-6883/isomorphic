@@ -1,9 +1,16 @@
 
+import { INestedObject, ISingleStanding } from '@/types';
 import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
 import Link from 'next/link';
+import React from 'react';
 
-export default function StandingTeamItem({ singleStandings, index }) {
+interface StandingTeamItemProps {
+  singleStandings: INestedObject;
+  index: number;
+}
+
+  export default function StandingTeamItem({ singleStandings, index}:StandingTeamItemProps) {
   return (
     <div
       key={singleStandings.teamName}

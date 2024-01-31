@@ -5,7 +5,7 @@ export const metadata = {
   description: 'AsiaSport',
 };
 
-export default async function page({ params }) {
+export default async function page({ params } : {params:{news_slug:string} }) {
   const { news_slug } = params;
 
   return <SingleNewsDetails newsSlug={news_slug} />;

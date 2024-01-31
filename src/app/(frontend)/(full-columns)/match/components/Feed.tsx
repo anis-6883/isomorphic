@@ -3,18 +3,19 @@
 import MainLoading from '@/app/shared/MainLoading';
 import NoDataFound from '@/app/shared/NoDataFound';
 import { useGetFixturesInfoAndCommentsQuery } from '@/features/front-end/fixture/fixtureApi';
+import { IMatchData, INestedObject } from '@/types';
 
-export default function Feed({ matchData }) {
+export default function Feed({ matchData }:{matchData:INestedObject}) {
   const { isLoading: matchEventsLoading, data: eventData } =
-    useGetFixturesInfoAndCommentsQuery(matchData?.data.id, {
-      skip: !matchData?.data.id,
+    useGetFixturesInfoAndCommentsQuery(matchData?.id, {
+      skip: !matchData?.id,
     });
 
-  if (matchEventsLoading) {
-    return <MainLoading />;
-  }
-  const comment = eventData?.data?.comments?.map((comment) => comment?.comment);
-
+    if (matchEventsLoading) {
+      return <MainLoading />;
+    }
+    console.log(eventData)
+  const comment = eventData?.data?.comments?.map((comment : {comment:{comment:string}}) => comment?.comment);
   if (comment?.length === 0) {
     return <NoDataFound />;
   }

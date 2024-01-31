@@ -1,7 +1,7 @@
-import { IMatch } from "@/types";
+import { INestedObject } from "@/types";
 import { convertTimestampToFormattedDate } from "@/utils/convert-timestamp-to-formatted-date";
 
-export default function MatchState({ match }:{match:IMatch}) {
+export default function MatchState({ match }:{match:INestedObject}) {
   const liveStatus = [
     'INPLAY_1ST_HALF',
     'INPLAY_2ND_HALF',

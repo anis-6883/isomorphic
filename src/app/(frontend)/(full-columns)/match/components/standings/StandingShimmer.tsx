@@ -1,4 +1,4 @@
-export default function StandingsShimmer({ size }) {
+export default function StandingsShimmer({ size }:{size:number}) {
   const arr = Array(size).fill(0);
 
   return (

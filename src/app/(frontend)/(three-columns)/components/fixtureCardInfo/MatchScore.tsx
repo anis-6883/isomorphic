@@ -1,11 +1,11 @@
-import { IMatch } from '@/types';
+import { IMatch, INestedObject } from '@/types';
 import { getCurrentGoals } from '@/utils/get-current-goals';
 
 export default function MatchScore({
   match,
   large,
 }: {
-  match: IMatch;
+  match: INestedObject;
   large: boolean;
 }) {
   const liveStatus = [
