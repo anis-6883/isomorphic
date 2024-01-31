@@ -6,7 +6,7 @@ export default function SocialLinksForm() {
     <FormBlockWrapper title="App Download & Social Links">
       <div className="grid grid-cols-1 gap-4 gap-y-2 md:grid-cols-3">
         <Field name="facebook">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text font-semibold">Facebook</span>
@@ -21,7 +21,7 @@ export default function SocialLinksForm() {
         </Field>
 
         <Field name="instagram">
-          {({ field }) => (
+          {({ field }: { field: any; meta: any }) => (
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text font-semibold">Instagram</span>
@@ -36,7 +36,7 @@ export default function SocialLinksForm() {
         </Field>
 
         <Field name="youtube">
-          {({ field }) => (
+          {({ field }: { field: any; meta: any }) => (
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text font-semibold">Youtube</span>
@@ -53,7 +53,7 @@ export default function SocialLinksForm() {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Field name="android_download_link">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text font-semibold">
@@ -70,7 +70,7 @@ export default function SocialLinksForm() {
         </Field>
 
         <Field name="ios_download_link">
-          {({ field }) => (
+          {({ field }: { field: any; meta: any }) => (
             <label className="form-control w-full">
               <div className="label">
                 <span className="label-text font-semibold">

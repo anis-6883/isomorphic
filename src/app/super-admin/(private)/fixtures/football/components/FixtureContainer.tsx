@@ -27,11 +27,7 @@ export default function FixtureContainer() {
   return (
     <div>
       <DatePicker ref={flatpickrRef} dates={dates} handleDate={handleDate} />
-      <FixtureList
-        pickerDate={pickerDate}
-        isFetching={isFetching}
-        setIsFetching={setIsFetching}
-      />
+      <FixtureList pickerDate={pickerDate} />
     </div>
   );
 }

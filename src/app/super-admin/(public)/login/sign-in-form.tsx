@@ -6,7 +6,7 @@
 // import { Input } from '@/components/ui/input';
 // import { Password } from '@/components/ui/password';
 import { useMedia } from '@/hooks/use-media';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -38,7 +38,7 @@ export default function SignInForm() {
   });
 
   // Form Submit Handler
-  const onSubmit = async (values) => {
+  const onSubmit = async (values: any) => {
     setLoginFormSubmitted(true);
     values.adminLogin = true;
 
@@ -120,25 +120,25 @@ export default function SignInForm() {
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
-        {(formik) => {
+        {() => {
           return (
             <Form>
               <div className="form-control mt-5 w-full">
                 <label className="label">
                   <span className="label-text font-bold">
                     Email<span className="mr-2 text-red-600">*</span>
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="email"
                       component={({ children }) => (
                         <span className="text-sm text-red-600">
                           ({children})
                         </span>
                       )}
-                    />
+                    /> */}
                   </span>
                 </label>
                 <Field name="email">
-                  {({ field, meta }) => {
+                  {({ field, meta }: { field: any; meta: any }) => {
                     return (
                       <input
                         type="email"
@@ -157,18 +157,18 @@ export default function SignInForm() {
                 <label className="label">
                   <span className="label-text font-bold">
                     Password<span className="mr-2 text-red-600">*</span>
-                    <ErrorMessage
+                    {/* <ErrorMessage
                       name="password"
                       component={({ children }) => (
                         <span className="text-sm text-red-600">
                           ({children})
                         </span>
                       )}
-                    />
+                    /> */}
                   </span>
                 </label>
                 <Field name="password">
-                  {({ field, meta }) => {
+                  {({ field, meta }: { field: any; meta: any }) => {
                     return (
                       <div className="relative">
                         <input

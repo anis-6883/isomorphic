@@ -21,7 +21,7 @@ export const liveMatchApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['liveMatches'],
     }),
-    updateLiveMatch: builder.mutation<{}, FormData>({
+    updateLiveMatch: builder.mutation({
       query: ({ id, data }) => {
         return {
           url: `/api/admin/matches/${id}`,
@@ -30,7 +30,7 @@ export const liveMatchApi = apiSlice.injectEndpoints({
           // credentials: 'include',
         };
       },
-      invalidatesTags: (result, error, arg) => [
+      invalidatesTags: (result, error, arg: any) => [
         'liveMatches',
         { type: 'liveMatch', id: arg.id },
       ],

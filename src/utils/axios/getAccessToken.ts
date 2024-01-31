@@ -1,6 +1,6 @@
 import { asiaSportBackendUrl } from './getAxios';
 
-const refreshAccessToken = async (url, token) => {
+const refreshAccessToken = async (url: string, token: any) => {
   try {
     const { data } = await asiaSportBackendUrl.get(url, {
       headers: {
@@ -21,7 +21,7 @@ const refreshAccessToken = async (url, token) => {
   }
 };
 
-export default async function getAccessToken(token, role) {
+export default async function getAccessToken(token: any, role: string) {
   const apiUrl =
     role === 'admin' ? '/api/admin/refresh-token' : '/api/user/refresh-token';
   return await refreshAccessToken(apiUrl, token);

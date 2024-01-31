@@ -9,12 +9,18 @@ export default function ImageDropzoneSingle({
   onChange,
   size,
   sizeText,
+}: {
+  className: string;
+  value: any;
+  onChange: any;
+  size: number;
+  sizeText: string;
 }) {
   const [preview, setPreview] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string>('');
 
   const onDrop = useCallback(
-    (acceptedFiles) => {
+    (acceptedFiles: any) => {
       const file = acceptedFiles[0];
 
       // Check if the file is present and is an image
@@ -26,7 +32,7 @@ export default function ImageDropzoneSingle({
           });
           setPreview(fileWithPreview.preview);
           onChange(fileWithPreview);
-          setError(null); // Clear any previous errors
+          setError(''); // Clear any previous errors
         } else {
           setError('File size exceeds 1MB. Please choose a smaller file.');
         }
@@ -58,7 +64,7 @@ export default function ImageDropzoneSingle({
   const removeFile = () => {
     setPreview(null);
     onChange(null);
-    setError(null); // Clear any previous errors
+    setError(''); // Clear any previous errors
   };
 
   return (

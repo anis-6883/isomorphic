@@ -48,16 +48,17 @@ function DatePicker(
               <Flatpickr
                 ref={flatpickrRef}
                 render={({ defaultValue, value, ...props }, ref) => (
-                  <Image
-                    src="/images/calendar.png"
-                    alt="logo"
-                    ref={ref as any}
-                    width={0}
-                    {...props}
-                    height={0}
-                    sizes="100vw"
-                    className="h-6 w-6 cursor-pointer"
-                  />
+                  <div ref={ref}>
+                    <Image
+                      src="/images/calendar.png"
+                      alt="logo"
+                      width={0}
+                      // {...props}
+                      height={0}
+                      sizes="100vw"
+                      className="h-6 w-6 cursor-pointer"
+                    />
+                  </div>
                 )}
                 options={{
                   onChange: function (selectedDates, dateStr) {

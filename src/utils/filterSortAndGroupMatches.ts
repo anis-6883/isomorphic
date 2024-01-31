@@ -1,12 +1,12 @@
 // helper.js
-export function filterSortAndGroupMatches(matches, upcoming) {
+export function filterSortAndGroupMatches(matches: any, upcoming: any) {
   const today = new Date();
   today.setHours(0, 0, 0, 0); // Set the time to the start of today
 
   let filteredMatches = matches;
 
   if (upcoming) {
-    filteredMatches = matches.filter((match) => {
+    filteredMatches = matches.filter((match: any) => {
       const matchDate = new Date(match.starting_at);
       return matchDate >= today;
     });
@@ -15,11 +15,14 @@ export function filterSortAndGroupMatches(matches, upcoming) {
   // Sort the filtered matches by ascending date
   filteredMatches
     .slice()
-    .sort((a, b) => new Date(a.starting_at) - new Date(b.starting_at));
+    .sort(
+      (a: any, b: any) =>
+        new Date(a.starting_at).getTime() - new Date(b.starting_at).getTime()
+    );
 
-  const groupedMatches = [];
+  const groupedMatches: any[] = [];
 
-  filteredMatches.forEach((match) => {
+  filteredMatches.forEach((match: any) => {
     const matchDate = match.starting_at.split(' ')[0];
 
     // Check if there is already a group for this date

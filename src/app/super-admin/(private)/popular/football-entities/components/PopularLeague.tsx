@@ -3,20 +3,13 @@ import {
   useGetPopularLeaguesQuery,
 } from '@/features/super-admin/popular-football-entity/popularFootballEntityApi';
 import { TModalElementType } from '@/types';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { arrayMove } from '@dnd-kit/sortable';
 import Image from 'next/image';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { FaVolleyballBall } from 'react-icons/fa';
 import { HiMagnifyingGlass } from 'react-icons/hi2';
 import { LuPlus } from 'react-icons/lu';
 import { RiCloseCircleFill } from 'react-icons/ri';
-import LeagueItem from './LeagueItem';
 
 export default function PopularLeague() {
   const [showLeagues, setShowLeagues] = useState([]);
@@ -38,46 +31,46 @@ export default function PopularLeague() {
     console.log('allPopularLeagues: ', popularLeagues);
   }
 
-  const handleSearch = (e) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;
     setSearchInput(searchValue);
 
-    const searchResult = leaguesData.filter((league) =>
-      league.name.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    // const searchResult = leaguesData.filter((league) =>
+    //   league.name.toLowerCase().includes(searchValue.toLowerCase())
+    // );
 
-    setShowLeagues(searchResult);
+    // setShowLeagues(searchResult);
     setShowSearchModal(true);
   };
 
-  const selectPointTableHandler = async (id) => {
-    try {
-      //   const { data } = await asiaSportBackendUrl.post(
-      //     '/api/admin/popular-leagues/update/select-point-table',
-      //     {
-      //       id: id,
-      //     },
-      //     {
-      //       headers: { Authorization: `Bearer ${session?.user?.accessToken}` },
-      //     }
-      //   );
-      //   if (data.status) {
-      //     popularLeaguesRefetch();
-      //     toast.success(data?.message);
-      //   } else {
-      //     toast.error(data?.message);
-      //   }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const selectPointTableHandler = async (id) => {
+  //   try {
+  //       const { data } = await asiaSportBackendUrl.post(
+  //         '/api/admin/popular-leagues/update/select-point-table',
+  //         {
+  //           id: id,
+  //         },
+  //         {
+  //           headers: { Authorization: `Bearer ${session?.user?.accessToken}` },
+  //         }
+  //       );
+  //       if (data.status) {
+  //         popularLeaguesRefetch();
+  //         toast.success(data?.message);
+  //       } else {
+  //         toast.error(data?.message);
+  //       }
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const handleSearchModal = () => {
     setShowSearchModal(false);
     setSearchInput('');
   };
 
-  const deleteLeagueHandler = (league) => {
+  const deleteLeagueHandler = (league: any) => {
     setSingleLeague(league);
     const modal = document.getElementById(
       'leagueDeleteModal'
@@ -87,37 +80,40 @@ export default function PopularLeague() {
     }
   };
 
-  const handleDragEnd = async (event) => {
+  const handleDragEnd = async (event: any) => {
     const { active, over } = event;
 
     if (active.id !== over.id) {
-      const activeIndex = leagueList.findIndex((item) => item.id === active.id);
-      const overIndex = leagueList.findIndex((item) => item.id === over.id);
+      const activeIndex = leagueList.findIndex(
+        (item: any) => item.id === active.id
+      );
+      const overIndex = leagueList.findIndex(
+        (item: any) => item.id === over.id
+      );
       const newItems = arrayMove(leagueList, activeIndex, overIndex);
-      newItems.forEach((item, index) => {
+      newItems.forEach((item: any, index: number) => {
         item.position = index + 1;
       });
 
       setLeagueList(newItems);
 
-      const leagueIdWithPosition = newItems.map((item) => {
+      const leagueIdWithPosition = newItems.map((item: any) => {
         return { id: item.id, position: item.position };
       });
 
       try {
         // setIsSorting(true);
-        const { data } = await asiaSportBackendUrl.post(
-          '/api/admin/popular-leagues/sort',
-          leagueIdWithPosition,
-          {
-            headers: { Authorization: `Bearer ${session?.user?.accessToken}` },
-          }
-        );
-
-        if (data?.status) {
-          // setIsSorting(false);
-          toast.success(data?.message);
-        }
+        // const { data } = await asiaSportBackendUrl.post(
+        //   '/api/admin/popular-leagues/sort',
+        //   leagueIdWithPosition,
+        //   {
+        //     headers: { Authorization: `Bearer ${session?.user?.accessToken}` },
+        //   }
+        // );
+        // if (data?.status) {
+        //   // setIsSorting(false);
+        //   toast.success(data?.message);
+        // }
       } catch (err) {
         // setIsSorting(false);
         toast.error('Failed to sort!');
@@ -157,7 +153,7 @@ export default function PopularLeague() {
                 <ul className="w-full rounded-box">
                   {showLeagues.length > 0 ? (
                     <>
-                      {showLeagues.map((league) => (
+                      {showLeagues.map((league: any) => (
                         <li
                           key={league.league_id}
                           className="mb-2 grid grid-cols-12 rounded-md bg-gray-200 p-2"
@@ -206,7 +202,7 @@ export default function PopularLeague() {
       <div className="mt-5 w-full bg-white px-5">
         <h2 className="mb-5 text-xl font-semibold">Popular League List</h2>
         <div>
-          <div className="w-full rounded-box">
+          {/* <div className="w-full rounded-box">
             {popularLeaguesLoading ? (
               <div className="flex h-44 justify-center p-5">
                 <div className="animate-bounce">
@@ -237,7 +233,7 @@ export default function PopularLeague() {
                 No Data Found!
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

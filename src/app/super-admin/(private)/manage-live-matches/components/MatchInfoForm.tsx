@@ -69,7 +69,7 @@ export default function MatchInfoForm({
                       meta.touched && meta.error && 'input-error'
                     }`}
                     ref={ref}
-                    {...props}
+                    // {...props}
                     placeholder="YYYY-MM-DD HH:MM"
                   />
                 </label>

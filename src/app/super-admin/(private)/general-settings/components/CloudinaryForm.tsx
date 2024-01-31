@@ -6,7 +6,7 @@ export default function CloudinaryForm() {
     <FormBlockWrapper title="Cloudinary Credentials">
       <div className="grid grid-cols-1 gap-x-4 gap-y-2">
         <Field name="cloudinary_cloud_name">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -27,7 +27,7 @@ export default function CloudinaryForm() {
         </Field>
 
         <Field name="cloudinary_api_key">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -48,7 +48,7 @@ export default function CloudinaryForm() {
         </Field>
 
         <Field name="cloudinary_app_secret">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">

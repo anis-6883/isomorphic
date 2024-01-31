@@ -5,7 +5,13 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import FormBlockWrapper from '../../components/FormBlockWrapper';
 
-export default function GeneralSettingsForm({ setFieldValue, values }) {
+export default function GeneralSettingsForm({
+  setFieldValue,
+  values,
+}: {
+  setFieldValue: any;
+  values: any;
+}) {
   const animatedComponents = makeAnimated();
   const convertedData = convertDataToObject(es);
 
@@ -13,7 +19,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
     <FormBlockWrapper title="Main Information">
       <div className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-3">
         <Field name="company_name">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -38,7 +44,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
         </Field>
 
         <Field name="site_title">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -63,7 +69,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
         </Field>
 
         <Field name="timezone">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -91,7 +97,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
 
       <div className="grid grid-cols-1 gap-x-4 gap-y-2">
         <Field name="allowed_country">
-          {({ field }) => (
+          {({ field }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -118,7 +124,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
 
       <div className="grid grid-cols-1 gap-x-4 gap-y-2 md:grid-cols-2">
         <Field name="qpsms_appkey">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -137,7 +143,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
         </Field>
 
         <Field name="qpsms_secretkey">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -159,7 +165,7 @@ export default function GeneralSettingsForm({ setFieldValue, values }) {
   );
 }
 
-function convertDataToObject(inputData) {
+function convertDataToObject(inputData: any) {
   const dataArray = [];
 
   for (const key in inputData) {

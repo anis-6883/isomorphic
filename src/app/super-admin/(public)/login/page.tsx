@@ -13,7 +13,7 @@ export default async function Page() {
   const session = await getServerSession(authOptions);
 
   if (session?.user) {
-    if (session.user.role === 'admin') {
+    if (session?.user?.role === 'admin') {
       redirect('/super-admin/dashboard');
     } else {
       redirect('/');

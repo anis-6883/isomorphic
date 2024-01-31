@@ -60,7 +60,7 @@ export default function FootballEntitiesContainer() {
       setIsSubmitting(false);
       setInitialValues((prevValues) => ({
         ...prevValues,
-        ...updatedData?.data,
+        ...(updatedData as { data: any }).data,
       }));
       toast.success('General Setting Updated Successfully!');
     }
@@ -91,7 +91,7 @@ export default function FootballEntitiesContainer() {
   });
 
   // Submit Handler
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: any) => {
     setIsSubmitting(true);
 
     var formBody = new FormData();

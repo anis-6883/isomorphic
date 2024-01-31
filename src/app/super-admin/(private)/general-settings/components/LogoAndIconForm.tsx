@@ -10,6 +10,13 @@ export default function LogoAndIconForm({
   siteIcon,
   setSiteLogo,
   siteLogo,
+}: {
+  values: any;
+  setFieldValue: any;
+  setSiteIcon: any;
+  siteIcon: any;
+  setSiteLogo: any;
+  siteLogo: any;
 }) {
   return (
     <FormBlockWrapper title="Logo & Icon">
@@ -39,7 +46,7 @@ export default function LogoAndIconForm({
           ) : (
             <ImageDropzoneSingle
               value={siteLogo}
-              onChange={(image) => setSiteLogo(image)}
+              onChange={(image: any) => setSiteLogo(image)}
               className="mt-2"
               size={1024 * 1000}
               sizeText="1MB"
@@ -72,7 +79,7 @@ export default function LogoAndIconForm({
           ) : (
             <ImageDropzoneSingle
               value={siteIcon}
-              onChange={(image) => setSiteIcon(image)}
+              onChange={(image: any) => setSiteIcon(image)}
               className="mt-2"
               size={1024 * 1000}
               sizeText="1MB"
