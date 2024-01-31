@@ -1,24 +1,25 @@
+import { INestedObject, LeagueStats } from '@/types';
 import Image from 'next/image';
 
-export default function PlayerStats({ playerData }) {
+export default function PlayerStats({ playerData } : { playerData:INestedObject }) {
   if (!playerData?.statistics) {
     return <div>No statistics available for this player.</div>;
   }
-  const transformDetailsToObject = (details) =>
-    details.reduce((result, { type, value }) => {
+  const transformDetailsToObject = (details :INestedObject) =>
+    details.reduce((result :INestedObject, { type , value } : { type :INestedObject  , value :INestedObject }) => {
       result[type.developer_name] = value.total;
       return result;
     }, {});
 
   const groupedData = playerData.statistics
-    .map((season) => ({
+    .map((season :INestedObject) => ({
       leagueId: season?.season?.league?.id,
       leagueName: season?.season?.league?.name,
       leagueImage: season?.season?.league?.image_path,
       season: season.season.name,
       stats: transformDetailsToObject(season.details),
     }))
-    .reduce((result, { leagueId, leagueName, leagueImage, season, stats }) => {
+    .reduce((result :INestedObject, { leagueId, leagueName, leagueImage, season, stats } : { leagueId:number, leagueName:string, leagueImage:string, season:string, stats:INestedObject }) => {
       const key = leagueId || leagueName;
 
       if (!result[key]) {
@@ -34,7 +35,8 @@ export default function PlayerStats({ playerData }) {
       return result;
     }, {});
 
-  const groupedPlayerStats = Object.values(groupedData);
+
+  const groupedPlayerStats : LeagueStats[] = Object.values(groupedData);
 
   return (
     <div className="mt-5">

@@ -6,10 +6,13 @@ import RecentTeamMatches from './RecentTeamMatches';
 export default function UpcomingTeamMatches({
   upcomingMatches,
   recentMatches,
+}:{
+  upcomingMatches:any
+  recentMatches:any,
 }) {
   return (
     <div className=" mx-auto">
-      {upcomingMatches?.map((match) => (
+      {upcomingMatches?.map((match:any) => (
         <div key={match?.id} className="relative w-full">
           <p className="px-4 text-secondary">
             {moment

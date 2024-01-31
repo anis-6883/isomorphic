@@ -1,18 +1,18 @@
-import StandingTeamItem from '@/components/Global/StandingTeamItem';
-import useFetchLeagueStandings from '@/lib/hooks/useFetchLeagueStandings';
+import StandingTeamItem from '@/app/shared/StandingTeamItem';
+import { useGetLeagueStandingQuery } from '@/features/front-end/league/leagueApi';
 import Image from 'next/image';
 import Link from 'next/link';
 
-function transformDetailsToObj(details) {
-  const result = {};
-  details.forEach(({ type_id, value }) => {
+function transformDetailsToObj(details :any) {
+  const result:any = {};
+  details.forEach(({ type_id, value } : { type_id:string,value:string }) => {
     result[type_id] = value;
   });
   return result;
 }
 
-function getItemAndNeighbors(array, teamId) {
-  const index = array.findIndex((item) => item.teamId === parseInt(teamId));
+function getItemAndNeighbors(array:any, teamId:string) {
+  const index = array.findIndex((item : any) => item.teamId === parseInt(teamId));
   if (index === -1) {
     return [];
   }
@@ -29,16 +29,20 @@ export default function TeamStandingOnPointTable({
   seasonId,
   teamId,
   leagueInfo,
+}:{
+  seasonId:string
+  teamId:string,
+  leagueInfo:any,
 }) {
-  const { leagueStandingsLoading, leagueStandingsData } =
-    useFetchLeagueStandings(seasonId);
+  const { isLoading:leagueStandingsLoading, data:leagueStandingsData } =
+  useGetLeagueStandingQuery(seasonId);
 
   if (leagueStandingsLoading) {
     return <>Loading . . . .</>;
   }
 
   const transformedStandings = (leagueStandingsData?.data ?? []).map(
-    (singleStandings) => {
+    (singleStandings :any) => {
       const transformedData = transformDetailsToObj(singleStandings?.details);
       return {
         teamId: singleStandings?.participant?.id,
@@ -57,7 +61,7 @@ export default function TeamStandingOnPointTable({
     }
   );
 
-  transformedStandings.sort((a, b) => b.PTS - a.PTS);
+  transformedStandings.sort((a:any, b:any) => b.PTS - a.PTS);
 
   const desiredList = getItemAndNeighbors(transformedStandings, teamId);
 
@@ -101,6 +105,7 @@ export default function TeamStandingOnPointTable({
             <StandingTeamItem
               key={singleStandings.position + index}
               singleStandings={singleStandings}
+              index={index}
             />
           ))
         ) : (

@@ -1,10 +1,12 @@
-import { sportMonkUrl } from '@/lib/axios/getAxios';
-import { useQuery } from 'react-query';
-import PlayerMatchCard from './PlayerMatchCard';
 
-export default function PlayerMatches({ playerData }) {
-  function getFixtureIds(latest) {
-    return latest.map((fixture) => fixture.fixture_id);
+import { useGetPlayerMatchesQuery } from '@/features/front-end/player/playerApi';
+import PlayerMatchCard from './PlayerMatchCard';
+import { INestedObject } from '@/types';
+import MainLoading from '@/app/shared/MainLoading';
+
+export default function PlayerMatches({ playerData } : { playerData : INestedObject}) {
+  function getFixtureIds(latest : INestedObject) {
+    return latest.map((fixture : INestedObject) => fixture.fixture_id);
   }
 
   const fixtureIds = getFixtureIds(playerData?.latest);
@@ -14,33 +16,26 @@ export default function PlayerMatches({ playerData }) {
     isLoading: isLoadingPlayerMatches,
     data: playerMatchesData,
     refetch: refetchPlayerMatches,
-  } = useQuery('playerMatches', async () => {
-    const response = await sportMonkUrl.get(
-      `/fixtures/multi/${fixtureIds}?include=league;participants;state;scores;events.type;lineups.details.type`
-    );
-    if (response.status === 200) {
-      // setIsRefetching(false);
-      return response.data?.data;
-    } else {
-      throw new Error('Failed to fetch all Leagues data');
-    }
-  });
+  } = useGetPlayerMatchesQuery(fixtureIds , {skip:!fixtureIds});
+    
 
   if (isLoadingPlayerMatches) {
-    return <>Loading . . . .</>;
+    return <MainLoading/>;
   }
+
+console.log("playerMatchesData" , playerMatchesData)
 
   return (
     <div>
-      {playerMatchesData
-        ?.sort((a, b) => new Date(b.starting_at) - new Date(a.starting_at))
-        .map((match) => (
-          <PlayerMatchCard
-            key={match?.id}
-            match={match}
-            playerData={playerData}
-          />
-        ))}
+      {playerMatchesData?.data
+  ?.sort((a: any, b: any) => (new Date(b.starting_at) as any) - (new Date(a.starting_at) as any))
+  .map((match:INestedObject) => (
+    <PlayerMatchCard
+      key={match?.id}
+      match={match}
+      playerData={playerData}
+    />
+  ))}
     </div>
   );
 }

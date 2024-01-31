@@ -1,17 +1,18 @@
-import NoDataFound from '@/components/Global/NoDataFound';
-import StandingTeamItem from '@/components/Global/StandingTeamItem';
+import NoDataFound from "@/app/shared/NoDataFound";
+import StandingTeamItem from "@/app/shared/StandingTeamItem";
 
-export default function SelectedSeasonPointTable({ leagueStandingsData }) {
-  function transformDetailsToObj(details) {
-    const result = {};
-    details.forEach(({ type_id, value }) => {
+
+export default function SelectedSeasonPointTable({ leagueStandingsData }:{ leagueStandingsData :any}) {
+  function transformDetailsToObj(details:any) {
+    const result:any = {};
+    details.forEach(({ type_id, value }: { type_id:string,value:string }) => {
       result[type_id] = value;
     });
     return result;
   }
 
   const transformedStandings = (leagueStandingsData?.data ?? []).map(
-    (singleStandings) => {
+    (singleStandings:any) => {
       const transformedData = transformDetailsToObj(singleStandings?.details);
       return {
         teamId: singleStandings?.participant?.id,
@@ -30,7 +31,7 @@ export default function SelectedSeasonPointTable({ leagueStandingsData }) {
     }
   );
 
-  transformedStandings.sort((a, b) => b.PTS - a.PTS);
+  transformedStandings.sort((a:any, b:any) => b.PTS - a.PTS);
 
   return (
     <>
@@ -51,10 +52,11 @@ export default function SelectedSeasonPointTable({ leagueStandingsData }) {
             </div>
           </div>
           <div>
-            {transformedStandings.map((singleStandings, index) => (
+            {transformedStandings.map((singleStandings:any, index:number) => (
               <StandingTeamItem
                 key={singleStandings.position + index}
                 singleStandings={singleStandings}
+                index={index}
               />
             ))}
           </div>

@@ -1,5 +1,7 @@
-import getShortName from '@/lib/helpers/getShortName';
-import getSlugify from '@/lib/helpers/getSlugify';
+
+import { INestedObject } from '@/types';
+import getShortName from '@/utils/get-short-name';
+import getSlugify from '@/utils/get-slugify';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,43 +13,43 @@ const GOALS_TYPE_ID = 52;
 const RATING_TYPE_ID = 118;
 const MINUTES_TYPE_ID = 119;
 
-export default function PlayerMatchCard({ match, playerData }) {
+export default function PlayerMatchCard({ match, playerData } : {match:INestedObject , playerData:INestedObject}) {
   const [isStarClicked, setIsStarClicked] = useState(false);
 
   const findPlayerLineUp = match?.lineups?.find(
-    (lineup) => lineup?.player_id === playerData?.id
+    (lineup : INestedObject) => lineup?.player_id === playerData?.id
   );
 
   const goals = findPlayerLineUp?.details?.find(
-    (element) => element.type_id === GOALS_TYPE_ID
+    (element: INestedObject) => element.type_id === GOALS_TYPE_ID
   );
 
   const rating = findPlayerLineUp?.details?.find(
-    (element) => element.type_id === RATING_TYPE_ID
+    (element: INestedObject) => element.type_id === RATING_TYPE_ID
   );
 
   const minutes = findPlayerLineUp?.details?.find(
-    (element) => element.type_id === MINUTES_TYPE_ID
+    (element : INestedObject) => element.type_id === MINUTES_TYPE_ID
   );
 
   const { participants, scores, state } = match;
 
   const homeTeam = participants.find(
-    (participant) => participant.meta.location === 'home'
+    (participant: INestedObject) => participant.meta.location === 'home'
   );
   const awayTeam = participants.find(
-    (participant) => participant.meta.location === 'away'
+    (participant: INestedObject) => participant.meta.location === 'away'
   );
 
   // Get the current score for home and away teams
   const homeScore =
-    scores.find((score) => score.participant_id === homeTeam.id)?.score.goals ||
+    scores.find((score: INestedObject) => score.participant_id === homeTeam.id)?.score.goals ||
     0;
   const awayScore =
-    scores.find((score) => score.participant_id === awayTeam.id)?.score.goals ||
+    scores.find((score: INestedObject) => score.participant_id === awayTeam.id)?.score.goals ||
     0;
 
-  const handleButtonClick = (event) => {
+  const handleButtonClick = (event: INestedObject) => {
     event.preventDefault();
     setIsStarClicked(!isStarClicked);
   };

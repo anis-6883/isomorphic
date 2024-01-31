@@ -2,7 +2,7 @@ import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function PlayerCard({ player }) {
+export default function PlayerCard({ player }:{player:any}) {
   return (
     <Link
       href={`/player/${getSlugify(player?.displayName)}/${player?.playerId}`}

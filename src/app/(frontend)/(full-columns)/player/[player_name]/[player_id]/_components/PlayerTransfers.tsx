@@ -1,10 +1,11 @@
+import { INestedObject } from '@/types';
 import moment from 'moment';
 import Image from 'next/image';
 
-export default function PlayerTransfers({ transfers }) {
+export default function PlayerTransfers({ transfers } : { transfers:INestedObject }) {
   return (
     <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-5">
-      {transfers?.map((transfer) => (
+      {transfers?.map((transfer :INestedObject ) => (
         <div className="bg-gray-200" key={transfer?.id}>
           <div className="skew-y-[0.5deg] flex items-center gap-3 p-2">
             <Image
@@ -33,7 +34,7 @@ export default function PlayerTransfers({ transfers }) {
   );
 }
 
-function formatMoney(amount) {
+function formatMoney(amount : number) {
   if (amount === null || amount === undefined) {
     return '-';
   }
