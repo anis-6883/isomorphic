@@ -17,9 +17,8 @@ import Standings from './Standings';
 
 export default function LeagueDetails({ leagueId }: { leagueId: number }) {
   const [currentTab, setCurrentTab] = useState(0);
-  //   const { data: session } = useSession();
-  //   const { userProfile } = useGetUserProfile(session);
   const [seasonId, setSeasonId] = useState<number | null>(null);
+
   const { isLoading, data: leagueData } = useGetSingleLeagueByIdQuery(
     leagueId || null,
     { skip: !leagueId }

@@ -49,13 +49,17 @@ export default function LiveMatchIndex() {
     }
   };
 
-  const columns = useMemo(
+  const columns = useMemo<any>(
     () => [
       {
         accessorKey: 'team_one_name',
         header: 'Team One',
         id: 'team_one_image',
-        Cell: ({ row }) => (
+        Cell: ({
+          row,
+        }: {
+          row: { original: { team_one_image: string; team_one_name: string } };
+        }) => (
           <div className="flex items-center">
             {row?.original?.team_one_image ? (
               <Image
@@ -85,7 +89,11 @@ export default function LiveMatchIndex() {
         accessorKey: 'team_two_name',
         header: 'Team Two',
         id: 'team_two_image',
-        Cell: ({ row }) => (
+        Cell: ({
+          row,
+        }: {
+          row: { original: { team_two_image: string; team_two_name: string } };
+        }) => (
           <div className="flex items-center">
             {row?.original?.team_two_image ? (
               <Image
@@ -120,7 +128,11 @@ export default function LiveMatchIndex() {
         mantineTableBodyCellProps: {
           align: 'center',
         },
-        Cell: ({ row }) => (
+        Cell: ({
+          row,
+        }: {
+          row: { original: { match_title: string; time: string } };
+        }) => (
           <div>
             <p className="mb-1 text-center text-sm font-medium">
               {row.original.match_title}
@@ -141,7 +153,7 @@ export default function LiveMatchIndex() {
         mantineTableBodyCellProps: {
           align: 'center',
         },
-        Cell: ({ row }) => {
+        Cell: ({ row }: { row: { original: { status: string } } }) => {
           return row.original.status == '1' ? (
             <span className="badge rounded-full bg-success">Active</span>
           ) : (
@@ -154,7 +166,11 @@ export default function LiveMatchIndex() {
         header: 'Action',
         columnDefType: 'display',
         enableColumnOrdering: false,
-        Cell: ({ row }) => (
+        Cell: ({
+          row,
+        }: {
+          row: { original: { id: number; match_title: string } };
+        }) => (
           <div>
             <LiveMatchActions
               id={row.original.id}
@@ -204,22 +220,26 @@ export default function LiveMatchIndex() {
     autoResetPageIndex: false,
     mantineRowDragHandleProps: ({ table }) => ({
       onDragEnd: () => {
-        const { draggingRow, hoveredRow } = table.getState();
-        // console.log('draggingRow: ', draggingRow);
-        // console.log('hoveredRow: ', hoveredRow);
+        const {
+          draggingRow,
+          hoveredRow,
+        }: { hoveredRow: any; draggingRow: any } = table.getState();
 
-        let copiedArray = [...finalData];
-        const elementToMove = copiedArray.splice(draggingRow.index, 1)[0];
-        copiedArray.splice(hoveredRow.index, 0, elementToMove);
+        if (draggingRow && hoveredRow) {
+          let copiedArray = [...(finalData as readonly any[])];
+          const elementToMove = copiedArray.splice(
+            draggingRow.index as number,
+            1
+          )[0];
+          copiedArray.splice(hoveredRow.index, 0, elementToMove);
 
-        const updatedArray = copiedArray.map((obj, index) => ({
-          ...obj,
-          position: index + 1,
-        }));
+          const updatedArray = copiedArray.map((obj: any, index: number) => ({
+            ...obj,
+            position: index + 1,
+          }));
 
-        // console.log('updatedArray: ', updatedArray);
-
-        setFinalData(updatedArray);
+          setFinalData(updatedArray as never[]);
+        }
       },
     }),
   });

@@ -1,35 +1,42 @@
-import { IMatch, INestedObject, TModalElementType, Team } from '@/types';
+import { INestedObject, TModalElementType, Team } from '@/types';
 import getShortName from '@/utils/get-short-name';
 import getSlugify from '@/utils/get-slugify';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import MatchState from '../(three-columns)/components/fixtureCardInfo/MatchState';
-// import useGetUserProfile from '@/hooks/use-get-userprofile';
+import toast from 'react-hot-toast';
+import { IoStar, IoStarOutline } from 'react-icons/io5';
 import BetDroopDown, {
   BetMobileModal,
 } from '../(three-columns)/components/fixtureCardInfo/BetDroopDown';
 import MatchScore from '../(three-columns)/components/fixtureCardInfo/MatchScore';
+import MatchState from '../(three-columns)/components/fixtureCardInfo/MatchState';
 import Probability from '../(three-columns)/components/fixtureCardInfo/Probability';
 
-const FixtureCard = ({ match, large }: { match: INestedObject; large: boolean }) => {
-  const { data: session } = useSession();
-  // const { userProfile, refetchProfile } = useGetUserProfile(session);
+const FixtureCard = ({
+  match,
+  large,
+  favoriteMatches,
+  accessToken,
+  user,
+}: {
+  match: INestedObject;
+  large: boolean;
+  favoriteMatches: any;
+  accessToken: string | undefined;
+  user: any;
+}) => {
   const [screenWidth, setScreenWidth] = useState<number>(0);
+  const [isFavorite, setIsFavorite] = useState(false);
 
-  // const favoriteSelected =
-  //   userProfile?.favorites?.matches.some(
-  //     (item) => parseInt(item.id) === parseInt(match.id)
-  //   ) || false;
-
-  // const [isFavorite, setIsFavorite] = useState(favoriteSelected);
-
-  // useEffect(() => {
-  //   if (userProfile) {
-  //     setIsFavorite(favoriteSelected);
-  //   }
-  // }, [favoriteSelected, userProfile]);
+  useEffect(() => {
+    if (favoriteMatches) {
+      const favoriteSelected = favoriteMatches.some(
+        (item: any) => parseInt(item) === parseInt(match.id)
+      );
+      setIsFavorite(favoriteSelected);
+    }
+  }, [favoriteMatches, match]);
 
   useEffect(() => {
     const updateScreenWidth = () => {
@@ -58,7 +65,9 @@ const FixtureCard = ({ match, large }: { match: INestedObject; large: boolean })
     'INTERRUPTED',
     'POSTPONED',
   ];
+
   const isPreviewPage = upcomingStatus.includes(match?.state?.short_name ?? '');
+
   // Add To Favorites
   // const addToFavorites = async (e, matchId) => {
   //   e.preventDefault();
@@ -141,7 +150,9 @@ const FixtureCard = ({ match, large }: { match: INestedObject; large: boolean })
   // };
 
   const teamByLocation = (location: string) =>
-    match?.participants?.find((team : Team | undefined) => team?.meta?.location === location);
+    match?.participants?.find(
+      (team: Team | undefined) => team?.meta?.location === location
+    );
 
   return (
     <div className="relative mx-2 my-2 lg:mx-0">
@@ -320,27 +331,42 @@ const FixtureCard = ({ match, large }: { match: INestedObject; large: boolean })
         </div>
       </div>
       {/* favorite section  */}
-      {/* <div
+      <div
         className={
           large
-            ? 'my-auto mx-auto absolute right-[0.5rem] top-[1.75rem] h-5 md:right-5 md:top-5 '
-            : 'my-auto mx-auto absolute right-[0.5rem] lg:right-5 top-[1.75rem] lg:top-[1rem] h-5'
+            ? 'absolute right-[0.5rem] top-[1.75rem] mx-auto my-auto h-5 md:right-5 md:top-5 '
+            : 'absolute right-[0.5rem] top-[1.75rem] mx-auto my-auto h-5 lg:right-5 lg:top-[1rem]'
         }
       >
         <div className="cursor-pointer">
-          {isFavorite ? (
-            <IoStar
-              // onClick={(e) => removeFromFavorites(e, match.id)}
-              className="text-xl text-yellow-500 h-5"
-            />
+          {accessToken && user?.role !== 'admin' ? (
+            isFavorite ? (
+              <IoStar
+                // onClick={(e) => removeFromFavorites(e, match.id)}
+                onClick={(e) => setIsFavorite(false)}
+                className="h-5 text-xl text-yellow-500"
+              />
+            ) : (
+              <IoStarOutline
+                // onClick={(e) => addToFavorites(e, match.id)}
+                onClick={(e) => setIsFavorite(true)}
+                className="h-5 text-xl text-white"
+              />
+            )
           ) : (
             <IoStarOutline
-              // onClick={(e) => addToFavorites(e, match.id)}
-              className="text-xl text-white h-5"
+              onClick={() =>
+                toast.error(
+                  user?.role === 'admin'
+                    ? 'No allow for admin!'
+                    : 'Please, Login in First!'
+                )
+              }
+              className="h-5 text-xl text-white"
             />
           )}
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

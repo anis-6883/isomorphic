@@ -1,6 +1,7 @@
 'use client';
 
 import { routes } from '@/config/routes';
+import { userLoggedOut } from '@/features/auth/authSlice';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,13 +12,17 @@ import { FaFacebookF } from 'react-icons/fa';
 import { HiMenuAlt2 } from 'react-icons/hi';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoLogoInstagram } from 'react-icons/io5';
+import { useDispatch } from 'react-redux';
 import './header.css';
 
 export default function Header() {
   const pathname = usePathname();
+  const dispatch = useDispatch();
   const { data: session } = useSession();
 
   const handleLogout = async () => {
+    dispatch(userLoggedOut());
+
     await signOut({
       redirect: false,
       callbackUrl: '/',

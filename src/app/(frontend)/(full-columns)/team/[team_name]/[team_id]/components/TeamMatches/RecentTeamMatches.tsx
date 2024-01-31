@@ -1,8 +1,11 @@
 'use client';
 
 import FixtureCard from '@/app/(frontend)/components/FixtureCard';
+import { useGetProfileQuery } from '@/features/auth/authApi';
+import { RootState } from '@/features/store';
 import { INestedObject } from '@/types';
 import moment from 'moment';
+import { useSelector } from 'react-redux';
 
 // const MatchCard = ({ match, teamId }) => {
 //   const [isStarClicked, setIsStarClicked] = useState(false);
@@ -139,10 +142,22 @@ import moment from 'moment';
 //   );
 // };
 
-const RecentTeamMatches = ({ recentMatches } : { recentMatches:INestedObject }) => {
+const RecentTeamMatches = ({
+  recentMatches,
+}: {
+  recentMatches: INestedObject;
+}) => {
+  const { accessToken, user } = useSelector(
+    (state: RootState) => state.authSlice
+  );
+
+  const { data: userData } = useGetProfileQuery(undefined, {
+    skip: accessToken === undefined,
+  });
+
   return (
     <div className="">
-      {recentMatches?.map((match :INestedObject) => (
+      {recentMatches?.map((match: INestedObject) => (
         <div key={match.id}>
           <p className="px-3 text-secondary">
             {moment
@@ -150,7 +165,14 @@ const RecentTeamMatches = ({ recentMatches } : { recentMatches:INestedObject }) 
               .local()
               .format('DD MMM YYYY')}
           </p>
-          <FixtureCard key={match.id} large={true} match={match} />
+          <FixtureCard
+            key={match.id}
+            large={true}
+            match={match}
+            favoriteMatches={userData?.data?.favorites?.matches || undefined}
+            accessToken={accessToken}
+            user={user}
+          />
         </div>
       ))}
     </div>

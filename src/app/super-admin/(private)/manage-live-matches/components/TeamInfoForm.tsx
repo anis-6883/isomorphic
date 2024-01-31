@@ -11,13 +11,20 @@ export default function TeamInfoForm({
   teamTwoImage,
   setTeamTwoImage,
   setFieldValue,
+}: {
+  values: any;
+  teamOneImage: any;
+  setTeamOneImage: any;
+  teamTwoImage: any;
+  setTeamTwoImage: any;
+  setFieldValue: any;
 }) {
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
       <FormBlockWrapper title="Team One">
         <div className="grid grid-cols-1 gap-2">
           <Field name="team_one_name">
-            {({ field, meta }) => (
+            {({ field, meta }: { field: any; meta: any }) => (
               <>
                 <label className="form-control w-full">
                   <div className="label">
@@ -44,7 +51,7 @@ export default function TeamInfoForm({
           </Field>
 
           <Field name="team_one_image_type">
-            {({ field }) => (
+            {({ field }: { field: any }) => (
               <>
                 <label className="form-control w-full">
                   <div className="label">
@@ -62,7 +69,7 @@ export default function TeamInfoForm({
 
           {values?.team_one_image_type === 'url' && (
             <Field name="team_one_image">
-              {({ field, meta }) => (
+              {({ field, meta }: { field: any; meta: any }) => (
                 <>
                   <label className="form-control w-full">
                     <div className="label">
@@ -121,7 +128,7 @@ export default function TeamInfoForm({
               <ImageDropzoneSingle
                 className="mt-2"
                 value={teamOneImage}
-                onChange={(image) => setTeamOneImage(image)}
+                onChange={(image: any) => setTeamOneImage(image)}
                 size={1024 * 1000}
                 sizeText="1MB"
               />
@@ -132,7 +139,7 @@ export default function TeamInfoForm({
       <FormBlockWrapper title="Team Two">
         <div className="grid grid-cols-1 gap-2">
           <Field name="team_two_name">
-            {({ field, meta }) => (
+            {({ field, meta }: { field: any; meta: any }) => (
               <>
                 <label className="form-control w-full">
                   <div className="label">
@@ -159,7 +166,7 @@ export default function TeamInfoForm({
           </Field>
 
           <Field name="team_two_image_type">
-            {({ field }) => (
+            {({ field }: { field: any }) => (
               <>
                 <label className="form-control w-full">
                   <div className="label">
@@ -177,7 +184,7 @@ export default function TeamInfoForm({
 
           {values?.team_two_image_type === 'url' && (
             <Field name="team_two_image">
-              {({ field, meta }) => (
+              {({ field, meta }: { field: any; meta: any }) => (
                 <>
                   <label className="form-control w-full">
                     <div className="label">
@@ -236,7 +243,7 @@ export default function TeamInfoForm({
               <ImageDropzoneSingle
                 className="mt-2"
                 value={teamTwoImage}
-                onChange={(image) => setTeamTwoImage(image)}
+                onChange={(image: any) => setTeamTwoImage(image)}
                 size={1024 * 1000}
                 sizeText="1MB"
               />

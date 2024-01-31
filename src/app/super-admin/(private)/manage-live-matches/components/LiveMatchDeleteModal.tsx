@@ -2,6 +2,7 @@ import {
   useDeleteLiveMatchMutation,
   useGetLiveMatchesQuery,
 } from '@/features/super-admin/live-match/liveMatchApi';
+import { TModalElementType } from '@/types';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { CgSpinner } from 'react-icons/cg';
@@ -23,11 +24,14 @@ export default function LiveMatchDeleteModal({
 
   useEffect(() => {
     if (isSuccess && data?.status && !isError) {
-      const modal = document.getElementById('liveMatchDeleteModal');
+      const modal = document.getElementById(
+        'liveMatchDeleteModal'
+      ) as TModalElementType;
+
       if (modal) {
-        // modal.closest('.modal')?.classList.remove('modal-open');
         modal.close();
       }
+
       refetch();
       toast.success(data?.message);
     }

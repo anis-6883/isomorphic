@@ -1,15 +1,18 @@
 import { routes } from '@/config/routes';
 import { useVerifyPhoneMutation } from '@/features/auth/authApi';
+import { userLoggedIn } from '@/features/auth/authSlice';
 import { TModalElementType } from '@/types';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { SetStateAction, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { PiSpinnerLight } from 'react-icons/pi';
+import { useDispatch } from 'react-redux';
 import { PinCode } from 'rizzui';
 
 export default function OtpModal({ phone }: { phone: string }) {
   const { replace } = useRouter();
+  const dispatch = useDispatch();
   const [otp, setOtp] =
     useState<SetStateAction<string | number | undefined>>('');
   const [otpSubmitting, setOtpSubmitting] = useState(false);
@@ -25,13 +28,18 @@ export default function OtpModal({ phone }: { phone: string }) {
     }
 
     if (isSuccess) {
-      console.log(responseData?.data);
-
       if (!responseData?.status) {
         setOtpSubmitting(false);
         setOtpValidMsg(responseData?.message);
       } else {
         toast.success(responseData?.message);
+
+        dispatch(
+          userLoggedIn({
+            accessToken: responseData?.data?.accessToken,
+            user: responseData?.data,
+          })
+        );
 
         signIn('credentials', {
           userData: JSON.stringify(responseData?.data),
@@ -51,12 +59,11 @@ export default function OtpModal({ phone }: { phone: string }) {
             if (modal) {
               modal.close();
             }
-            // toast.success('Login Successfully!');
           }
         });
       }
     }
-  }, [isError, isSuccess, replace, responseData]);
+  }, [dispatch, isError, isSuccess, replace, responseData]);
 
   // Submit Handler
   const otpSubmitHandler = (e: React.FormEvent) => {

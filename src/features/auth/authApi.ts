@@ -20,7 +20,14 @@ export const authApi = apiSlice.injectEndpoints({
         };
       },
     }),
+    getProfile: builder.query({
+      query: () => `/api/user/profile`,
+    }),
   }),
 });
 
-export const { useLoginWithPhoneMutation, useVerifyPhoneMutation } = authApi;
+export const {
+  useLoginWithPhoneMutation,
+  useVerifyPhoneMutation,
+  useGetProfileQuery,
+} = authApi;

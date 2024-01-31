@@ -16,6 +16,8 @@ export default function AuthProvider({
 
   // User data and token update into redux state
   useEffect(() => {
+    // console.log('Session Check: ', session);
+
     if (session) {
       dispatch(
         userLoggedIn({

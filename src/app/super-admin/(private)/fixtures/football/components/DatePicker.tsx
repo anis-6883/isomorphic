@@ -6,7 +6,10 @@ import Image from 'next/image';
 import React from 'react';
 import Flatpickr from 'react-flatpickr';
 
-function DatePicker({ dates, handleDate }, flatpickrRef) {
+function DatePicker(
+  { dates, handleDate }: { dates: any; handleDate: any },
+  flatpickrRef: any
+) {
   return (
     <div className="grid grid-cols-1 gap-6 pt-5">
       <div className="panel">
@@ -17,7 +20,7 @@ function DatePicker({ dates, handleDate }, flatpickrRef) {
         </div>
         <div className="mb-5 flex items-center justify-center overflow-x-scroll md:overflow-x-auto">
           <div className="m-auto flex w-9/12 justify-center border-b-[2px] border-dashed border-[#eaeaea] pb-5">
-            {dates.map((item, index) => (
+            {dates.map((item: any, index: number) => (
               <div
                 onClick={() => handleDate(item)}
                 key={index}
@@ -48,9 +51,9 @@ function DatePicker({ dates, handleDate }, flatpickrRef) {
                   <Image
                     src="/images/calendar.png"
                     alt="logo"
-                    ref={ref}
-                    {...props}
+                    ref={ref as any}
                     width={0}
+                    {...props}
                     height={0}
                     sizes="100vw"
                     className="h-6 w-6 cursor-pointer"

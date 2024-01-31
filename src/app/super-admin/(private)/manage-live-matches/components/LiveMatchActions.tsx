@@ -10,10 +10,9 @@ import { BsSortUpAlt } from 'react-icons/bs';
 import { FaRegClone } from 'react-icons/fa';
 
 type LiveMatchActionsProps = {
-  id: string;
+  id: number;
   description: string;
-  matchTitle: string;
-  handleDeleteModal: ({}) => void;
+  handleDeleteModal: (data: { id: number; description: string }) => void;
 };
 
 export default function LiveMatchActions({

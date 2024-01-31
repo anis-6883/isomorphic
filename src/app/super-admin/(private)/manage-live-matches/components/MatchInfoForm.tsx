@@ -4,12 +4,23 @@ import { Field } from 'formik';
 import Flatpickr from 'react-flatpickr';
 import FormBlockWrapper from '../../components/FormBlockWrapper';
 
-export default function MatchInfoForm({ values, setFieldValue }) {
+export default function MatchInfoForm({
+  values,
+  setFieldValue,
+}: {
+  values: any;
+  setFieldValue: any;
+}) {
+  type RenderProps = {
+    defaultValue: any;
+    value: any;
+    props: any;
+  };
   return (
     <FormBlockWrapper title="Match Information">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Field name="match_title">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -36,34 +47,32 @@ export default function MatchInfoForm({ values, setFieldValue }) {
         </Field>
 
         <Field name="time">
-          {({ field, meta }) => (
+          {({ field, meta }: { field: any; meta: any }) => (
             <Flatpickr
               value={values?.time}
               render={({ defaultValue, value, ...props }, ref) => (
-                <>
-                  <label className="form-control w-full">
-                    <div className="label">
-                      <span className="label-text font-semibold">
-                        Match Time{' '}
-                        <span className="text-red-600">
-                          *{' '}
-                          {meta.touched && meta.error && (
-                            <span>({meta.error})</span>
-                          )}
-                        </span>
+                <label className="form-control w-full">
+                  <div className="label">
+                    <span className="label-text font-semibold">
+                      Match Time{' '}
+                      <span className="text-red-600">
+                        *{' '}
+                        {meta.touched && meta.error && (
+                          <span>({meta.error})</span>
+                        )}
                       </span>
-                    </div>
-                    <input
-                      type="text"
-                      className={`input input-bordered w-full ${
-                        meta.touched && meta.error && 'input-error'
-                      }`}
-                      ref={ref}
-                      {...props}
-                      placeholder="YYYY-MM-DD HH:MM"
-                    />
-                  </label>
-                </>
+                    </span>
+                  </div>
+                  <input
+                    type="text"
+                    className={`input input-bordered w-full ${
+                      meta.touched && meta.error && 'input-error'
+                    }`}
+                    ref={ref}
+                    {...props}
+                    placeholder="YYYY-MM-DD HH:MM"
+                  />
+                </label>
               )}
               options={{
                 onChange: function (selectedDates, dateStr) {
@@ -78,7 +87,7 @@ export default function MatchInfoForm({ values, setFieldValue }) {
         </Field>
 
         <Field name="fixture_id">
-          {({ field }) => (
+          {({ field }: { field: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -97,7 +106,7 @@ export default function MatchInfoForm({ values, setFieldValue }) {
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         <Field name="is_hot">
-          {({ field }) => (
+          {({ field }: { field: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -114,7 +123,7 @@ export default function MatchInfoForm({ values, setFieldValue }) {
           )}
         </Field>
         <Field name="sports_type_name">
-          {({ field }) => (
+          {({ field }: { field: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">
@@ -133,7 +142,7 @@ export default function MatchInfoForm({ values, setFieldValue }) {
           )}
         </Field>
         <Field name="status">
-          {({ field }) => (
+          {({ field }: { field: any }) => (
             <>
               <label className="form-control w-full">
                 <div className="label">

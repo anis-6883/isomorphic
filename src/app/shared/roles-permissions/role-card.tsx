@@ -1,17 +1,18 @@
 'use client';
 
+import UserCog from '@/components/icons/user-cog';
+import { ActionIcon } from '@/components/ui/action-icon';
+import { Title } from '@/components/ui/text';
+import { ROLES } from '@/config/constants';
+import cn from '@/utils/class-names';
 import Image from 'next/image';
 import { PiDotsThreeBold } from 'react-icons/pi';
-import { Title } from '@/components/ui/text';
-import cn from '@/utils/class-names';
-import UserCog from '@/components/icons/user-cog';
-import { ROLES } from '@/config/constants';
-import { ActionIcon } from '@/components/ui/action-icon';
-import { Dropdown, DropdownItem } from '@/components/ui/dropdown ';
-import { useModal } from '@/app/shared/modal-views/use-modal';
+// import { Dropdown, DropdownItem } from '@/components/ui/dropdown ';
 import ModalButton from '@/app/shared/modal-button';
-import EditRole from '@/app/shared/roles-permissions/edit-role';
+import { useModal } from '@/app/shared/modal-views/use-modal';
 import CreateUser from '@/app/shared/roles-permissions/create-user';
+import EditRole from '@/app/shared/roles-permissions/edit-role';
+import { Dropdown, DropdownItem } from 'rizzui';
 
 type User = {
   id: number;

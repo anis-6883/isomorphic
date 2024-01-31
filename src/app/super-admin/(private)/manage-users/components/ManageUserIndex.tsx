@@ -35,7 +35,7 @@ export default function ManageUserIndex() {
     }
   };
 
-  interface User {
+  interface IUser {
     _id: string;
     phone: string;
     name: string;
@@ -44,7 +44,7 @@ export default function ManageUserIndex() {
     country: string;
   }
 
-  const columns = useMemo<MRT_ColumnDef<User>[]>(
+  const columns = useMemo<MRT_ColumnDef<IUser>[]>(
     () => [
       {
         accessorKey: 'phone',

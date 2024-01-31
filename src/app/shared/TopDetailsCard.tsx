@@ -1,4 +1,10 @@
-export default function TopDetailsCard({ children, title }) {
+export default function TopDetailsCard({
+  children,
+  title,
+}: {
+  children: any;
+  title: any;
+}) {
   return (
     <div className="flex flex-col items-center rounded-2xl border-[1px] border-primary">
       <div className=" w-full">

@@ -8,7 +8,7 @@ export const routes = {
     home: '/super-admin/manage-live-matches',
     create: '/super-admin/manage-live-matches/create',
     details: (id: string) => `/super-admin/manage-live-matches/${id}`,
-    edit: (id: string) => `/super-admin/manage-live-matches/update/${id}`,
+    edit: (id: number) => `/super-admin/manage-live-matches/update/${id}`,
   },
   fixture: {
     football: '/super-admin/fixtures/football',

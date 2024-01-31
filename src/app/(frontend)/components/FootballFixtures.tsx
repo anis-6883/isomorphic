@@ -1,6 +1,7 @@
 'use client';
 
 import NoDataFound from '@/app/shared/NoDataFound';
+import { useGetProfileQuery } from '@/features/auth/authApi';
 import { useGetFixtureDataQuery } from '@/features/front-end/fixture/fixtureApi';
 import { RootState } from '@/features/store';
 import { ILeague } from '@/types';
@@ -15,31 +16,41 @@ import FixtureCard from './FixtureCard';
 
 export default function FootballFixtures() {
   const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
   const { selectedDate, checkLive } = useSelector(
     (state: RootState) => state.fixtureSlice
   );
-  const { data, isLoading, isError, refetch, isFetching } =
-    useGetFixtureDataQuery(selectedDate , { skip :!selectedDate });
 
-    if (isLoading || isFetching) {
-      return (
-        <div className=" m-2 mb-2 rounded-2xl border-[1px] border-primary p-2 px-4 lg:m-0">
-          {arr.map((item) => (
-            <div className="grid grid-cols-12 gap-2 py-2" key={item}>
-              <div className="col-span-1 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
-              <div className="col-span-8 h-12 w-full animate-pulse rounded-md bg-neutral "></div>
-              <div className="col-span-2 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
-              <div className="col-span-1 flex h-12 w-full animate-pulse items-center justify-center">
-                <BiStar className="text-xl text-neutral" />
-              </div>
+  const { accessToken, user } = useSelector(
+    (state: RootState) => state.authSlice
+  );
+
+  const { data, isLoading, isFetching } = useGetFixtureDataQuery(selectedDate, {
+    skip: !selectedDate,
+  });
+
+  const { data: userData } = useGetProfileQuery(undefined, {
+    skip: accessToken === undefined,
+  });
+
+  if (isLoading || isFetching) {
+    return (
+      <div className=" m-2 mb-2 rounded-2xl border-[1px] border-primary p-2 px-4 lg:m-0">
+        {arr.map((item) => (
+          <div className="grid grid-cols-12 gap-2 py-2" key={item}>
+            <div className="col-span-1 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
+            <div className="col-span-8 h-12 w-full animate-pulse rounded-md bg-neutral "></div>
+            <div className="col-span-2 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
+            <div className="col-span-1 flex h-12 w-full animate-pulse items-center justify-center">
+              <BiStar className="text-xl text-neutral" />
             </div>
-          ))}
-        </div>
-      );
-    }
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   const fixturesData = data?.data;
-  console.log('fixturesData' ,fixturesData)
 
   const liveStatus: string[] = [
     'INPLAY_1ST_HALF',
@@ -91,7 +102,6 @@ export default function FootballFixtures() {
   const finalFixtures = _.cloneDeep(fixturesData)?.sort(
     (a: { id: number }, b: { id: number }) => a.id - b.id
   );
-
 
   if (!fixturesData?.length) {
     return (
@@ -155,6 +165,11 @@ export default function FootballFixtures() {
                         key={index}
                         match={match}
                         large={false}
+                        favoriteMatches={
+                          userData?.data?.favorites?.matches || undefined
+                        }
+                        accessToken={accessToken}
+                        user={user}
                       />
                     ))}
                   </div>
@@ -202,9 +217,14 @@ export default function FootballFixtures() {
                 {/* card body  */}
                 {league?.fixtures?.map((match, index: number) => (
                   <FixtureCard
-                  key={index}
-                  match={match}
-                  large={false}
+                    key={index}
+                    match={match}
+                    large={false}
+                    favoriteMatches={
+                      userData?.data?.favorites?.matches || undefined
+                    }
+                    accessToken={accessToken}
+                    user={user}
                   />
                 ))}
               </div>

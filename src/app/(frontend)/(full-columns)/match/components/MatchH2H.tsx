@@ -1,7 +1,7 @@
 import MatchScore from '@/app/(frontend)/(three-columns)/components/fixtureCardInfo/MatchScore';
 import NoDataFound from '@/app/shared/NoDataFound';
 import { useGetFixturesMatchH2HByTeamQuery } from '@/features/front-end/fixture/fixtureApi';
-import { IEvent, IMatchData, INestedObject, Team } from '@/types';
+import { INestedObject, Team } from '@/types';
 import getShortName from '@/utils/get-short-name';
 import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { IoStar } from 'react-icons/io5';
 
-export default function MatchH2H({ matchData }:{matchData:INestedObject}) {
+export default function MatchH2H({ matchData }: { matchData: INestedObject }) {
   const [isStarClicked, setIsStarClicked] = useState(false);
   const homeId = matchData?.data.participants.find(
     (team: Team | undefined) => team?.meta?.location === 'home'
@@ -50,7 +50,7 @@ export default function MatchH2H({ matchData }:{matchData:INestedObject}) {
     };
     // Add other properties as needed
   }
-  
+
   interface Encounter {
     id: string;
     league_name: string;
@@ -63,14 +63,16 @@ export default function MatchH2H({ matchData }:{matchData:INestedObject}) {
     teamMatch: Match;
     // Add other properties as needed
   }
-  
-  const getPreviousEncounters = (counters: Match[] | undefined): Encounter[] | JSX.Element => {
+
+  const getPreviousEncounters = (
+    counters: Match[] | undefined
+  ): Encounter[] | JSX.Element => {
     if (!counters?.length) {
       return <NoDataFound />;
     }
-  
+
     let previousEncounters: Encounter[] = [];
-  
+
     counters?.forEach((match) => {
       const fixtureId = match?.id;
       const leagueName = match.name;
@@ -80,7 +82,7 @@ export default function MatchH2H({ matchData }:{matchData:INestedObject}) {
       const awayTeamName = match.participants[1].name;
       const awayTeamImage = match.participants[1].image_path;
       const matchState = match.state.state;
-  
+
       const encounter: Encounter = {
         id: fixtureId,
         league_name: leagueName,
@@ -92,25 +94,24 @@ export default function MatchH2H({ matchData }:{matchData:INestedObject}) {
         match_state: matchState,
         teamMatch: match,
       };
-  
+
       previousEncounters.push(encounter);
     });
-  
+
     return previousEncounters;
   };
-  
 
   const previousEncounters = getPreviousEncounters(headToHeadData?.data);
-  const teamByLocation = (location:string) =>
+  const teamByLocation = (location: string) =>
     matchData?.data.participants?.find(
-      (team : Team | undefined) => team?.meta?.location === location
+      (team: Team | undefined) => team?.meta?.location === location
     );
   return (
-    <div className=" m-2 mb-20 mt-10 rounded-2xl border-[1px] border-primary text-[11px] md:m-0 md:mb-0 md:mb-8 md:text-base">
+    <div className=" m-2 mb-20 mt-10 rounded-2xl border-[1px] border-primary text-[11px] md:m-0 md:mb-8 md:text-base">
       <div className="">
         <div></div>
         <div>
-        {((previousEncounters as Encounter[]) || []).map((match) => (
+          {((previousEncounters as Encounter[]) || []).map((match) => (
             <div key={match?.id}>
               <div className="grid grid-cols-5">
                 <div></div>

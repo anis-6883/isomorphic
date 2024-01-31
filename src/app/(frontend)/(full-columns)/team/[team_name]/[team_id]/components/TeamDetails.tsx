@@ -64,7 +64,7 @@ export default function TeamDetails({
     />,
   ];
 
-  const handleTabChange = (tab:number) => {
+  const handleTabChange = (tab: number) => {
     setCurrentTab(tab);
   };
 

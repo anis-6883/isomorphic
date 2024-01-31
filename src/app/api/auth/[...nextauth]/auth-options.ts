@@ -17,7 +17,15 @@ export const authOptions: NextAuthOptions = {
     maxAge: 60 * 60 * 24 * 30, // Expire in 30 Days
   },
   callbacks: {
-    async jwt({ token, user, account }) {
+    async jwt({
+      token,
+      user,
+      account,
+    }: {
+      token: any;
+      user: any;
+      account: any;
+    }) {
       if (account?.provider === 'credentials') {
         if (user) {
           return {
@@ -26,9 +34,6 @@ export const authOptions: NextAuthOptions = {
           };
         }
       }
-
-      // console.log('user: ', user);
-      // console.log('token 1212: ', token);
 
       // Handle Social Auth
       if (account?.provider === 'google' || account?.provider === 'apple') {
@@ -68,16 +73,6 @@ export const authOptions: NextAuthOptions = {
         },
       };
     },
-    // async redirect({ url, baseUrl }) {
-    //   const parsedUrl = new URL(url, baseUrl);
-    //   if (parsedUrl.searchParams.has('callbackUrl')) {
-    //     return `${baseUrl}${parsedUrl.searchParams.get('callbackUrl')}`;
-    //   }
-    //   if (parsedUrl.origin === baseUrl) {
-    //     return url;
-    //   }
-    //   return baseUrl;
-    // },
   },
   providers: [
     CredentialsProvider({
@@ -103,14 +98,13 @@ export const authOptions: NextAuthOptions = {
               const user = data?.data;
               return user; // return the user's data
             }
-          } catch (err) {
+          } catch (err: any) {
             console.log(err.message);
             throw new Error(err.message);
           }
         } else {
           // User Otp Verify & Sign In
           const user = JSON.parse(credentials.userData);
-          // console.log('userData: ', user);
           return user; // userData come from otp verify
 
           // if (credentials?.signUp === 'true') {

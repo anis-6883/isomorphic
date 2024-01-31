@@ -2,6 +2,7 @@
 
 import MainLoading from '@/app/shared/MainLoading';
 import NoDataFound from '@/app/shared/NoDataFound';
+import { useGetProfileQuery } from '@/features/auth/authApi';
 import { useGetCricketFixturesQuery } from '@/features/front-end/cricket/fixture/fixtureApi';
 import { useGetFixtureDataQuery } from '@/features/front-end/fixture/fixtureApi';
 import { RootState } from '@/features/store';
@@ -13,7 +14,6 @@ import Link from 'next/link';
 import { BiStar } from 'react-icons/bi';
 import { IoIosArrowForward } from 'react-icons/io';
 import { useSelector } from 'react-redux';
-import FixtureCard from './FixtureCard';
 
 export default function CricketFixtures() {
   const { selectedDate, checkLive } = useSelector(
@@ -24,6 +24,14 @@ export default function CricketFixtures() {
 
   const { data: cricketFixtures, isLoading: cricketFixturesLoading } =
     useGetCricketFixturesQuery(undefined);
+
+  const { accessToken, user } = useSelector(
+    (state: RootState) => state.authSlice
+  );
+
+  const { data: userData } = useGetProfileQuery(undefined, {
+    skip: accessToken === undefined,
+  });
 
   const fixturesData = cricketFixtures?.data;
 
@@ -142,13 +150,18 @@ export default function CricketFixtures() {
                 </div>
               </Link>
               {/* card body */}
-              {league?.fixtures?.map((match) => (
+              {/* {league?.fixtures?.map((match) => (
                 <FixtureCard
                   key={match.id}
                   match={match}
-                  refetchFixtures={refetch}
+                  favoriteMatches={
+                    userData?.data?.favorites?.matches || undefined
+                  }
+                  accessToken={accessToken}
+                  user={user}
+                  // refetchFixtures={refetch}
                 />
-              ))}
+              ))} */}
             </div>
           ))}
         </div>

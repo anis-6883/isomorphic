@@ -55,9 +55,9 @@ export default function LiveMatchUpdate({
         ...matchData,
         // team_one_image_type: 'url',
         // team_two_image_type: 'url',
-        streaming_sources: matchData?.streaming_sources?.map((source) => ({
+        streaming_sources: matchData?.streaming_sources?.map((source: any) => ({
           ...source,
-          headers: Object.entries(JSON.parse(source?.headers)).map(
+          headers: Object.entries(JSON.parse(source?.headers) as any).map(
             ([key, value]) => ({ key, value })
           ),
         })),
@@ -103,7 +103,7 @@ export default function LiveMatchUpdate({
   });
 
   // Live Match Create Handler
-  const handleUpdate = async (values) => {
+  const handleUpdate = async (values: any) => {
     setIsSubmitting(true);
 
     // values.id = generateRandomId(15);

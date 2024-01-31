@@ -87,7 +87,7 @@ export default function LiveMatchCreate({
   });
 
   // Live Match Create Handler
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: any) => {
     setIsSubmitting(true);
 
     values.id = generateRandomId(15);
@@ -154,7 +154,7 @@ export default function LiveMatchCreate({
           enableReinitialize
           onSubmit={handleSubmit}
         >
-          {({ values, setFieldValue }) => {
+          {({ values, setFieldValue, errors }) => {
             return (
               <Form>
                 <MatchInfoForm values={values} setFieldValue={setFieldValue} />
@@ -165,6 +165,7 @@ export default function LiveMatchCreate({
                   setTeamOneImage={setTeamOneImage}
                   teamTwoImage={teamTwoImage}
                   setTeamTwoImage={setTeamTwoImage}
+                  setFieldValue={setFieldValue}
                 />
                 <div className="my-5 border-b border-dashed border-slate-300"></div>
                 <StreamingInfoForm values={values} />
