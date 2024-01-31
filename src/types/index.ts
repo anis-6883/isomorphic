@@ -1,5 +1,22 @@
 import { CouponType } from '@/config/enums';
 
+export interface LeagueStats {
+  leagueId: string;
+  leagueImage: string;
+  leagueName: string;
+  stats: {
+    season: string;
+    stats: {
+      APPEARANCES: number;
+      MINUTES_PLAYED: number;
+      LINEUPS: number;
+      ASSISTS: number;
+      GOALS_CONCEDED: number;
+      YELLOWCARDS: number;
+      REDCARDS: number;
+    };
+  }[];
+}
 export interface IEvent {
   code: string;
   player:string;

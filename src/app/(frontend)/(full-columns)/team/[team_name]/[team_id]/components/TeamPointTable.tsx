@@ -1,23 +1,24 @@
 // TeamPointTable.js
 import { useAppContext } from '@/contexts/XoomAppContent';
-import useFetchLeagueStandings from '@/lib/hooks/useFetchLeagueStandings';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { GoChevronDown } from 'react-icons/go';
 import SelectedSeasonPointTable from './TeamPointTable/SelectedSeasonPointTable';
+import { useGetLeagueStandingQuery } from '@/features/front-end/league/leagueApi';
+import MainLoading from '@/app/shared/MainLoading';
 
-export default function TeamPointTable({ activeSeasons }) {
+export default function TeamPointTable({ activeSeasons }:{ activeSeasons:any }) {
   const { selectedSeasonTeam, setSelectedSeasonTeam } = useAppContext();
 
   useEffect(() => {
     setSelectedSeasonTeam(activeSeasons[0]);
   }, []);
 
-  const { leagueStandingsLoading, leagueStandingsData } =
-    useFetchLeagueStandings(selectedSeasonTeam?.id);
+    const { isLoading:leagueStandingsLoading, data:leagueStandingsData } =
+    useGetLeagueStandingQuery(selectedSeasonTeam?.id ,{skip:!selectedSeasonTeam?.id});
 
   if (leagueStandingsLoading) {
-    return <>Loading...</>;
+    return <MainLoading/>;
   }
 
   if (!leagueStandingsData) {
@@ -58,7 +59,7 @@ export default function TeamPointTable({ activeSeasons }) {
         </div>
       </div>
 
-      <SelectedSeasonPointTable leagueStandingsData={leagueStandingsData} />
+      <SelectedSeasonPointTable leagueStandingsData={leagueStandingsData?.data} />
     </div>
   );
 }

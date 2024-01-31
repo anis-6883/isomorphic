@@ -1,10 +1,11 @@
+import { Team } from '@/types';
 import Image from 'next/image';
 
-function calculateTeamScores(scores, teamId) {
+function calculateTeamScores(scores :any, teamId:string) {
   let teamOneScore = 0;
   let teamTwoScore = 0;
 
-  scores?.forEach((item) => {
+  scores?.forEach((item :any) => {
     if (item.description === 'CURRENT') {
       if (item.participant_id === parseInt(teamId)) {
         teamOneScore = item.score?.goals || 0;
@@ -17,7 +18,7 @@ function calculateTeamScores(scores, teamId) {
   return { teamOneScore, teamTwoScore };
 }
 
-export default function LastFiveMatchCard({ match, teamId }) {
+export default function LastFiveMatchCard({ match, teamId } : { match:any ;teamId:string }) {
   const { scores, participants } = match;
 
   const { teamOneScore, teamTwoScore } = calculateTeamScores(scores, teamId);
@@ -35,7 +36,7 @@ export default function LastFiveMatchCard({ match, teamId }) {
     L: 'bg-red-500 text-white',
   };
 
-  const awayTeam = participants.find((team) => team.id != teamId);
+  const awayTeam = participants.find((team :any) => team?.id != teamId);
 
   return (
     <div className="w-fit">

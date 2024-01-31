@@ -1,5 +1,7 @@
-export default function TeamResultCircle({ match }) {
-  const teamId = match?.participants.find((team) => team.meta === 'home')?.id;
+import { Team } from "@/types";
+
+export default function TeamResultCircle({ match } : { match:any }) {
+  const teamId = match?.participants.find((team : any) => team?.meta === 'home')?.id;
 
   const { teamOneScore, teamTwoScore } = calculateTeamScores(
     match?.scores,
@@ -31,11 +33,11 @@ export default function TeamResultCircle({ match }) {
   );
 }
 
-function calculateTeamScores(scores, teamId) {
+function calculateTeamScores(scores :any, teamId :string) {
   let teamOneScore = 0;
   let teamTwoScore = 0;
 
-  scores?.forEach((item) => {
+  scores?.forEach((item : any) => {
     if (item.description === 'CURRENT') {
       if (item.participant_id === parseInt(teamId)) {
         teamOneScore = item.score?.goals || 0;

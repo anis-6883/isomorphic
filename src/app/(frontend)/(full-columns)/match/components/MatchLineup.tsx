@@ -1,13 +1,19 @@
 import MainLoading from '@/app/shared/MainLoading';
 import { useGetFixturesMatchLineupByIdQuery } from '@/features/front-end/fixture/fixtureApi';
+import { INestedObject, Team } from '@/types';
 import Image from 'next/image';
 import { ImArrowLeft, ImArrowRight } from 'react-icons/im';
 import PlayerView from './PlayerView';
-import { INestedObject, Team } from '@/types';
 
-export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
-  const findTeamInfo = (location :string, participants:INestedObject) => {
-    const team = participants.find((team : Team | undefined) => team?.meta?.location === location);
+export default function MatchLineup({
+  matchData,
+}: {
+  matchData: INestedObject;
+}) {
+  const findTeamInfo = (location: string, participants: INestedObject) => {
+    const team = participants.find(
+      (team: Team | undefined) => team?.meta?.location === location
+    );
     return {
       id: team?.id,
       name: team?.name,
@@ -19,21 +25,22 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
   const awayTeamInfo = findTeamInfo('away', matchData?.data.participants);
 
   const { isLoading: matchLineupsLoading, data: matchLineupsData } =
-    useGetFixturesMatchLineupByIdQuery(matchData?.data.id , {skip:!matchData?.data.id });
-
+    useGetFixturesMatchLineupByIdQuery(matchData?.data.id, {
+      skip: !matchData?.data.id,
+    });
 
   if (matchLineupsLoading) {
     return <MainLoading />;
   }
 
-  const getAdjustedLineup = (apiResponse:INestedObject) => {
-    const getFormation = (location:string) =>
+  const getAdjustedLineup = (apiResponse: INestedObject) => {
+    const getFormation = (location: string) =>
       apiResponse.formations.find(
-        (formation :{location:string}) => formation.location === location
+        (formation: { location: string }) => formation.location === location
       )?.formation;
 
     // Main Schema
-    let formattedLineup = {
+    let formattedLineup: any = {
       home: {
         id: homeTeamInfo.id,
         name: homeTeamInfo.name,
@@ -62,7 +69,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
       jersey_number: string;
       // Add other properties as needed
     }
-    
+
     interface Details {
       type_id: number;
       data: {
@@ -71,7 +78,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
       };
       // Add other properties as needed
     }
-    
+
     interface PlayerInfo {
       id: string;
       jersey: string;
@@ -84,7 +91,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
       playerRedCards?: string | undefined; // Adjust the type based on your data
       playerSubstitution?: string | undefined; // Adjust the type based on your data
     }
-    
+
     const addToPosition = (
       player: Player,
       team: string,
@@ -93,7 +100,8 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
       details: Details[]
     ): void => {
       const rating = details.find((topic) => topic.type_id === 118)?.data.value;
-      const playerGoals = details.find((topic) => topic.type_id === 52)?.data.value;
+      const playerGoals = details.find((topic) => topic.type_id === 52)?.data
+        .value;
       const playerAssists = details.find((topic) => topic.type_id === 79)?.data
         .value;
       const playerYellowCards = details.find((topic) => topic.type_id === 84)
@@ -102,7 +110,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
         .value;
       const playerSubstitution = details.find((topic) => topic.type_id === 18)
         ?.data.value;
-    
+
       const playerInfo: PlayerInfo = {
         id: player.player.id,
         jersey: player.jersey_number,
@@ -115,14 +123,14 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
         playerRedCards,
         playerSubstitution,
       };
-    
+
       formattedLineup[team][type][position] =
-      formattedLineup[team][type][position] || [];
+        formattedLineup[team][type][position] || [];
       formattedLineup[team][type][position].push(playerInfo);
     };
 
     // Create Main Result
-    apiResponse.lineups.forEach((player) => {
+    apiResponse.lineups.forEach((player: any) => {
       const team = player.team_id === homeTeamInfo.id ? 'home' : 'away';
       const positionCode = player?.position?.code;
       const details = player?.details;
@@ -155,38 +163,39 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
 
   const benchedPlayers = matchLineupsData?.data?.lineups
     .filter(
-      (lineup) => lineup?.type?.code === 'bench' && lineup.details.length > 0
+      (lineup: any) =>
+        lineup?.type?.code === 'bench' && lineup.details.length > 0
     )
-    .sort((a, b) => {
-      const getMinutesPlayed = (player) =>
+    .sort((a: any, b: any) => {
+      const getMinutesPlayed = (player: any) =>
         player?.details?.find(
-          (stat) => stat.type.developer_name === 'MINUTES_PLAYED'
+          (stat: any) => stat.type.developer_name === 'MINUTES_PLAYED'
         )?.data?.value || 0;
 
       return getMinutesPlayed(b) - getMinutesPlayed(a);
     });
   const substitutesPlayers = matchLineupsData?.data?.events
-    .filter((substitute) => substitute?.type_id === 18)
-    .sort((a, b) => {
-      const getMinutesPlayed = (player) =>
+    .filter((substitute: any) => substitute?.type_id === 18)
+    .sort((a: any, b: any) => {
+      const getMinutesPlayed = (player: any) =>
         player?.details?.find(
-          (stat) => stat.type.developer_name === 'MINUTES_PLAYED'
+          (stat: any) => stat.type.developer_name === 'MINUTES_PLAYED'
         )?.data?.value || 0;
 
       return getMinutesPlayed(b) - getMinutesPlayed(a);
     });
 
   const homeSubstitutesPlayers = substitutesPlayers.filter(
-    (players) => players?.participant_id === homeTeamInfo?.id
+    (players: any) => players?.participant_id === homeTeamInfo?.id
   );
   const awaySubstitutesPlayers = substitutesPlayers.filter(
-    (players) => players?.participant_id === awayTeamInfo?.id
+    (players: any) => players?.participant_id === awayTeamInfo?.id
   );
   const homeBenchPlayers = benchedPlayers.filter(
-    (players) => players?.team_id === homeTeamInfo?.id
+    (players: any) => players?.team_id === homeTeamInfo?.id
   );
   const awayBenchPlayers = benchedPlayers.filter(
-    (players) => players?.team_id === awayTeamInfo?.id
+    (players: any) => players?.team_id === awayTeamInfo?.id
   );
 
   return (
@@ -206,21 +215,21 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
             <div className="grid h-full grid-rows-2 gap-2 p-5">
               <div className="relative flex h-full flex-col  justify-between text-gray-300">
                 <div className="mx-auto flex items-center justify-around gap-0 md:gap-4">
-                  {adjustedData?.home?.lineup?.goalkeeper.map((player) => (
+                  {adjustedData?.home?.lineup?.goalkeeper.map((player: any) => (
                     <PlayerView key={player.id} player={player} />
                   ))}
                 </div>
                 <div
                   className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                 >
-                  {adjustedData?.home?.lineup?.defender.map((player) => (
+                  {adjustedData?.home?.lineup?.defender.map((player: any) => (
                     <PlayerView key={player.id} player={player} />
                   ))}
                 </div>
                 <div
                   className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                 >
-                  {adjustedData?.home?.lineup?.midfielder.map((player) => (
+                  {adjustedData?.home?.lineup?.midfielder.map((player: any) => (
                     <PlayerView key={player.id} player={player} />
                   ))}
                 </div>
@@ -230,7 +239,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                       className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                     >
                       {adjustedData?.home?.lineup?.midfielder_second_half?.map(
-                        (player) => (
+                        (player: any) => (
                           <PlayerView key={player.id} player={player} />
                         )
                       )}
@@ -238,9 +247,11 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                     <div
                       className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                     >
-                      {adjustedData?.home?.lineup?.attacker.map((player) => (
-                        <PlayerView key={player.id} player={player} />
-                      ))}
+                      {adjustedData?.home?.lineup?.attacker.map(
+                        (player: any) => (
+                          <PlayerView key={player.id} player={player} />
+                        )
+                      )}
                     </div>
                   </>
                 ) : (
@@ -248,9 +259,11 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                     <div
                       className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                     >
-                      {adjustedData?.home?.lineup?.attacker.map((player) => (
-                        <PlayerView key={player.id} player={player} />
-                      ))}
+                      {adjustedData?.home?.lineup?.attacker.map(
+                        (player: any) => (
+                          <PlayerView key={player.id} player={player} />
+                        )
+                      )}
                     </div>
                   </>
                 )}
@@ -270,8 +283,8 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                   <span className="text-gray-300">
                     {matchLineupsData?.data?.formations
                       ? matchLineupsData.data.formations
-                          .filter((f) => f.location === 'home')
-                          .map((filteredFormation) => (
+                          .filter((f: any) => f.location === 'home')
+                          .map((filteredFormation: any) => (
                             <div key={filteredFormation.id}>
                               {filteredFormation?.formation}
                             </div>
@@ -287,7 +300,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                       className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                     >
                       {adjustedData?.away?.lineup?.midfielder_second_half?.map(
-                        (player) => (
+                        (player: any) => (
                           <PlayerView key={player.id} player={player} />
                         )
                       )}
@@ -295,9 +308,11 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                     <div
                       className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                     >
-                      {adjustedData?.away?.lineup?.attacker.map((player) => (
-                        <PlayerView key={player.id} player={player} />
-                      ))}
+                      {adjustedData?.away?.lineup?.attacker.map(
+                        (player: any) => (
+                          <PlayerView key={player.id} player={player} />
+                        )
+                      )}
                     </div>
                   </>
                 ) : (
@@ -305,28 +320,30 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                     <div
                       className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                     >
-                      {adjustedData?.away?.lineup?.attacker.map((player) => (
-                        <PlayerView key={player.id} player={player} />
-                      ))}
+                      {adjustedData?.away?.lineup?.attacker.map(
+                        (player: any) => (
+                          <PlayerView key={player.id} player={player} />
+                        )
+                      )}
                     </div>
                   </>
                 )}
                 <div
                   className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                 >
-                  {adjustedData?.away?.lineup?.midfielder.map((player) => (
+                  {adjustedData?.away?.lineup?.midfielder.map((player: any) => (
                     <PlayerView key={player.id} player={player} />
                   ))}
                 </div>
                 <div
                   className={`mx-auto flex items-center justify-around gap-0 md:gap-4`}
                 >
-                  {adjustedData?.away?.lineup?.defender.map((player) => (
+                  {adjustedData?.away?.lineup?.defender.map((player: any) => (
                     <PlayerView key={player.id} player={player} />
                   ))}
                 </div>
                 <div className="mx-auto flex items-center justify-around gap-0 md:gap-4">
-                  {adjustedData?.away?.lineup?.goalkeeper.map((player) => (
+                  {adjustedData?.away?.lineup?.goalkeeper.map((player: any) => (
                     <PlayerView key={player.id} player={player} />
                   ))}
                 </div>
@@ -336,8 +353,8 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
                   <span className="text-gray-300">
                     {matchLineupsData?.data?.formations
                       ? matchLineupsData.data.formations
-                          .filter((f) => f.location === 'away')
-                          .map((filteredFormation) => (
+                          .filter((f: any) => f.location === 'away')
+                          .map((filteredFormation: any) => (
                             <div key={filteredFormation.id}>
                               {filteredFormation?.formation}
                             </div>
@@ -390,7 +407,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
 
           <div className="justify-items-between grid grid-cols-2">
             <div>
-              {homeSubstitutesPlayers?.map((playerData) => {
+              {homeSubstitutesPlayers?.map((playerData: any) => {
                 return (
                   <div key={playerData.id}>
                     <div className=" my-2 grid grid-cols-5 content-center items-center gap-2 ">
@@ -424,7 +441,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
             </div>
             <div>
               {' '}
-              {awaySubstitutesPlayers?.map((playerData) => {
+              {awaySubstitutesPlayers?.map((playerData: any) => {
                 return (
                   <div key={playerData.id}>
                     <div className=" my-2 grid  grid-cols-5 content-center items-center gap-2">
@@ -490,7 +507,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
 
           <div className="justify-items-between grid grid-cols-2">
             <div>
-              {homeBenchPlayers?.map((playerData) => {
+              {homeBenchPlayers?.map((playerData: any) => {
                 return (
                   <div key={playerData.id}>
                     <div className=" my-2 grid grid-cols-5 content-center items-center gap-2">
@@ -517,7 +534,7 @@ export default function MatchLineup({ matchData }:{matchData:INestedObject}) {
             </div>
             <div>
               {' '}
-              {awayBenchPlayers?.map((playerData) => {
+              {awayBenchPlayers?.map((playerData: any) => {
                 return (
                   <div key={playerData.id}>
                     <div className=" my-2 grid  grid-cols-5 content-center items-center gap-2">

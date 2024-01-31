@@ -1,15 +1,17 @@
-import MatchStates from '@/app/match/_components/MatchStates';
-import getShortName from '@/lib/helpers/getShortName';
-import getSlugify from '@/lib/helpers/getSlugify';
+
+import MatchStates from '@/app/(frontend)/(full-columns)/match/components/MatchStates';
+import getShortName from '@/utils/get-short-name';
+import getSlugify from '@/utils/get-slugify';
+import { AnyCnameRecord } from 'dns';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 
-export default function NextMatch({ nextMatch }) {
+export default function NextMatch({ nextMatch }:{nextMatch:any}) {
   const [isStarClicked, setIsStarClicked] = useState(false);
 
-  const handleButtonClick = (event) => {
+  const handleButtonClick = (event :any) => {
     event.preventDefault();
     setIsStarClicked(!isStarClicked);
   };
@@ -63,7 +65,7 @@ export default function NextMatch({ nextMatch }) {
                   </h4>
                 </div>
 
-                <MatchStates match={nextMatch} />
+                <MatchStates matchData={nextMatch} />
                 <div className="col-span-3 flex items-center">
                   <Image
                     src={nextMatch?.participants[1]?.image_path}

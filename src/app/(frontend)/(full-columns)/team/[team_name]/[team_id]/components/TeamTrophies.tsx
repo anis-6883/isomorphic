@@ -1,14 +1,17 @@
-import NoDataFound from '@/components/Global/NoDataFound';
-import useFetchTeamTrophies from '@/lib/hooks/useFetchTeamTrophies';
+
+import NoDataFound from '@/app/shared/NoDataFound';
+import { useGetTeamTrophiesQuery } from '@/features/front-end/teams/teamsApi';
+
 import Image from 'next/image';
 
 const LOADING_TEXT = 'Loading...';
 
-const formatSeasonName = (season) => `${season?.name},`;
+const formatSeasonName = (season:any) => `${season?.name},`;
 
-const TeamTrophies = ({ teamId }) => {
-  const { teamTrophiesLoading, teamTrophiesData, teamTrophiesRefetch } =
-    useFetchTeamTrophies(teamId);
+const TeamTrophies = ({ teamId }:{teamId:any}) => {
+
+  const { isLoading:teamTrophiesLoading, data:teamTrophiesData, refetch:teamTrophiesRefetch } =
+  useGetTeamTrophiesQuery(teamId);
 
   const trophiesData = teamTrophiesData?.data;
 
@@ -16,10 +19,10 @@ const TeamTrophies = ({ teamId }) => {
     return <>{LOADING_TEXT}</>;
   }
 
-  const extractWinnersAndRunnersUp = (data) => {
+  const extractWinnersAndRunnersUp = (data:any) => {
     const results = {};
 
-    data.forEach((entry) => {
+    data.forEach((entry:any) => {
       const { league } = entry;
       const leagueId = league?.id;
 
@@ -58,7 +61,7 @@ const TeamTrophies = ({ teamId }) => {
     <div>
       {leagueResults.length === 0 && <NoDataFound />}
       {leagueResults
-        .filter((league) => league.leagueId !== undefined)
+        .filter((league) => league?.leagueId !== undefined)
         .map((league) => (
           <div key={league?.leagueId}>
             <div className="bg-base-100 p-4 px-6 skew-y-[0.5deg]">

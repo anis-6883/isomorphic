@@ -1,6 +1,6 @@
 import UpcomingTeamMatches from './TeamMatches/UpcomingTeamMatches';
 
-export default function TeamMatches({ teamDetails }) {
+export default function TeamMatches({ teamDetails }:{ teamDetails:any }) {
   const upcomingMatches = teamDetails?.upcoming;
   const recentMatches = teamDetails?.latest;
   // const [currentTab, setCurrentTab] = useState(0);

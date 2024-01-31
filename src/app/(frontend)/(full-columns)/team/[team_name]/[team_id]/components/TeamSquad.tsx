@@ -3,10 +3,10 @@ import { useGetTeamSquadDataQuery } from '@/features/front-end/teams/teamsApi';
 import Image from 'next/image';
 import PlayerCard from './PlayerCard';
 
-export default function TeamSquad({ teamDetails, teamId }) {
+export default function TeamSquad({ teamDetails, teamId }:{teamDetails:any; teamId:string}) {
   const seasonId = teamDetails?.activeseasons[0]?.id;
 
-  const activeCoach = teamDetails?.coaches.find((coach) => coach.active);
+  const activeCoach = teamDetails?.coaches.find((coach:any) => coach.active);
 
   const { isLoading: teamSquadLoading, data: teamSquadData } =
     useGetTeamSquadDataQuery(
@@ -17,8 +17,8 @@ export default function TeamSquad({ teamDetails, teamId }) {
   if (teamSquadLoading) {
     return <MainLoading />;
   }
-  function groupSquadDataByPosition(squadData) {
-    return squadData?.reduce((groupedData, player) => {
+  function groupSquadDataByPosition(squadData:any) {
+    return squadData?.reduce((groupedData:any, player:any) => {
       const positionCode = player?.player?.position?.code;
 
       if (!groupedData[positionCode]) {
@@ -64,7 +64,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
         Goal-keeper
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
-        {groupedData?.goalkeeper?.map((player) => (
+        {groupedData?.goalkeeper?.map((player:any) => (
           <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>
@@ -73,7 +73,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
         DEFENDER
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
-        {groupedData?.defender?.map((player) => (
+        {groupedData?.defender?.map((player:any) => (
           <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>
@@ -82,7 +82,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
         MIDFIELDER
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
-        {groupedData?.midfielder?.map((player) => (
+        {groupedData?.midfielder?.map((player:any) => (
           <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>
@@ -91,7 +91,7 @@ export default function TeamSquad({ teamDetails, teamId }) {
         ATTACKER
       </h4>
       <div className="grid grid-cols-4 items-center justify-center gap-5 pb-6">
-        {groupedData?.attacker?.map((player) => (
+        {groupedData?.attacker?.map((player:any) => (
           <PlayerCard key={player?.playerId} player={player} />
         ))}
       </div>

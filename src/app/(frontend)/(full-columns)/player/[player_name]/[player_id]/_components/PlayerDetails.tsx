@@ -6,9 +6,9 @@ import TopDetailsCard from '@/app/shared/TopDetailsCard';
 import { useGetPlayerDetailsQuery } from '@/features/front-end/player/playerApi';
 import Image from 'next/image';
 import PlayerProfile from './PlayerProfile';
-import { Team } from '@/types';
 
-export default function PlayerDetails({ playerId }:{playerId:number}) {
+
+export default function PlayerDetails({ playerId }:{playerId:any}) {
   const { isLoading, data: playerData } = useGetPlayerDetailsQuery(playerId, {
     skip: !playerId,
   });
@@ -16,7 +16,7 @@ export default function PlayerDetails({ playerId }:{playerId:number}) {
     return <MainLoading />;
   }
   const playerLeague = playerData?.data.teams?.find(
-    (team :Team) => team?.team?.type === 'domestic'
+    (team :{team:{type:string}}) => team?.team?.type === 'domestic'
   );
   console.log('playerLeague' , playerLeague)
 
@@ -60,7 +60,7 @@ export default function PlayerDetails({ playerId }:{playerId:number}) {
             <PlayerProfile
               key={'player_details_tab_01'}
               playerData={playerData?.data}
-              playerLeague={playerLeague}
+              // playerLeague={playerLeague}
             />
           </div>
         </div>

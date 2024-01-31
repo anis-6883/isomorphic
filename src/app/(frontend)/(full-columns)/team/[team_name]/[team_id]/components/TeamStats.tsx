@@ -1,33 +1,33 @@
-import NoDataFound from '@/components/Global/NoDataFound';
+
+import NoDataFound from '@/app/shared/NoDataFound';
 import { useAppContext } from '@/contexts/XoomAppContent';
-import { sportMonkUrl } from '@/lib/axios/getAxios';
-import getSlugify from '@/lib/helpers/getSlugify';
-import useFetchLeagueStandings from '@/lib/hooks/useFetchLeagueStandings';
+import { useGetLeagueStandingQuery } from '@/features/front-end/league/leagueApi';
+import { useGetTopScorerAssistQuery } from '@/features/front-end/teams/teamsApi';
+import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { GoChevronDown } from 'react-icons/go';
-import { useQuery } from 'react-query';
 
-function getTopPlayers(data, typeId) {
+function getTopPlayers(data:any, typeId:any) {
   return (
     data?.data?.topscorers
-      .filter((scorer) => scorer.type_id === typeId)
-      .sort((a, b) => b.total - a.total) || []
+      .filter((scorer :any) => scorer.type_id === typeId)
+      .sort((a:any, b:any) => b?.total - a?.total) || []
   );
 }
 
-function transformDetailsToObj(details) {
-  const result = {};
+function transformDetailsToObj(details:any) {
+  const result:any = {};
 
-  details.forEach((detail) => {
+  details.forEach((detail:any) => {
     const { type_id, value } = detail;
     result[type_id] = value;
   });
   return result;
 }
 
-export default function TeamStats({ activeSeasons, teamId }) {
+export default function TeamStats({ activeSeasons, teamId }:{ activeSeasons:any, teamId:string }) {
   const { selectedSeasonTeam, setSelectedSeasonTeam } = useAppContext();
 
   useEffect(() => {
@@ -36,27 +36,15 @@ export default function TeamStats({ activeSeasons, teamId }) {
     }
   }, [activeSeasons]);
 
-  const { leagueStandingsLoading, leagueStandingsData } =
-    useFetchLeagueStandings(selectedSeasonTeam?.id);
+  const { isLoading:leagueStandingsLoading, data:leagueStandingsData } =
+  useGetLeagueStandingQuery(selectedSeasonTeam?.id ,{skip:!selectedSeasonTeam?.id});
 
   const {
     isLoading: topScorerAssistLoading,
     data: topScorerAssistData,
     isError: topScorerAssistError,
-  } = useQuery(
-    ['top-scorer-assist', selectedSeasonTeam?.id],
-    async () => {
-      const response = await sportMonkUrl.get(
-        `/seasons/${selectedSeasonTeam?.id}?include=topscorers.player;topscorers.participant&filters=seasonTopscorerTypes:208,209`
-      );
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error('Failed to fetch top scorer and assist data!');
-      }
-    },
-    { enabled: !!selectedSeasonTeam?.id } // Enable query only when team ID is available
-  );
+  } = useGetTopScorerAssistQuery(selectedSeasonTeam?.id ,{skip:!selectedSeasonTeam?.id});
+      
 
   if (leagueStandingsLoading || topScorerAssistLoading) {
     return <>Loading...</>;
@@ -71,7 +59,7 @@ export default function TeamStats({ activeSeasons, teamId }) {
   let transformedStandingsAway = [];
 
   transformedStandingsHome = leagueStandingsData?.data?.map(
-    (singleStandings) => {
+    (singleStandings:any) => {
       const transformedData = transformDetailsToObj(singleStandings?.details);
       return {
         teamId: singleStandings?.participant?.id,
@@ -91,7 +79,7 @@ export default function TeamStats({ activeSeasons, teamId }) {
   );
 
   transformedStandingsAway = leagueStandingsData?.data?.map(
-    (singleStandings) => {
+    (singleStandings :any) => {
       const transformedData = transformDetailsToObj(singleStandings?.details);
       return {
         teamId: singleStandings?.participant?.id,
@@ -111,11 +99,11 @@ export default function TeamStats({ activeSeasons, teamId }) {
   );
 
   // Sort standings by PTS
-  transformedStandingsHome?.sort((a, b) => b.PTS - a.PTS);
-  transformedStandingsAway?.sort((a, b) => b.PTS - a.PTS);
+  transformedStandingsHome?.sort((a :any, b :any) => b.PTS - a.PTS);
+  transformedStandingsAway?.sort((a:any, b:any) => b.PTS - a.PTS);
 
-  const findStandingsWithTeamId = (standings, teamId) =>
-    standings?.find((point) => point.teamId === parseInt(teamId));
+  const findStandingsWithTeamId = (standings :any, teamId :string) =>
+    standings?.find((point:any) => point.teamId === parseInt(teamId));
 
   const homeStandingsWithTeamId = findStandingsWithTeamId(
     transformedStandingsHome,
@@ -289,7 +277,7 @@ export default function TeamStats({ activeSeasons, teamId }) {
               Top Scorer
             </h4>
             {topScorer.length > 0 ? (
-              topScorer.slice(0, 20).map((scorer) => (
+              topScorer.slice(0, 20).map((scorer:any) => (
                 <div
                   key={scorer.id}
                   className="flex items-center justify-between py-2"
@@ -333,7 +321,7 @@ export default function TeamStats({ activeSeasons, teamId }) {
               Top Assist
             </h4>
             {topAssist.length > 0 ? (
-              topAssist.slice(0, 20).map((assist) => (
+              topAssist.slice(0, 20).map((assist:any) => (
                 <div
                   key={assist.id}
                   className="flex items-center justify-between py-2"

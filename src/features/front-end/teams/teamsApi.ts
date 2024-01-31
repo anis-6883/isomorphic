@@ -25,6 +25,14 @@ export const leagueApi = apiSlice.injectEndpoints({
       query: ({ seasonId, teamId }) =>
         `/v3/football/squads/seasons/${seasonId}/teams/${teamId}?include=player.position;player.country`,
     }),
+    getTopScorerAssist: builder.query({
+      query: (id) =>
+        `/v3/football/seasons/${id}?include=topscorers.player;topscorers.participant&filters=seasonTopscorerTypes:208,209`,
+    }),
+    getTeamTrophies: builder.query({
+      query: (id) =>
+        `/v3/football/teams/${id}?include=trophies.league;trophies.season;trophies.trophy`,
+    }),
   }),
 });
 
@@ -34,4 +42,6 @@ export const {
   useGetTeamDetailsQuery,
   useGetTeamTransfersQuery,
   useGetTeamSquadDataQuery,
+  useGetTopScorerAssistQuery,
+  useGetTeamTrophiesQuery
 } = leagueApi;

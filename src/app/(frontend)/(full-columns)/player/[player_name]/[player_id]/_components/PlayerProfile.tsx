@@ -1,8 +1,9 @@
+import { INestedObject } from '@/types';
 import getSlugify from '@/utils/get-slugify';
 import Image from 'next/image';
 import Link from 'next/link';
 
-function calculateAge(dateOfBirth) {
+function calculateAge(dateOfBirth : string) {
   const dob = new Date(dateOfBirth);
   const today = new Date();
 
@@ -15,7 +16,7 @@ function calculateAge(dateOfBirth) {
   return age;
 }
 
-function formatMoney(amount) {
+function formatMoney(amount : number) {
   if (amount >= 1e6) {
     return (amount / 1e6)?.toFixed(2) + 'M';
   } else if (amount >= 1e3) {
@@ -25,8 +26,8 @@ function formatMoney(amount) {
   }
 }
 
-function findRecentSeasonStats(statistics) {
-  return statistics?.find((item) => {
+function findRecentSeasonStats(statistics : INestedObject) {
+  return statistics?.find((item : INestedObject) => {
     return (
       item.has_values === true &&
       item.season.is_current === true &&
@@ -35,10 +36,10 @@ function findRecentSeasonStats(statistics) {
   });
 }
 
-export default function PlayerProfile({ playerData }) {
+export default function PlayerProfile({ playerData } :{playerData:INestedObject}) {
   const recentSeasonStats = findRecentSeasonStats(playerData?.statistics);
 
-  const displayIfNullOrUndefined = (value, postfix = '') =>
+  const displayIfNullOrUndefined = (value:number, postfix = '') =>
     value !== null && value !== undefined ? `${value} ${postfix}` : '--';
 
   return (
@@ -99,7 +100,7 @@ export default function PlayerProfile({ playerData }) {
                 </tr>
               </thead>
               <tbody>
-                {playerData.transfers.map((transfer) => (
+                {playerData.transfers.map((transfer: INestedObject) => (
                   <tr key={transfer.id} className="border-none">
                     <td>
                       <Link

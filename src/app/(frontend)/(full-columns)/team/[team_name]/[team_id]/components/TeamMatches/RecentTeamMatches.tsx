@@ -1,6 +1,7 @@
 'use client';
 
 import FixtureCard from '@/app/(frontend)/components/FixtureCard';
+import { INestedObject } from '@/types';
 import moment from 'moment';
 
 // const MatchCard = ({ match, teamId }) => {
@@ -138,10 +139,10 @@ import moment from 'moment';
 //   );
 // };
 
-const RecentTeamMatches = ({ recentMatches }) => {
+const RecentTeamMatches = ({ recentMatches } : { recentMatches:INestedObject }) => {
   return (
     <div className="">
-      {recentMatches?.map((match) => (
+      {recentMatches?.map((match :INestedObject) => (
         <div key={match.id}>
           <p className="px-3 text-secondary">
             {moment
