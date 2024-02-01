@@ -190,7 +190,7 @@ const FixtureCard = ({
                     className={large ? 'h-5 w-5' : 'h-4 w-4'}
                   />
                 </div>
-                <h2 className="text-gray-500">
+                <h2 className="text-zinc-400">
                   {getShortName(
                     teamByLocation('home')?.name,
                     teamByLocation('home')?.short_code
@@ -213,7 +213,7 @@ const FixtureCard = ({
                     className={large ? 'h-5 w-5' : 'h-4 w-4'}
                   />
                 </div>
-                <h2 className="text-gray-500">
+                <h2 className="text-zinc-400">
                   {getShortName(
                     teamByLocation('away')?.name,
                     teamByLocation('away')?.short_code
@@ -246,7 +246,7 @@ const FixtureCard = ({
             />
             <div
               tabIndex={0}
-              className="menu dropdown-content absolute !right-[-241px] z-[1000]  hidden w-[600px] lg:block"
+              className="menu dropdown-content absolute !right-[-241px] z-[1000] w-[600px]"
             >
               <div className="relative mt-5  rounded-md  bg-[#1B2435] shadow-lg  shadow-pink-50">
                 <div className="absolute z-20 -mt-1 ms-[21.3rem] h-3 w-3 rotate-45 bg-[#1B2435] "></div>
@@ -270,8 +270,8 @@ const FixtureCard = ({
       <div
         className={
           large
-            ? 'dropdown dropdown-end dropdown-hover absolute right-[2.8rem] top-[0px] col-span-2 mx-auto my-auto h-12 bg-[#122948] p-2 text-xs lg:right-[3.5rem]  lg:h-full '
-            : 'dropdown dropdown-end  dropdown-hover absolute right-[2.3rem] top-[0px] col-span-2 mx-auto my-auto h-12 bg-[#122948] p-2 text-xs lg:right-[3.5rem] '
+            ? 'dropdown dropdown-end dropdown-hover absolute right-[2.8rem] top-[0px] col-span-2 mx-auto my-auto h-12 bg-gradient-to-t from-[#112848] to-transparent p-2 text-xs lg:right-[3.5rem]  lg:h-full '
+            : 'dropdown dropdown-end  dropdown-hover absolute right-[2.3rem] top-[0px] col-span-2 mx-auto my-auto h-12 bg-gradient-to-t from-[#112848] to-transparent  p-2 text-xs lg:right-[3.5rem] '
         }
       >
         <div className="my-auto">
