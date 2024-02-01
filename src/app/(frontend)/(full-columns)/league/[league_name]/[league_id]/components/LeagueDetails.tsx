@@ -14,12 +14,14 @@ import { IoIosArrowDown } from 'react-icons/io';
 import LeagueFixture from './LeagueFixture';
 import Recent from './Recent';
 import Standings from './Standings';
+import { BiStar } from 'react-icons/bi';
 
 export default function LeagueDetails({ leagueId }: { leagueId: number }) {
   const [currentTab, setCurrentTab] = useState(0);
   const [seasonId, setSeasonId] = useState<number | null>(null);
+  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
 
-  const { isLoading, data: leagueData } = useGetSingleLeagueByIdQuery(
+  const { isLoading, data: leagueData , isFetching } = useGetSingleLeagueByIdQuery(
     leagueId || null,
     { skip: !leagueId }
   );
@@ -30,8 +32,71 @@ export default function LeagueDetails({ leagueId }: { leagueId: number }) {
     }
   }, [isLoading, leagueData]);
 
-  if (isLoading) {
-    return <MainLoading />;
+  if (isLoading || isFetching) {
+    return (
+      <div className="mx-auto max-w-screen-xl">
+      <div className="grid grid-cols-12 gap-5">
+        <div className="col-span-0 md:col-span-3"></div>
+        <div className="col-span-12 w-full px-5 md:col-span-9">
+          <div className="flex w-full items-center justify-between py-6">
+            <div className="flex items-center">
+              <Image
+                src='/images/team_placeholder.png'
+                alt="team placeholder name"
+                height={0}
+                width={0}
+                sizes="100vw"
+                className="mr-4 h-16 w-16 animate-pulse select-none rounded-full bg-white p-[2px] ring-1 ring-gray-100"
+              />
+              <div className="text-white">
+              <div className="col-span-8 h-6 w-64 animate-pulse rounded-md bg-neutral "></div>
+                <div className="flex gap-4">
+                <div className="col-span-8 h-4 w-20 animate-pulse rounded-md bg-neutral mt-3 "></div>
+                  <div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="my-5 flex select-none items-center justify-start gap-5">
+          <div className="col-span-8 h-1 w-14 animate-pulse rounded-md bg-neutral mt-3 "></div>
+          <div className="col-span-8 h-1 w-14 animate-pulse rounded-md bg-neutral mt-3 "></div>
+          <div className="col-span-8 h-1 w-14 animate-pulse rounded-md bg-neutral mt-3 "></div>
+          </div>
+        </div>
+      </div>
+
+      <div className="m-2 my-2 mb-20 grid grid-cols-12 gap-5 md:m-0 md:mb-0 ">
+        <div className="col-span-3 rounded-2xl border-[1px] border-primary hidden md:block">
+        {arr.map((item) => (
+        <div key={item} className="flex items-center gap-2 p-3">
+        <div className="col-span-8 h-10 w-10 animate-pulse rounded-full bg-neutral"></div>
+              <div className="text-white">
+              <div className="col-span-8 h-4 w-44 animate-pulse rounded-md bg-neutral "></div>
+                <div className="flex gap-4">
+                  <div>
+                  </div>
+                </div>
+              </div>
+            </div>))}
+        </div>
+        <div className="col-span-12  flex flex-col items-center md:col-span-9">
+          <div className="h-auto w-full rounded-2xl border-[1px] border-primary pb-3">
+          {arr.map((item) => (
+          <div className="grid grid-cols-12 gap-2 py-2 p-3" key={item}>
+            <div className="col-span-1 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
+            <div className="col-span-8 h-12 w-full animate-pulse rounded-md bg-neutral "></div>
+            <div className="col-span-2 h-12 w-full animate-pulse rounded-md bg-neutral"></div>
+            <div className="col-span-1 flex h-12 w-full animate-pulse items-center justify-center">
+              <BiStar className="text-xl text-neutral" />
+            </div>
+          </div>
+        ))}
+          </div>
+        </div>
+      </div>
+    </div>
+    );
   }
 
   //   const favoriteSelected =
@@ -50,9 +115,9 @@ export default function LeagueDetails({ leagueId }: { leagueId: number }) {
   const tabs = ['Upcoming', 'Recent', 'Standings'];
 
   const tabContents = [
-    <LeagueFixture key={'001'} upcoming={leagueData?.data.upcoming} />,
-    <Recent key={'002'} latest={leagueData?.data.latest} />,
-    <Standings key={'003'} seasonId={seasonId} />,
+    <LeagueFixture key={'001'} upcoming={leagueData?.data?.upcoming} />,
+    <Recent key={'002'} latest={leagueData?.data?.latest} />,
+    <Standings key={'003'} seasonId={leagueData?.data?.currentseason?.id} />,
   ];
 
   const handleTabChange = (tab: number) => {
@@ -150,11 +215,11 @@ export default function LeagueDetails({ leagueId }: { leagueId: number }) {
             <div className="flex items-center">
               <Image
                 src={
-                  leagueData?.data.image_path
-                    ? leagueData?.data.image_path
+                  leagueData?.data?.image_path
+                    ? leagueData?.data?.image_path
                     : 'team_placeholder.png'
                 }
-                alt={leagueData?.data.name}
+                alt={leagueData?.data?.name}
                 height={0}
                 width={0}
                 sizes="100vw"
@@ -162,7 +227,7 @@ export default function LeagueDetails({ leagueId }: { leagueId: number }) {
               />
 
               <div className="text-white">
-                <p className="select-none text-2xl">{leagueData?.data.name}</p>
+                <p className="select-none text-2xl">{leagueData?.data?.name}</p>
                 <div className="flex gap-4">
                   <p className="my-auto select-none text-base font-light">
                     {leagueData?.data.country?.name}
@@ -171,7 +236,7 @@ export default function LeagueDetails({ leagueId }: { leagueId: number }) {
                     <select
                       id="seasons"
                       name="seasons"
-                      className="select-none border-none bg-transparent text-secondary outline-none"
+                      className="select mt-2 border-none bg-transparent text-secondary outline-none cursor-pointer"
                       onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                         setSeasonId(Number(e.target.value))
                       }
@@ -190,10 +255,11 @@ export default function LeagueDetails({ leagueId }: { leagueId: number }) {
                             value={season?.id}
                           >
                             {season?.name}
-                            <IoIosArrowDown />
                           </option>
+                          
                         ))}
                     </select>
+                     
                   </div>
                 </div>
               </div>
@@ -226,13 +292,13 @@ export default function LeagueDetails({ leagueId }: { leagueId: number }) {
         </div>
       </div>
 
-      <div className="m-2 mb-20 grid grid-cols-12 gap-5 md:m-0 md:mb-0">
+      <div className="m-2 my-2 mb-20 grid grid-cols-12 gap-5 md:m-0 md:mb-0">
         <div className="col-span-3 hidden md:block">
           <TopDetailsCard title="POPULAR LEAGUES">
             <TopLeaguesList />
           </TopDetailsCard>
         </div>
-        <div className="col-span-12 my-3 flex flex-col items-center md:col-span-9">
+        <div className="col-span-12  flex flex-col items-center md:col-span-9">
           <div className="h-auto w-full rounded-2xl border-[1px] border-primary pb-3">
             {tabContents.map((content, index) => (
               <TabPanel
