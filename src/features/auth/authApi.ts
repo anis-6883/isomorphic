@@ -2,10 +2,19 @@ import { apiSlice } from '@/features/api/apiSlice';
 
 export const authApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    userRegister: builder.mutation({
+      query: (data) => {
+        return {
+          url: `/api/user/register`,
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
     loginWithPhone: builder.mutation({
       query: (data) => {
         return {
-          url: `/api/user/login-with-phone`,
+          url: `/api/user/login`,
           method: 'POST',
           body: data,
         };
@@ -27,7 +36,8 @@ export const authApi = apiSlice.injectEndpoints({
 });
 
 export const {
-  useLoginWithPhoneMutation,
-  useVerifyPhoneMutation,
   useGetProfileQuery,
+  useVerifyPhoneMutation,
+  useUserRegisterMutation,
+  useLoginWithPhoneMutation,
 } = authApi;

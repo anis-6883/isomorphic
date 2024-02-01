@@ -1,58 +1,123 @@
 'use client';
 
 import { routes } from '@/config/routes';
-import { useLoginWithPhoneMutation } from '@/features/auth/authApi';
+import {
+  useLoginWithPhoneMutation,
+  useUserRegisterMutation,
+} from '@/features/auth/authApi';
+import { userLoggedIn } from '@/features/auth/authSlice';
 import { useGetAllowedStatesQuery } from '@/features/front-end/settings/settingsApi';
 import { TModalElementType } from '@/types';
 import { CountryCode, isValidPhoneNumber } from 'libphonenumber-js';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { HiOutlineArrowSmLeft } from 'react-icons/hi';
 import { PiSpinnerLight } from 'react-icons/pi';
+import { useDispatch } from 'react-redux';
+import { Password } from 'rizzui';
 import OtpModal from './OtpModal';
 import { PhoneNumber } from './PhoneNumber';
 
 export default function SignInForm({ signUp }: { signUp: boolean }) {
+  const { replace } = useRouter();
+  const dispatch = useDispatch();
   const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
   const [country, setCountry] = useState('');
   const [countryCode, setCountryCode] = useState<any>('');
   const [dialCode, setDialCode] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [phoneValidMsg, setPhoneValidMsg] = useState('');
+  const [passwordValidMsg, setPasswordValidMsg] = useState('');
 
-  const [loginWithPhone, { data: responseData, isSuccess, isError }] =
-    useLoginWithPhoneMutation();
+  const [
+    loginWithPhone,
+    { data: loginResponse, isSuccess: loginSuccess, isError: loginError },
+  ] = useLoginWithPhoneMutation();
+
+  const [
+    userRegister,
+    {
+      data: registerResponse,
+      isSuccess: registerSuccess,
+      isError: registerError,
+    },
+  ] = useUserRegisterMutation();
 
   const { data: allowedCountries, isLoading } =
     useGetAllowedStatesQuery(undefined);
 
-  // Handle Response
+  // Handle Register Response
   useEffect(() => {
-    if (isError) {
+    if (registerError) {
       setSubmitting(false);
       toast.error('Something went wrong! Try Again');
     }
 
-    if (isSuccess) {
-      console.log(responseData);
+    if (registerSuccess) {
       setSubmitting(false);
-      toast.success(responseData?.message);
-      const modal = document.getElementById(
-        'otpModalVerify'
-      ) as TModalElementType;
 
-      if (modal) {
-        modal.showModal();
+      if (registerResponse?.status) {
+        toast.success(registerResponse?.message);
+        const modal = document.getElementById(
+          'otpModalVerify'
+        ) as TModalElementType;
+
+        if (modal) {
+          modal.showModal();
+        }
+      } else {
+        toast.error(registerResponse?.message);
       }
     }
-  }, [isError, isSuccess, responseData]);
+  }, [registerError, registerSuccess, registerResponse]);
+
+  // Handle Login Response
+  useEffect(() => {
+    if (loginError) {
+      setSubmitting(false);
+      toast.error('Something went wrong! Try Again');
+    }
+
+    if (loginSuccess) {
+      if (loginResponse?.status) {
+        dispatch(
+          userLoggedIn({
+            accessToken: loginResponse?.data?.accessToken,
+            user: loginResponse?.data,
+          })
+        );
+
+        signIn('credentials', {
+          userData: JSON.stringify(loginResponse?.data),
+          adminLogin: false,
+          redirect: false,
+        }).then((callback) => {
+          if (callback?.error) {
+            setSubmitting(false);
+            toast.error(callback?.error);
+          }
+          if (callback?.ok && !callback?.error) {
+            toast.success(loginResponse?.message);
+            replace(routes.home);
+          }
+        });
+      } else {
+        setSubmitting(false);
+        toast.error(loginResponse?.message);
+      }
+    }
+  }, [loginError, loginSuccess, loginResponse, replace, dispatch]);
 
   // Submit Handler
   const signInHandler = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setPhoneValidMsg('');
+    setPasswordValidMsg('');
 
     if (
       !phone ||
@@ -65,10 +130,31 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
       return;
     }
 
-    loginWithPhone({
-      phone,
-      country,
-    });
+    if (!password) {
+      setSubmitting(false);
+      setPasswordValidMsg('Password is required!');
+      return;
+    }
+
+    if (signUp && password.length < 8) {
+      setSubmitting(false);
+      setPasswordValidMsg('Password length at least 8 characters!');
+      return;
+    }
+
+    if (signUp) {
+      userRegister({
+        phone,
+        password,
+        country,
+        provider: 'phone',
+      });
+    } else {
+      loginWithPhone({
+        phone,
+        password,
+      });
+    }
   };
 
   return (
@@ -104,6 +190,7 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
                       dialCode: string;
                     }
                   ) => {
+                    setPhoneValidMsg('');
                     setPhone(phone);
                     setCountry(country?.name);
                     setCountryCode(country?.countryCode.toUpperCase());
@@ -118,6 +205,29 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
                 )}
               </div>
             )}
+
+            <div className="mt-3">
+              <Password
+                size="lg"
+                label={
+                  <p>
+                    Password<span className="font-bold text-red-600"> *</span>
+                  </p>
+                }
+                variant="outline"
+                color="primary"
+                labelClassName="text-base"
+                onChange={(e) => {
+                  setPasswordValidMsg('');
+                  setPassword(e.target.value);
+                }}
+              />
+              {passwordValidMsg && (
+                <p className="mt-1 select-none px-1 font-medium text-error">
+                  {passwordValidMsg}
+                </p>
+              )}
+            </div>
 
             <div className="card-actions mt-5 justify-end">
               <button
@@ -142,7 +252,7 @@ export default function SignInForm({ signUp }: { signUp: boolean }) {
               {signUp ? 'Sign In' : 'Sign Up'}
             </Link>
           </div>
-          <div className="mt-5 flex items-center justify-center">
+          <div className="mt-5 flex select-none items-center justify-center">
             <Link
               href="/"
               className="flex items-center transition-all duration-150 ease-in hover:text-primary"

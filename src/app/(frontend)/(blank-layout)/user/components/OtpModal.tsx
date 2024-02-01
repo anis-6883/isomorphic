@@ -16,6 +16,7 @@ export default function OtpModal({ phone }: { phone: string }) {
   const [otp, setOtp] =
     useState<SetStateAction<string | number | undefined>>('');
   const [otpSubmitting, setOtpSubmitting] = useState(false);
+  const [resendOtpSubmitting, setResendOtpSubmitting] = useState(false);
   const [otpValidMsg, setOtpValidMsg] = useState('');
 
   const [verifyPhone, { data: responseData, isSuccess, isError }] =
@@ -32,8 +33,6 @@ export default function OtpModal({ phone }: { phone: string }) {
         setOtpSubmitting(false);
         setOtpValidMsg(responseData?.message);
       } else {
-        toast.success(responseData?.message);
-
         dispatch(
           userLoggedIn({
             accessToken: responseData?.data?.accessToken,
@@ -51,6 +50,7 @@ export default function OtpModal({ phone }: { phone: string }) {
             toast.error(callback?.error);
           }
           if (callback?.ok && !callback?.error) {
+            toast.success(responseData?.message);
             replace(routes.home);
             const modal = document.getElementById(
               'otpModalVerify'
@@ -65,7 +65,7 @@ export default function OtpModal({ phone }: { phone: string }) {
     }
   }, [dispatch, isError, isSuccess, replace, responseData]);
 
-  // Submit Handler
+  // Handler Otp Submit
   const otpSubmitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     setOtpSubmitting(true);
@@ -84,6 +84,16 @@ export default function OtpModal({ phone }: { phone: string }) {
     } else {
       setOtpValidMsg('Please, Enter Valid OTP!');
     }
+  };
+
+  // Handle Resend Otp Handler
+  const handleResendOtp = () => {
+    setResendOtpSubmitting(true);
+
+    setTimeout(() => {
+      toast.success('OTP resend successfully!');
+      setResendOtpSubmitting(false);
+    }, 2000);
   };
 
   return (
@@ -106,16 +116,32 @@ export default function OtpModal({ phone }: { phone: string }) {
                 {otpValidMsg}
               </p>
             )}
-            <div className="card-actions mt-10 justify-end">
-              <button
-                className="btn btn-primary w-full disabled:bg-[#0053d7] disabled:text-[#d1f2ff]"
-                disabled={otpSubmitting}
-              >
-                Submit{' '}
-                {otpSubmitting && (
-                  <PiSpinnerLight size={20} className="animate-spin" />
-                )}
-              </button>
+            <div className="mt-10 grid grid-cols-12 items-center">
+              <div className="col-span-8">
+                <p className="flex select-none items-center">
+                  Didn{"'"}t get any otp yet?{' '}
+                  <span
+                    className="ml-1 cursor-pointer font-semibold text-primary"
+                    onClick={handleResendOtp}
+                  >
+                    Resend OTP
+                  </span>
+                  {resendOtpSubmitting && (
+                    <PiSpinnerLight size={20} className="ml-1 animate-spin" />
+                  )}
+                </p>
+              </div>
+              <div className="col-span-4 text-right">
+                <button
+                  className="btn btn-primary btn-sm"
+                  disabled={otpSubmitting}
+                >
+                  Submit{' '}
+                  {otpSubmitting && (
+                    <PiSpinnerLight size={20} className="animate-spin" />
+                  )}
+                </button>
+              </div>
             </div>
           </form>
         </div>
