@@ -29,6 +29,7 @@ export default function Header() {
     });
     toast.success('Sign Out Successfully!');
   };
+// Contains the value and text for the options
 
   return (
     <header>
@@ -93,22 +94,18 @@ export default function Header() {
                       width={24}
                     />
                   </div>
-                  <div className="dropdown dropdown-end">
-                    <div tabIndex={0} role="button" className="">
-                      <IoIosArrowDown className="text-sm text-white" />
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="menu dropdown-content z-[2000] mt-4 w-52 rounded-md bg-white p-2"
-                    >
-                      <li>
-                        <a>Item 1</a>
-                      </li>
-                      <li>
-                        <a>Item 2</a>
-                      </li>
-                    </ul>
-                  </div>
+                  {/* <select className='select-text' value={lang} onChange={handleChange}>
+                {languages.map((item) => {
+                    return (
+                        <option
+                            key={item.value}
+                            value={item.value}
+                        >
+                            {item.text}
+                        </option>
+                    );
+                })}
+            </select> */}
                 </div>
               </div>
             </div>

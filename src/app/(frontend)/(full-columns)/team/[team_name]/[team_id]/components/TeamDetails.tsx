@@ -14,6 +14,7 @@ import { useState } from 'react';
 import TeamMatches from './TeamMatches';
 import TeamOverview from './TeamOverview';
 import TeamSquad from './TeamSquad';
+import { DetailsShemmer } from './DetailsShemmer';
 
 export default function TeamDetails({
   teamId,
@@ -30,7 +31,7 @@ export default function TeamDetails({
     useGetTeamTransfersQuery(teamId, { skip: !teamId });
 
   if (teamDetailsLoading || teamTransfersLoading) {
-    return <MainLoading />;
+    return <DetailsShemmer />;
   }
   // const favoriteSelected =
   //   userProfile?.favorites?.teams.some(

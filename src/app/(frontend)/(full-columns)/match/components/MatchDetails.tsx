@@ -23,6 +23,7 @@ import MatchPreview from './MatchPreview';
 import MatchStandings from './MatchStandings';
 import MatchStates from './MatchStates';
 import Events from './summary/Events';
+import StandingsShimmer from './standings/StandingShimmer';
 
 export default function MatchDetails({ status, fixtureId }: IFixtureProps) {
   const [currentTab, setCurrentTab] = useState(0);
@@ -63,7 +64,7 @@ export default function MatchDetails({ status, fixtureId }: IFixtureProps) {
   }, [matchData]);
 
   if (isMatchDataLoading || isHomeDataLoading || isAwayDataLoading) {
-    return <MainLoading />;
+    return <StandingsShimmer size={10} />;
   }
 
   const liveStatus = [
